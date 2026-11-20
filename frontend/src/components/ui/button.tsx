@@ -10,9 +10,9 @@ export { buttonClass, iconTileClass };
 export type { ButtonSize, ButtonVariant, IconTileSize, IconTileTone };
 
 /**
- * Pill buttons.
- * - primary: the blue gradient with white text and a soft blue glow (one per view, ideally)
- * - secondary: a soft raised pill with a thin outline
+ * Buttons.
+ * - primary: solid azure with white text (one per view, ideally)
+ * - secondary: white with a thin outline
  * - ghost: text-only until hovered
  * - danger / quiet-danger: destructive actions
  */
@@ -48,7 +48,7 @@ export function Button({
   );
 }
 
-/** Alias: every button in the system is a pill. */
+/** @deprecated Alias kept for existing imports. */
 export const PillButton = Button;
 
 interface ButtonLinkProps extends ComponentProps<typeof Link> {
@@ -92,12 +92,11 @@ export function IconTile({
 interface IconButtonProps extends ComponentProps<"button"> {
   label: string;
   size?: "sm" | "md";
-  /**
-   * plain: round, appears on hover (default) · soft: raised tile · accent: gradient tile.
-   */
+  /** plain: glyph until hovered (default) · soft: round white button · accent: round white, azure glyph. */
   tone?: "plain" | "soft" | "accent";
 }
 
+/** Round icon button (white circle with a coloured glyph). */
 export function IconButton({ label, size = "md", tone = "plain", className, children, type = "button", ...rest }: IconButtonProps) {
   return (
     <button
@@ -105,13 +104,11 @@ export function IconButton({ label, size = "md", tone = "plain", className, chil
       aria-label={label}
       title={label}
       className={clsx(
-        "inline-flex shrink-0 items-center justify-center transition-[box-shadow,background-color,color,transform] duration-150 disabled:pointer-events-none disabled:opacity-40 active:translate-y-px",
-        tone === "plain" && "rounded-full text-ink-3 hover:bg-surface-hi hover:text-accent hover:shadow-raised-xs",
-        tone === "soft" &&
-          "rounded-[14px] border border-line-strong/70 bg-surface-grad text-ink-2 shadow-raised-xs hover:text-accent active:shadow-inset-sm",
-        tone === "accent" && "rounded-[14px] bg-accent-grad-diag text-white shadow-glow-sm hover:shadow-glow",
+        "inline-flex shrink-0 items-center justify-center rounded-full transition-[background-color,color,border-color,box-shadow] duration-150 disabled:pointer-events-none disabled:opacity-40",
+        tone === "plain" && "text-ink-3 hover:bg-surface-2 hover:text-accent",
+        tone === "soft" && "border border-line bg-surface text-ink-2 shadow-xs hover:border-primary hover:text-accent",
+        tone === "accent" && "border border-line bg-surface text-primary shadow-xs hover:border-primary",
         size === "sm" ? "h-8 w-8" : "h-10 w-10",
-        tone !== "plain" && size === "sm" && "rounded-[11px]",
         className,
       )}
       {...rest}

@@ -128,7 +128,7 @@ function SubmitInner({ task, onClose, onSubmitted }: { task: TaskOut; onClose: (
       }
     >
       <form id="submit-approval" onSubmit={submit} className="space-y-5">
-        <div className="rounded-[18px] bg-surface-2 px-4 py-3 shadow-inset-sm">
+        <div className="rounded-[18px] bg-surface-2 px-4 py-3">
           <p className="text-[11.5px] font-medium text-ink-3">Task</p>
           <p className="mt-0.5 line-clamp-2 text-[13.5px] font-medium text-ink">{task.title}</p>
         </div>

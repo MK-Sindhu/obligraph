@@ -309,7 +309,7 @@ export function TeamTab() {
         )}
       </Panel>
 
-      <aside className="rounded-card soft px-6 py-6">
+      <aside className="rounded-card card px-6 py-6">
         <IconTile tone="accent" size="md" className="mb-4">
           <ShieldCheck size={18} />
         </IconTile>

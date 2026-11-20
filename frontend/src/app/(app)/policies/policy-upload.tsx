@@ -8,26 +8,26 @@ import { Input, Label, Panel } from "@/components/ui/misc";
 import { useToast } from "@/components/ui/toast";
 import { api, ApiError, errorMessage, type PolicyOut } from "@/lib/api";
 import { fmtBytes } from "@/lib/format";
+import { useUploadLimitMb } from "@/lib/runtime";
 
 const ACCEPT = ".pdf,.docx,.txt,.md,.html,.htm";
 const EXTENSIONS = ["pdf", "docx", "txt", "md", "html", "htm"];
-const MAX_BYTES = 20 * 1024 * 1024;
 
-function checkFile(file: File): string | null {
+function checkFile(file: File, limitMb: number): string | null {
   const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
   if (!EXTENSIONS.includes(ext)) return `“${file.name}” isn't a supported type. Use PDF, Word (.docx), text, Markdown or HTML.`;
-  if (file.size > MAX_BYTES) return `“${file.name}” is ${fmtBytes(file.size)}. The limit is 20 MB.`;
+  if (file.size > limitMb * 1024 * 1024) return `“${file.name}” is ${fmtBytes(file.size)}. The limit is ${limitMb} MB.`;
   if (file.size === 0) return `“${file.name}” is empty.`;
   return null;
 }
 
 const lowerFirst = (s: string) => (s ? s[0].toLowerCase() + s.slice(1) : s);
 
-function uploadError(err: unknown): string {
+function uploadError(err: unknown, limitMb: number): string {
   if (err instanceof ApiError) {
     // Server message: "already uploaded as '<title>'" (same text hash).
     if (err.status === 409) return `This document is ${lowerFirst(err.message)}. Nothing changed.`;
-    if (err.status === 413) return "The file is larger than 20 MB. Split it or export a smaller PDF.";
+    if (err.status === 413) return `The file is larger than ${limitMb} MB. Split it or export a smaller PDF.`;
     if (err.status === 422) return `Obligraph couldn't read this file: ${lowerFirst(err.message).replace(/[.\s]+$/, "")}`;
     if (err.status === 403) return "Only admins can upload policies.";
   }
@@ -42,6 +42,7 @@ export function PolicyUpload({ canUpload, onUploaded }: { canUpload: boolean; on
   const [dragging, setDragging] = useState(false);
   const [problem, setProblem] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const limitMb = useUploadLimitMb();
 
   if (!canUpload) {
     return (
@@ -56,7 +57,7 @@ export function PolicyUpload({ canUpload, onUploaded }: { canUpload: boolean; on
 
   function choose(f: File | null | undefined) {
     if (!f) return;
-    const issue = checkFile(f);
+    const issue = checkFile(f, limitMb);
     setProblem(issue);
     setFile(issue ? null : f);
   }
@@ -82,7 +83,7 @@ export function PolicyUpload({ canUpload, onUploaded }: { canUpload: boolean; on
       clear();
       onUploaded(p);
     } catch (err) {
-      setProblem(uploadError(err));
+      setProblem(uploadError(err, limitMb));
     } finally {
       setBusy(false);
     }
@@ -103,7 +104,7 @@ export function PolicyUpload({ canUpload, onUploaded }: { canUpload: boolean; on
             choose(e.dataTransfer.files?.[0]);
           }}
           className={clsx(
-            "flex cursor-pointer flex-col items-center rounded-[24px] border-2 border-dashed px-4 py-7 text-center shadow-inset-sm transition-colors has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-accent",
+            "flex cursor-pointer flex-col items-center rounded-[24px] border-2 border-dashed px-4 py-7 text-center transition-colors has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-accent",
             dragging ? "border-accent bg-accent-wash" : "border-line-strong bg-surface-2 hover:border-accent/50",
           )}
         >
@@ -120,11 +121,11 @@ export function PolicyUpload({ canUpload, onUploaded }: { canUpload: boolean; on
           <span className="mt-3 text-[13.5px] font-medium text-ink">
             {dragging ? "Drop to attach" : "Drop a file here or browse"}
           </span>
-          <span className="mt-0.5 text-[12px] text-ink-3">PDF, Word (.docx), text, Markdown or HTML · up to 20 MB</span>
+          <span className="mt-0.5 text-[12px] text-ink-3">PDF, Word (.docx), text, Markdown or HTML · up to {limitMb} MB</span>
         </label>
 
         {file && (
-          <div className="flex items-center gap-3 rounded-[18px] soft-xs px-3.5 py-2.5">
+          <div className="flex items-center gap-3 rounded-[18px] card-xs px-3.5 py-2.5">
             <FileUp size={16} className="shrink-0 text-accent" aria-hidden="true" />
             <div className="min-w-0 flex-1">
               <p className="truncate text-[13px] font-medium">{file.name}</p>

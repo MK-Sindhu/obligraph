@@ -6,7 +6,7 @@ import Link from "next/link";
 import { COVERAGE_LABEL, CoverageBadge, ObligationStatusBadge, SeverityBadge, SeverityGlyph } from "@/components/domain/badges";
 import { Badge, Chip } from "@/components/ui/badge";
 import { Button, ButtonLink, IconButton, IconTile } from "@/components/ui/button";
-import { softCardClass } from "@/components/ui/card";
+import { cardClass } from "@/components/ui/card";
 import { DonutGauge } from "@/components/ui/charts";
 import { PageHeader, Panel, SegmentedControl } from "@/components/ui/misc";
 import { EmptyState, ErrorState, LoadingRows, Skeleton } from "@/components/ui/states";
@@ -25,7 +25,7 @@ const LAYER_LABEL: Record<SbrLayer, string> = { base: "Base", middle: "Middle", 
 
 function PackCard({ p, active, onOpen }: { p: PackSummary; active: boolean; onOpen: () => void }) {
   return (
-    <article className={softCardClass("raised", "md", clsx("flex flex-col px-6 pb-6 pt-5", active && "ring-2 ring-accent/50"))}>
+    <article className={cardClass("raised", "md", clsx("flex flex-col px-6 pb-6 pt-5", active && "ring-2 ring-accent/50"))}>
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <h2 className="display text-[17px] leading-snug text-ink">{p.name}</h2>
@@ -41,7 +41,7 @@ function PackCard({ p, active, onOpen }: { p: PackSummary; active: boolean; onOp
         <DonutGauge
           value={p.readiness_pct}
           size={136}
-          thickness={13}
+          thickness={8}
           label={`${p.name}: ${p.readiness_pct === null ? "not assessed yet" : `${Math.round(p.readiness_pct)}% ready`}`}
           centerCaption={p.readiness_pct === null ? "not assessed" : "ready"}
           segments={COV_ORDER.map((k) => ({ key: k, value: p.by_coverage[k] ?? 0, color: `var(--cov-${k})`, label: COVERAGE_LABEL[k] }))}
@@ -60,7 +60,7 @@ function PackCard({ p, active, onOpen }: { p: PackSummary; active: boolean; onOp
       <div className="mt-4">
         <p className="mb-2 text-[11.5px] font-medium text-ink-3">Top gaps</p>
         {p.top_gaps.length === 0 ? (
-          <p className="rounded-[16px] bg-surface-2 px-3.5 py-2.5 text-[12.5px] text-ink-3 shadow-inset-sm">No open gaps in this pack.</p>
+          <p className="rounded-[16px] bg-surface-2 px-3.5 py-2.5 text-[12.5px] text-ink-3">No open gaps in this pack.</p>
         ) : (
           <ul className="space-y-1.5">
             {p.top_gaps.slice(0, 3).map((g) => (
@@ -130,7 +130,7 @@ function PackItems({ packKey, onClose }: { packKey: string; onClose: () => void 
               <li key={i.obligation_id}>
                 <Link
                   href={`/obligations?id=${i.obligation_id}`}
-                  className="grid gap-x-4 gap-y-2 rounded-[20px] px-4 py-3 transition-[background-color,box-shadow] hover:bg-surface-hi hover:shadow-raised-xs md:grid-cols-[92px_minmax(0,1fr)_auto]"
+                  className="grid gap-x-4 gap-y-2 rounded-[20px] px-4 py-3 transition-[background-color,box-shadow] hover:bg-surface-hi hover:shadow-xs md:grid-cols-[92px_minmax(0,1fr)_auto]"
                 >
                   <span className="pt-px">
                     <SeverityBadge severity={i.severity} />
@@ -204,7 +204,7 @@ function LayerSteps({ sbr }: { sbr: SbrOut }) {
             <div
               className={clsx(
                 "flex flex-col justify-end rounded-tile px-4 pb-4 pt-3 transition-shadow",
-                current ? "soft ring-2 ring-accent/60" : target ? "border-2 border-dashed border-accent/60 bg-accent-wash/40" : "soft-inset",
+                current ? "card ring-2 ring-accent/60" : target ? "border-2 border-dashed border-accent/60 bg-accent-wash/40" : "tint",
               )}
               style={{ minHeight: 112 + i * 34 }}
             >
@@ -224,7 +224,7 @@ function LayerSteps({ sbr }: { sbr: SbrOut }) {
 }
 
 function ReqList({ items, empty, tone }: { items: SbrRequirement[]; empty: string; tone: "add" | "relieve" | "all" }) {
-  if (!items.length) return <p className="mx-6 mb-6 rounded-[18px] bg-surface-2 px-4 py-3 text-[13px] text-ink-3 shadow-inset-sm">{empty}</p>;
+  if (!items.length) return <p className="mx-6 mb-6 rounded-[18px] bg-surface-2 px-4 py-3 text-[13px] text-ink-3">{empty}</p>;
   return (
     <ul className="space-y-1 px-3 pb-4">
       {items.map((r) => (
@@ -236,7 +236,7 @@ function ReqList({ items, empty, tone }: { items: SbrRequirement[]; empty: strin
             <span
               className={clsx(
                 "mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-[10px]",
-                tone === "add" ? "bg-accent-grad-diag text-white shadow-glow-sm" : tone === "relieve" ? "bg-[var(--cov-covered-bg)] text-ok" : "bg-surface-2 text-ink-3 shadow-inset-sm",
+                tone === "add" ? "bg-primary text-white" : tone === "relieve" ? "bg-[var(--cov-covered-bg)] text-ok" : "bg-surface-2 text-ink-3",
               )}
               aria-hidden="true"
             >

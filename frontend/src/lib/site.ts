@@ -11,4 +11,4 @@ export const SITE_URL = (
 export const SITE_NAME = "Obligraph";
 
 /** Marketing routes: the only ones listed in the sitemap and open to crawlers. */
-export const MARKETING_ROUTES = ["/", "/product", "/solutions", "/security", "/contact", "/privacy"] as const;
+export const MARKETING_ROUTES = ["/", "/product", "/solutions", "/security", "/docs", "/contact", "/privacy"] as const;

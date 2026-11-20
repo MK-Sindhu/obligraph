@@ -25,7 +25,7 @@ function RequirementRow({
   const { topic } = useVocab();
   return (
     <li className="grid grid-cols-[34px_minmax(0,1fr)] gap-x-4 px-6 py-4">
-      <span className="num flex h-8 w-8 items-center justify-center rounded-[11px] bg-surface-2 font-mono text-[11.5px] text-ink-2 shadow-inset-sm">
+      <span className="num flex h-8 w-8 items-center justify-center rounded-[11px] bg-surface-2 font-mono text-[11.5px] text-ink-2">
         {String(req.ordinal + 1).padStart(2, "0")}
       </span>
       <div className="min-w-0">
@@ -60,7 +60,7 @@ function RequirementRow({
             <summary className="inline-flex cursor-pointer list-none items-center gap-1 rounded-full text-[12px] font-medium text-ink-3 hover:text-accent">
               <ChevronDown size={12} className="transition-transform group-open:rotate-180" aria-hidden="true" /> Source text
             </summary>
-            <blockquote className="mt-2 rounded-[16px] bg-surface-2 px-4 py-3 text-[13px] italic leading-relaxed text-ink-2 shadow-inset-sm">
+            <blockquote className="mt-2 rounded-[16px] bg-surface-2 px-4 py-3 text-[13px] italic leading-relaxed text-ink-2">
               {req.source_quote}
             </blockquote>
           </details>
@@ -114,7 +114,7 @@ function ImpactPanel({ reg }: { reg: RegulationDetail }) {
     <div>
       <div className="px-6 pt-1">
         <div
-          className="flex h-3 gap-[3px] overflow-hidden rounded-full bg-surface-3 p-[2px] shadow-inset-sm"
+          className="flex h-3 gap-[3px] overflow-hidden rounded-full bg-surface-3 p-[2px]"
           role="img"
           aria-label="Coverage of obligations from this instrument"
         >
@@ -179,7 +179,7 @@ export default function RegulationPage() {
   const back = (
     <Link
       href="/regulations"
-      className="mb-5 inline-flex h-9 items-center gap-1.5 rounded-full border border-line-strong/70 bg-surface-grad px-4 text-[12.5px] font-medium text-ink-2 shadow-raised-xs transition-colors hover:text-accent"
+      className="mb-5 inline-flex h-9 items-center gap-1.5 rounded-full border border-line-strong/70 bg-surface px-4 text-[12.5px] font-medium text-ink-2 shadow-xs transition-colors hover:text-accent"
     >
       <ArrowLeft size={14} aria-hidden="true" /> Regulations
     </Link>
@@ -221,7 +221,7 @@ export default function RegulationPage() {
       <title>{`${reg.ref_no ?? reg.title} · Obligraph`}</title>
       {back}
 
-      <header className="relative rounded-card-lg soft px-6 pb-7 pt-7 sm:px-9">
+      <header className="relative rounded-card-lg card px-6 pb-7 pt-7 sm:px-9">
         <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-3">
           <div className="min-w-0 flex-1 basis-[460px]">
             <Docket regulator={reg.regulator} refNo={reg.ref_no} date={reg.issued_on} docType={reg.doc_type} />
@@ -274,7 +274,7 @@ export default function RegulationPage() {
           </p>
         )}
 
-        <dl className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6 [&>div]:rounded-[18px] [&>div]:bg-surface-2 [&>div]:px-4 [&>div]:py-3 [&>div]:shadow-inset-sm">
+        <dl className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6 [&>div]:rounded-[18px] [&>div]:bg-surface-2 [&>div]:px-4 [&>div]:py-3 [&>div]:">
           <Meta label="Issued">{fmtDate(reg.issued_on)}</Meta>
           <Meta label="Effective">{reg.effective_on ? fmtDate(reg.effective_on) : "On issue"}</Meta>
           <Meta label="Requirements">

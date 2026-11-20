@@ -65,7 +65,7 @@ export function EmptyState({
 }) {
   return (
     <div className={clsx("flex flex-col items-center text-center", compact ? "px-4 py-6" : "px-6 py-12", className)}>
-      {icon && <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-[18px] soft-sm text-accent">{icon}</div>}
+      {icon && <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-[16px] border border-line bg-surface text-primary [&_svg]:stroke-[1.6]">{icon}</div>}
       <p className="display text-[16px] text-ink">{title}</p>
       {children && <div className="mt-1 max-w-md text-[13px] text-ink-2">{children}</div>}
       {action && <div className="mt-4">{action}</div>}
@@ -103,7 +103,7 @@ export function ErrorState({
         <button
           type="button"
           onClick={onRetry}
-          className="mt-4 inline-flex h-9 items-center gap-1.5 rounded-full border border-line-strong/80 bg-surface-grad px-4 text-[13px] font-medium text-accent shadow-raised-xs hover:shadow-raised-sm"
+          className="mt-4 inline-flex h-9 items-center gap-1.5 rounded-full border border-line-strong/80 bg-surface px-4 text-[13px] font-medium text-accent shadow-xs hover:shadow-card"
         >
           <RotateCw size={13} aria-hidden="true" /> Try again
         </button>

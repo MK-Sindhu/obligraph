@@ -29,7 +29,7 @@ const CONNECTOR_TONE = {
 };
 
 /**
- * Horizontal timeline: white knob-nodes with blue centres on a gradient line, each with a pill
+ * Horizontal timeline: round knob-nodes on a thin azure line (the active one filled), each with a tag
  * label beneath. Scrolls sideways when there isn't room for every step.
  */
 export function Timeline({
@@ -45,15 +45,15 @@ export function Timeline({
 }) {
   const n = items.length;
   const TOP = 44; // space above the line for connector labels
-  const NODE = 24;
+  const NODE = 18;
   return (
     <div className={clsx("-mx-2 overflow-x-auto px-2 pb-2", className)}>
       <ol aria-label={ariaLabel} className="relative flex" style={{ minWidth: n * minItemWidth }}>
         {n > 1 && (
           <span
             aria-hidden="true"
-            className="absolute h-[5px] rounded-full bg-accent-grad shadow-glow-sm"
-            style={{ left: `calc(100% / ${2 * n})`, right: `calc(100% / ${2 * n})`, top: TOP + NODE / 2 - 2.5 }}
+            className="absolute h-[2px] rounded-full bg-primary"
+            style={{ left: `calc(100% / ${2 * n})`, right: `calc(100% / ${2 * n})`, top: TOP + NODE / 2 - 1 }}
           />
         )}
         {items.map((it, i) => {
@@ -61,16 +61,16 @@ export function Timeline({
             <>
               <span
                 className={clsx(
-                  "relative inline-flex max-w-full items-center justify-center truncate rounded-full px-3.5 py-1.5 text-[12px] font-medium leading-none",
+                  "relative inline-flex max-w-full items-center justify-center truncate rounded-[8px] px-3 py-1.5 text-[12px] font-semibold leading-none",
                   it.active
-                    ? "bg-accent-grad-text text-white shadow-glow-sm"
+                    ? "bg-primary-fill text-white"
                     : it.muted
                       ? "border border-dashed border-line-strong text-ink-3"
-                      : "border border-line-strong/80 bg-surface-grad text-ink-2 shadow-raised-xs",
+                      : "border border-line-strong bg-surface text-ink-2",
                 )}
               >
                 {it.active && (
-                  <span aria-hidden="true" className="absolute -top-[5px] left-1/2 h-2.5 w-2.5 -translate-x-1/2 rotate-45 rounded-[2px] bg-[#2a55f8]" />
+                  <span aria-hidden="true" className="absolute -top-[4px] left-1/2 h-2 w-2 -translate-x-1/2 rotate-45 rounded-[1px] bg-primary-fill" />
                 )}
                 <span className="relative truncate">{it.pill}</span>
               </span>
@@ -106,12 +106,12 @@ export function Timeline({
               <span
                 aria-hidden="true"
                 className={clsx(
-                  "relative z-[1] flex shrink-0 items-center justify-center rounded-full",
-                  it.muted ? "border-2 border-dashed border-ink-4 bg-surface" : "bg-surface-hi shadow-knob",
+                  "relative z-[1] flex shrink-0 items-center justify-center rounded-full border-2 bg-surface",
+                  it.muted ? "border-dashed border-ink-4" : it.active ? "border-primary" : "border-primary",
                 )}
                 style={{ width: NODE, height: NODE }}
               >
-                {!it.muted && <span className={clsx("rounded-full bg-accent-grad-diag", it.active ? "h-3 w-3" : "h-2 w-2")} />}
+                {it.active && <span className="h-2.5 w-2.5 rounded-full bg-primary" />}
               </span>
               {it.href ? (
                 <Link href={it.href} className="group mt-3 flex max-w-full flex-col items-center rounded-[16px] px-2 pb-1">

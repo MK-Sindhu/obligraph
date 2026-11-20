@@ -74,7 +74,7 @@ export function JobRunner() {
     <div
       role="status"
       aria-live="polite"
-      className="glass fixed bottom-5 right-5 z-40 flex items-center gap-2 rounded-full px-4 py-2 text-sm text-[var(--ink-2)]"
+      className="card fixed bottom-5 right-5 z-40 flex items-center gap-2 rounded-full px-4 py-2 text-sm text-[var(--ink-2)]"
     >
       <span
         aria-hidden

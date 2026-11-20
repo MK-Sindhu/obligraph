@@ -46,10 +46,10 @@ function ApprovalListItem({ a, selected, href }: { a: ApprovalOut; selected: boo
         aria-current={selected ? "true" : undefined}
         className={clsx(
           "relative block rounded-[20px] px-4 py-3.5 transition-[background-color,box-shadow]",
-          selected ? "bg-accent-wash ring-1 ring-accent/30" : "hover:bg-surface-hi hover:shadow-raised-xs",
+          selected ? "bg-accent-wash ring-1 ring-accent/30" : "hover:bg-surface-hi hover:shadow-xs",
         )}
       >
-        {selected && <span className="absolute inset-y-3 left-0 w-[4px] rounded-full bg-accent-grad-diag" aria-hidden="true" />}
+        {selected && <span className="absolute inset-y-3 left-0 w-[4px] rounded-full bg-primary" aria-hidden="true" />}
         <div className="flex items-start justify-between gap-3">
           <p className="line-clamp-2 text-[13.5px] font-medium leading-snug text-ink">{a.task_title}</p>
           <ApprovalStatusBadge status={a.status} overdue={a.overdue} size="sm" />
@@ -119,7 +119,7 @@ function Decision({ a, onChange }: { a: ApprovalOut; onChange: (a: ApprovalOut) 
   const canEscalate = can("admin") && a.level < 2;
   if (!canDecide && !canWithdraw && !canEscalate) {
     return (
-      <p className="rounded-[18px] bg-surface-2 px-4 py-3 text-[13px] text-ink-2 shadow-inset-sm">
+      <p className="rounded-[18px] bg-surface-2 px-4 py-3 text-[13px] text-ink-2">
         {isMaker
           ? "You submitted this request, so someone else has to check it."
           : `Only ${a.required_role === "owner" ? "owners" : "admins and owners"} can decide at level ${a.level}.`}
@@ -154,7 +154,7 @@ function Decision({ a, onChange }: { a: ApprovalOut; onChange: (a: ApprovalOut) 
 
   const missing = tried && !note.trim();
   return (
-    <div className="rounded-[24px] bg-surface-2 p-4 shadow-inset-sm sm:p-5">
+    <div className="rounded-[24px] bg-surface-2 p-4 sm:p-5">
       <Label htmlFor="decision-note" hint={canDecide ? "Required to reject" : "Optional"}>
         {canDecide ? "Checker's note" : "Note"}
       </Label>
@@ -233,7 +233,7 @@ function ApprovalDetail({ id, onChange }: { id: string; onChange: (a: ApprovalOu
         </Link>
       </div>
 
-      <div className="flex items-center gap-3 rounded-[20px] px-4 py-3 soft-xs">
+      <div className="flex items-center gap-3 rounded-[20px] px-4 py-3 card-xs">
         <IconTile tone={a.status === "pending" ? "accent" : "soft"} size="sm">
           <Workflow size={15} />
         </IconTile>
@@ -243,7 +243,7 @@ function ApprovalDetail({ id, onChange }: { id: string; onChange: (a: ApprovalOu
         </div>
       </div>
 
-      <dl className="grid grid-cols-2 gap-3 lg:grid-cols-3 [&>div]:rounded-[18px] [&>div]:bg-surface-2 [&>div]:px-4 [&>div]:py-3 [&>div]:shadow-inset-sm">
+      <dl className="grid grid-cols-2 gap-3 lg:grid-cols-3 [&>div]:rounded-[18px] [&>div]:bg-surface-2 [&>div]:px-4 [&>div]:py-3 [&>div]:">
         <Meta label="Maker">{a.maker ?? "A former member"}</Meta>
         <Meta label="Checker">{a.checker ?? <span className="text-ink-3">Not decided</span>}</Meta>
         <Meta label="Submitted">{fmtDateTime(a.created_at)}</Meta>
@@ -258,13 +258,13 @@ function ApprovalDetail({ id, onChange }: { id: string; onChange: (a: ApprovalOu
       {(a.maker_note || a.checker_note) && (
         <div className="grid gap-3 md:grid-cols-2">
           {a.maker_note && (
-            <figure className="rounded-[20px] px-4 py-3.5 soft-xs">
+            <figure className="rounded-[20px] px-4 py-3.5 card-xs">
               <figcaption className="text-[11.5px] font-medium text-ink-3">Maker&rsquo;s note</figcaption>
               <p className="mt-1 whitespace-pre-line text-[13px] leading-relaxed text-ink">{a.maker_note}</p>
             </figure>
           )}
           {a.checker_note && (
-            <figure className="rounded-[20px] px-4 py-3.5 soft-xs">
+            <figure className="rounded-[20px] px-4 py-3.5 card-xs">
               <figcaption className="text-[11.5px] font-medium text-ink-3">Checker&rsquo;s note</figcaption>
               <p className="mt-1 whitespace-pre-line text-[13px] leading-relaxed text-ink">{a.checker_note}</p>
             </figure>

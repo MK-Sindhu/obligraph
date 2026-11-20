@@ -182,7 +182,7 @@ function FilingDialogInner({
   );
 
   const facts = (
-    <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4 [&>div]:rounded-[16px] [&>div]:bg-surface-2 [&>div]:px-3.5 [&>div]:py-2.5 [&>div]:shadow-inset-sm">
+    <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4 [&>div]:rounded-[16px] [&>div]:bg-surface-2 [&>div]:px-3.5 [&>div]:py-2.5 [&>div]:">
       <Meta label="Period">{periodLabel(filing)}</Meta>
       <Meta label="Due">{fmtDate(filing.due_on)}</Meta>
       <Meta label="Filed">{filing.filed_on ? fmtDate(filing.filed_on) : "—"}</Meta>
@@ -224,7 +224,7 @@ function FilingDialogInner({
         <div className="space-y-5">
           {facts}
           {filing.note && (
-            <p className="rounded-[18px] px-4 py-3 text-[13px] text-ink-2 soft-xs">
+            <p className="rounded-[18px] px-4 py-3 text-[13px] text-ink-2 card-xs">
               <span className="block text-[11.5px] font-medium text-ink-3">Note</span>
               {filing.note}
             </p>

@@ -3,11 +3,12 @@ import { Wordmark } from "@/components/brand";
 
 const COLUMNS = [
   {
-    title: "Product",
+    title: "Explore",
     links: [
       { href: "/product", label: "Product" },
       { href: "/solutions", label: "Solutions" },
       { href: "/security", label: "Security" },
+      { href: "/docs", label: "Docs" },
     ],
   },
   {
@@ -23,18 +24,17 @@ const COLUMNS = [
 export function MarketingFooter() {
   return (
     <footer className="mx-auto w-full max-w-[1200px] px-4 pb-10 sm:px-8">
-      <div className="soft rounded-card-lg px-6 py-10 sm:px-10">
-        <div className="grid gap-10 md:grid-cols-[minmax(0,1.4fr)_repeat(2,minmax(0,1fr))]">
-          <div>
+      <div className="card rounded-card-lg px-6 py-10 sm:px-10">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-8 md:grid-cols-[minmax(0,1.4fr)_repeat(2,minmax(0,1fr))] md:gap-10">
+          <div className="col-span-2 md:col-span-1">
             <Wordmark />
             <p className="mt-4 max-w-sm text-[13.5px] leading-relaxed text-ink-2">
-              Regulatory obligation tracking for Indian financial institutions: circulars, lineage, policy coverage and the work
-              that closes the gaps.
+              Circulars, obligations, policy gaps and the work that closes them.
             </p>
           </div>
           {COLUMNS.map((c) => (
             <nav key={c.title} aria-label={c.title}>
-              <p className="text-[12.5px] font-medium text-ink-3">{c.title}</p>
+              <p className="text-[11px] font-extrabold uppercase tracking-[0.08em] text-accent">{c.title}</p>
               <ul className="mt-3 space-y-2">
                 {c.links.map((l) => (
                   <li key={l.href}>

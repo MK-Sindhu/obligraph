@@ -1,14 +1,14 @@
 import type { Metadata, Viewport } from "next";
-import { IBM_Plex_Mono, Poppins } from "next/font/google";
+import { IBM_Plex_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import { Providers } from "@/components/providers";
 import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 // Friendly geometric sans for everything; mono only for reference numbers.
-const poppins = Poppins({
-  variable: "--font-poppins",
+const jakarta = Plus_Jakarta_Sans({
+  variable: "--font-jakarta",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
+  weight: ["400", "500", "600", "700", "800"],
   display: "swap",
 });
 
@@ -35,8 +35,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#e8edf3" },
-    { media: "(prefers-color-scheme: dark)", color: "#1e2330" },
+    { media: "(prefers-color-scheme: light)", color: "#a9d1fa" },
+    { media: "(prefers-color-scheme: dark)", color: "#0f1b2d" },
   ],
 };
 
@@ -47,7 +47,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en-IN"
-      className={`${poppins.variable} ${plexMono.variable} h-full antialiased`}
+      className={`${jakarta.variable} ${plexMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <head>

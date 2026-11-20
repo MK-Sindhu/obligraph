@@ -7,9 +7,9 @@ import { CoverageLegend, CoverageRing } from "@/components/dashboard/coverage-ri
 import { RiskHeatmap } from "@/components/dashboard/heatmap";
 import { SeverityGlyph } from "@/components/domain/badges";
 import { EventKindIcon, eventHref, eventSubtitle } from "@/components/domain/events";
-import { Badge } from "@/components/ui/badge";
+import { ArrowBadge, Badge } from "@/components/ui/badge";
 import { IconTile } from "@/components/ui/button";
-import { softCardClass, StatTile } from "@/components/ui/card";
+import { cardClass, StatTile } from "@/components/ui/card";
 import { AreaChart } from "@/components/ui/charts";
 import { PageHeader, Panel } from "@/components/ui/misc";
 import { ProgressSlider } from "@/components/ui/progress";
@@ -24,7 +24,7 @@ function PanelLink({ href, children }: { href: string; children: React.ReactNode
   return (
     <Link
       href={href}
-      className="inline-flex h-8 items-center gap-1.5 rounded-full border border-line-strong/70 bg-surface-grad px-3.5 text-[12.5px] font-medium text-accent shadow-raised-xs transition-shadow hover:shadow-raised-sm"
+      className="inline-flex h-8 items-center gap-1.5 rounded-full border border-line-strong/70 bg-surface px-3.5 text-[12.5px] font-medium text-accent shadow-xs transition-shadow hover:shadow-card"
     >
       {children} <ArrowRight size={13} aria-hidden="true" />
     </Link>
@@ -49,7 +49,7 @@ function Kpi({
   return (
     <Link
       href={href}
-      className={softCardClass("raised-sm", "tile", "group block px-5 py-4 transition-[box-shadow,transform] hover:-translate-y-0.5 hover:shadow-raised")}
+      className={cardClass("raised-sm", "tile", "group block px-4 py-4 transition-[box-shadow,transform] sm:px-5 hover:-translate-y-0.5 hover:shadow-card")}
     >
       <StatTile
         label={<span className="group-hover:text-accent">{label}</span>}
@@ -110,7 +110,7 @@ function Upcoming({ events }: { events: CalendarEvent[] }) {
           const late = e.overdue || days < 0;
           const inner = (
             <>
-              <span className="flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-[15px] bg-surface-2 shadow-inset-sm">
+              <span className="flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-[15px] bg-surface-2">
                 <span className="figure text-[17px] leading-none text-ink">{d.getDate()}</span>
                 <span className="mt-0.5 text-[10px] font-medium uppercase tracking-[0.06em] text-ink-3">
                   {d.toLocaleString("en-IN", { month: "short" })}
@@ -158,6 +158,21 @@ function alertHref(a: AlertOut): string | null {
   return null;
 }
 
+// Things that went wrong or need a decision get the red up-arrow; the rest the blue arrow.
+const ATTENTION = new Set(["gap_found", "approval_escalated", "approval_rejected", "task_overdue"]);
+
+function AlertBadge({ kind, severity }: { kind: string; severity: string }) {
+  const urgent = ATTENTION.has(kind) || severity === "critical";
+  return (
+    <ArrowBadge
+      direction={urgent ? "up" : "right"}
+      tone={urgent ? "negative" : "primary"}
+      label={urgent ? "Needs attention" : "For review"}
+      className="mt-0.5"
+    />
+  );
+}
+
 function RecentAlerts() {
   // /api/alerts (not dashboard.recent_alerts) because only it carries ref_type/ref_id for linking.
   const q = useQuery<AlertOut[]>("alerts:recent", (signal) => api.alerts.list({ limit: 6 }, { signal }));
@@ -175,9 +190,7 @@ function RecentAlerts() {
         const href = alertHref(a);
         const inner = (
           <>
-            <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-[11px] bg-surface-2 shadow-inset-sm">
-              <SeverityGlyph severity={a.severity} />
-            </span>
+            <AlertBadge kind={a.kind} severity={a.severity} />
             <span className="min-w-0 flex-1">
               <span className={clsx("line-clamp-2 text-[13px] leading-snug", a.read_at ? "text-ink-2" : "font-medium text-ink")}>{a.title}</span>
               <span className="mt-1 flex items-center gap-2 text-[11.5px] text-ink-3">
@@ -260,6 +273,7 @@ export default function DashboardPage() {
           <div className="grid gap-6 lg:grid-cols-[1.2fr_1fr]">
             <Panel
               title="Policy coverage"
+              tab
               meta="How well your policies meet each obligation"
               actions={<PanelLink href="/obligations">All obligations</PanelLink>}
               bodyClassName="flex items-center"
@@ -281,7 +295,7 @@ export default function DashboardPage() {
             </Panel>
 
             <Panel title="Workload">
-              <div className="grid grid-cols-2 gap-4 px-6 pt-1">
+              <div className="grid grid-cols-2 gap-3 px-4 pt-1 sm:gap-4 sm:px-6">
                 <Kpi
                   label="Open gaps"
                   value={gaps}

@@ -91,7 +91,7 @@ export function JobsPanel({ counts, onRefreshed }: { counts: Record<string, numb
                     {j.last_error && (
                       <details className="mt-1 max-w-[300px] text-[12px]">
                         <summary className="cursor-pointer truncate text-danger">{j.last_error.split("\n")[0]}</summary>
-                        <pre className="mt-1 max-h-48 overflow-auto whitespace-pre-wrap rounded-[12px] bg-surface-2 p-2.5 font-mono text-[11px] text-ink-2 shadow-inset-sm">
+                        <pre className="mt-1 max-h-48 overflow-auto whitespace-pre-wrap rounded-[12px] bg-surface-2 p-2.5 font-mono text-[11px] text-ink-2">
                           {j.last_error}
                         </pre>
                       </details>

@@ -5,7 +5,8 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input, Label, Select, Textarea } from "@/components/ui/field";
-import { glassClass } from "@/components/ui/glass";
+import { CornerTab } from "@/components/ui/card";
+import { cardClass } from "@/components/ui/styles";
 import { api, ApiError, errorMessage } from "@/lib/api";
 import { useVocab } from "@/lib/vocab";
 
@@ -58,16 +59,14 @@ export function ContactForm() {
 
   if (state.kind === "sent") {
     return (
-      <div ref={done} tabIndex={-1} role="status" className={glassClass("strong", "lg", "flex flex-col items-center px-8 py-14 text-center outline-none")}>
+      <div ref={done} tabIndex={-1} role="status" className={cardClass("raised", "lg", "flex flex-col items-center px-8 py-14 text-center outline-none")}>
         <span className="flex h-14 w-14 items-center justify-center rounded-[18px] bg-[var(--cov-covered-bg)] text-ok">
           <CheckCircle2 size={26} aria-hidden="true" />
         </span>
-        <h2 className="display mt-5 text-[22px] text-ink">Thanks, your request is in</h2>
-        <p className="mt-2 max-w-sm text-[14.5px] leading-relaxed text-ink-2">
-          We&rsquo;ll reply to {f.email} to arrange a time. If you need to change anything, just send another request.
-        </p>
-        <Link href="/product" className="mt-6 rounded-full text-[14px] font-medium text-accent hover:underline">
-          Meanwhile, see how each module works
+        <h2 className="display mt-5 text-[22px] text-ink">Request received</h2>
+        <p className="mt-2 max-w-sm text-[14.5px] leading-relaxed text-ink-2">We&rsquo;ll reply to {f.email} to arrange a time.</p>
+        <Link href="/docs" className="mt-6 rounded-[6px] text-[14px] font-semibold text-accent hover:underline">
+          Meanwhile, read the docs
         </Link>
       </div>
     );
@@ -75,9 +74,10 @@ export function ContactForm() {
 
   const busy = state.kind === "sending";
   return (
-    <form onSubmit={submit} className={glassClass("strong", "lg", "px-6 py-8 sm:px-9 sm:py-10")} aria-describedby="demo-consent">
-      <h2 className="display text-[22px] text-ink">Request a demo</h2>
-      <p className="mt-1.5 text-[14px] text-ink-2">Tell us a little about you. Fields marked optional can be left blank.</p>
+    <form onSubmit={submit} className={cardClass("raised", "lg", "relative px-6 py-8 sm:px-9 sm:py-9")} aria-describedby="demo-consent">
+      <CornerTab />
+      <h2 className="label-caps text-[20px]">Request a demo</h2>
+      <p className="mt-1.5 text-[13.5px] text-ink-3">Optional fields can stay blank.</p>
       <div className="mt-7 grid gap-5 sm:grid-cols-2">
         <div>
           <Label htmlFor="d-name">Name</Label>
@@ -129,13 +129,13 @@ export function ContactForm() {
         </p>
       )}
       <p id="demo-consent" className="mt-6 text-[12.5px] leading-relaxed text-ink-2">
-        We use these details only to reply to your request. See the{" "}
-        <Link href="/privacy" className="font-medium text-accent underline underline-offset-2">
+        Used only to reply to you. See the{" "}
+        <Link href="/privacy" className="font-semibold text-accent underline underline-offset-2">
           privacy notice
-        </Link>{" "}
-        for how long we keep them and how to ask for deletion.
+        </Link>
+        .
       </p>
-      <Button type="submit" variant="primary" size="lg" loading={busy} icon={<Send size={15} aria-hidden="true" />} className="mt-6 w-full sm:w-auto">
+      <Button type="submit" variant="primary" size="lg" loading={busy} icon={<Send size={15} aria-hidden="true" />} className="mt-6 w-full uppercase tracking-[0.06em] sm:w-auto">
         {busy ? "Sending…" : "Request a demo"}
       </Button>
     </form>

@@ -35,7 +35,7 @@ function OrgSwitcher() {
           onClick={p.toggle}
           aria-expanded={p["aria-expanded"]}
           aria-haspopup="menu"
-          className="flex min-w-0 max-w-[360px] items-center gap-3 rounded-full border border-[var(--card-edge)] bg-surface-grad py-1.5 pl-1.5 pr-4 text-left shadow-raised-xs transition-shadow hover:shadow-raised-sm"
+          className="flex min-w-0 max-w-[360px] items-center gap-3 rounded-full border border-[var(--card-edge)] bg-surface py-1.5 pl-1.5 pr-4 text-left shadow-xs transition-shadow hover:shadow-card"
         >
           <span className={iconTileClass("accent", "sm", "rounded-full!")}>
             <Building2 size={15} aria-hidden="true" />
@@ -156,7 +156,7 @@ function AlertsBell() {
           className={iconTileClass(
             "soft",
             "md",
-            "relative border-line-strong/70! text-ink-2 transition-[box-shadow,color] hover:text-accent active:shadow-inset-sm",
+            "relative border-line-strong/70! text-ink-2 transition-[box-shadow,color] hover:text-accent",
           )}
         >
           <Bell size={18} aria-hidden="true" />
@@ -305,7 +305,7 @@ function UserMenu() {
 
 export function Topbar({ onMenu }: { onMenu: () => void }) {
   return (
-    <header className="glass-bar sticky top-0 z-30 flex h-[76px] items-center gap-3 px-4 sm:px-8">
+    <header className="topbar sticky top-0 z-30 flex h-[76px] items-center gap-3 px-4 sm:px-8">
       <IconButton label="Open navigation" tone="soft" className="lg:hidden" onClick={onMenu}>
         <Menu size={18} />
       </IconButton>

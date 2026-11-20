@@ -66,7 +66,7 @@ export function InForceTool() {
             </p>
             <ul className={q.loading ? "space-y-2 opacity-60" : "space-y-2"}>
               {rows.map((r) => (
-                <li key={r.regulation_id} className="rounded-[18px] soft-xs px-4 py-3">
+                <li key={r.regulation_id} className="rounded-[18px] card-xs px-4 py-3">
                   <div className="flex items-center gap-1.5">
                     <RegulatorTag regulator={r.regulator} />
                     {r.ref_no && <span className="truncate font-mono text-[10.5px] text-ink-2">{r.ref_no}</span>}

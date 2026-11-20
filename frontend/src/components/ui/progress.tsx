@@ -8,8 +8,8 @@ function clamp(v: number) {
 }
 
 /**
- * Display-only slider: a grey pressed-in track, a blue-gradient fill and a white knob with a
- * blue centre dot, with the value shown large to the side ("71%").
+ * Display-only slider: a thin grey track, an azure fill and a round white knob ringed in azure,
+ * with the value shown large to the side ("71%").
  */
 export function ProgressSlider({
   value,
@@ -45,24 +45,22 @@ export function ProgressSlider({
             aria-valuemin={0}
             aria-valuemax={100}
             aria-valuenow={Math.round(v)}
-            className={clsx("relative rounded-full border border-line bg-surface-2 shadow-inset-sm", md ? "h-3" : "h-2.5")}
+            className={clsx("relative rounded-full bg-surface-3", md ? "h-1.5" : "h-1")}
           >
-            <span className="absolute inset-y-0 left-0 rounded-full bg-accent-grad" style={{ width: `${v}%` }} />
+            <span className="absolute inset-y-0 left-0 rounded-full bg-primary" style={{ width: `${v}%` }} />
             <span
               aria-hidden="true"
               className={clsx(
-                "absolute top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-surface-hi shadow-knob",
-                md ? "h-6 w-6" : "h-5 w-5",
+                "absolute top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-primary bg-surface",
+                md ? "h-4 w-4" : "h-3.5 w-3.5",
               )}
               style={{ left: `${v}%` }}
-            >
-              <span className={clsx("rounded-full bg-accent-grad-diag", md ? "h-2.5 w-2.5" : "h-2 w-2")} />
-            </span>
+            />
           </div>
           {caption && <p className="mt-2.5 text-[12px] text-ink-3">{caption}</p>}
         </div>
         {showValue && (
-          <span className={clsx("figure shrink-0 leading-none text-ink", md ? "text-[30px]" : "text-[22px]")}>
+          <span className={clsx("figure shrink-0 leading-none text-accent", md ? "text-[30px]" : "text-[22px]")}>
             {valueLabel ?? (
               <>
                 {Math.round(v)}
@@ -99,11 +97,11 @@ export function ProgressBar({
       aria-valuemax={label ? 100 : undefined}
       aria-valuenow={label ? Math.round(v) : undefined}
       aria-hidden={label ? undefined : true}
-      className={clsx("relative block overflow-hidden rounded-full bg-surface-3 shadow-inset-sm", className)}
+      className={clsx("relative block overflow-hidden rounded-full bg-surface-3", className)}
       style={{ height }}
     >
       <span
-        className={clsx("absolute inset-y-0 left-0 rounded-full", !color && "bg-accent-grad")}
+        className={clsx("absolute inset-y-0 left-0 rounded-full", !color && "bg-primary")}
         style={{ width: `${v}%`, background: color }}
       />
     </span>

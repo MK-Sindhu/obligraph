@@ -81,11 +81,11 @@ function ObligationRow({ ob, href, selected }: { ob: ObligationOut; href: string
       scroll={false}
       aria-current={selected ? "true" : undefined}
       className={clsx(
-        "relative mx-3 block rounded-[20px] px-4 py-3.5 transition-[background-color,box-shadow] hover:bg-surface-hi hover:shadow-raised-xs focus-visible:outline-offset-[-2px]",
+        "relative mx-3 block rounded-[20px] px-4 py-3.5 transition-[background-color,box-shadow] hover:bg-surface-hi hover:shadow-xs focus-visible:outline-offset-[-2px]",
         selected && "bg-accent-wash! shadow-none! ring-1 ring-accent/30",
       )}
     >
-      {selected && <span className="absolute inset-y-3 left-0 w-[4px] rounded-full bg-accent-grad-diag" aria-hidden="true" />}
+      {selected && <span className="absolute inset-y-3 left-0 w-[4px] rounded-full bg-primary" aria-hidden="true" />}
       {/* Desktop: one row per obligation */}
       <div className="hidden items-start gap-x-4 md:grid md:grid-cols-[92px_minmax(0,1fr)_124px_104px_140px_40px]">
         <div className="pt-px">
@@ -317,7 +317,7 @@ export function ObligationsView() {
         meta={data ? `${total} obligation${total === 1 ? "" : "s"}${list.loading ? " · updating…" : ""}` : undefined}
       >
         <div
-          className="mx-3 mb-2 hidden grid-cols-[92px_minmax(0,1fr)_124px_104px_140px_40px] gap-x-4 rounded-full bg-surface-2 px-4 py-2 shadow-inset-sm md:grid"
+          className="mx-3 mb-2 hidden grid-cols-[92px_minmax(0,1fr)_124px_104px_140px_40px] gap-x-4 rounded-full bg-surface-2 px-4 py-2 md:grid"
           aria-hidden="true"
         >
           {["Severity", "Requirement", "Coverage", "Status", "Owner", "Tasks"].map((h, i) => (

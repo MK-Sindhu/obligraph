@@ -23,12 +23,11 @@ function parseFragment(hash: string): { token: string | null; error: string | nu
   return { token: p.get("token"), error: p.get("error") ?? p.get("error_description") };
 }
 
-const ERROR_TEXT: Record<string, string> = {
-  access_denied: "The sign-in was cancelled at your identity provider.",
-  no_account: "There's no Obligraph account for that email. Ask an admin to add you from Settings → Team.",
-  domain_not_allowed: "Your email domain isn't allowed to sign in with single sign-on here.",
-  invalid_state: "The sign-in link expired or was already used. Start again from the sign-in page.",
-};
+/** The API sends a readable reason (e.g. "sign-in state mismatch; start again"). */
+function reason(err: string): string {
+  const t = err.trim();
+  return t ? `${t[0].toUpperCase()}${t.slice(1)}${/[.!?]$/.test(t) ? "" : "."}` : "Single sign-on failed.";
+}
 
 /**
  * Single sign-on hand-off. The token arrives in the URL fragment (never sent to a server),
@@ -45,7 +44,7 @@ export default function SsoPage() {
     (hash === null
       ? null
       : err
-        ? (ERROR_TEXT[err] ?? err.replace(/[_+]/g, " "))
+        ? reason(err)
         : !token
           ? "The single sign-on response didn't include a session. Start again from the sign-in page."
           : null);
@@ -72,7 +71,7 @@ export default function SsoPage() {
   return (
     <div className="flex min-h-dvh items-center justify-center bg-canvas px-4">
       <title>Sign-in failed · Obligraph</title>
-      <div role="alert" className="flex w-full max-w-[460px] flex-col items-center gap-3 rounded-card-lg soft px-8 py-10 text-center">
+      <div role="alert" className="flex w-full max-w-[460px] flex-col items-center gap-3 rounded-card-lg card px-8 py-10 text-center">
         <LogoMark size={40} />
         <span className="mt-3 flex h-12 w-12 items-center justify-center rounded-[16px] bg-danger-bg text-danger">
           <ShieldAlert size={22} aria-hidden="true" />
@@ -81,7 +80,7 @@ export default function SsoPage() {
         <p className="max-w-sm text-[13.5px] leading-relaxed text-ink-2">{error}</p>
         <Link
           href="/login"
-          className="mt-4 inline-flex h-10 items-center gap-2 rounded-full bg-accent-grad-text px-6 text-[13.5px] font-medium text-white shadow-glow"
+          className="mt-4 inline-flex h-10 items-center gap-2 rounded-full bg-primary-fill px-6 text-[13.5px] font-medium text-white"
         >
           <ArrowLeft size={15} aria-hidden="true" /> Back to sign in
         </Link>

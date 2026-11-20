@@ -51,7 +51,7 @@ export function OverviewPanel({ data, loading, error, onRetry }: Props) {
     <Panel title="Platform" meta="Across all organisations">
       <div className="grid grid-cols-2 gap-4 px-6 pb-6 pt-1 sm:grid-cols-3 xl:grid-cols-[repeat(6,minmax(0,1fr))_minmax(0,1.5fr)]">
         {counts.map((k) => (
-          <div key={k} className="min-w-0 rounded-tile soft-sm px-4 py-4">
+          <div key={k} className="min-w-0 rounded-tile card px-4 py-4">
             {COUNT_ICON[k] && (
               <IconTile tone="accent" size="xs" className="mb-3">
                 {COUNT_ICON[k]}
@@ -60,10 +60,10 @@ export function OverviewPanel({ data, loading, error, onRetry }: Props) {
             <p className="truncate text-[12px] font-medium text-ink-2" title={COUNT_LABEL[k] ?? humanize(k)}>
               {COUNT_LABEL[k] ?? humanize(k)}
             </p>
-            <p className="figure mt-1.5 text-[28px] leading-none">{fmtNumber(data.counts[k])}</p>
+            <p className="figure mt-1.5 text-[28px] leading-none text-accent">{fmtNumber(data.counts[k])}</p>
           </div>
         ))}
-        <div className="col-span-2 rounded-tile bg-surface-2 px-4 py-4 shadow-inset-sm sm:col-span-3 xl:col-span-1">
+        <div className="col-span-2 rounded-tile bg-surface-2 px-4 py-4 sm:col-span-3 xl:col-span-1">
           <p className="text-[12px] font-medium text-ink-2">AI engine</p>
           <p
             className={clsx(

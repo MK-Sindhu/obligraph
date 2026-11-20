@@ -4,8 +4,7 @@ import clsx from "clsx";
 import type { ReactNode } from "react";
 
 /**
- * Rounded-rect switch. ON: the blue gradient track with white "ON" text; OFF: a pressed-in
- * track with "OFF". The knob is a white embossed block that can carry an icon.
+ * Switch: a pill track (azure when on) with a round white knob that can carry an icon.
  * A native checkbox (role="switch") underneath keeps keyboard and screen-reader behaviour.
  */
 export function Toggle({
@@ -53,30 +52,19 @@ export function Toggle({
       <span
         aria-hidden="true"
         className={clsx(
-          "relative inline-flex shrink-0 items-center border transition-[background-color,border-color,box-shadow] duration-200",
-          "peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-accent",
-          md ? "h-[30px] w-[60px] rounded-[11px]" : "h-[24px] w-[46px] rounded-[9px]",
-          checked
-            ? "border-transparent bg-accent-grad shadow-glow-sm"
-            : "border-line-strong bg-surface-2 shadow-inset-sm",
+          "relative inline-flex shrink-0 items-center rounded-full border transition-[background-color,border-color] duration-200",
+          "peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-primary",
+          md ? "h-[26px] w-[46px]" : "h-[22px] w-[38px]",
+          checked ? "border-transparent bg-primary-fill" : "border-line-strong bg-surface-3",
         )}
       >
-        {state && (
-          <span
-            className={clsx(
-              "absolute text-[9.5px] font-semibold tracking-[0.08em]",
-              checked ? "left-[9px] text-white" : "right-[8px] text-ink-3",
-            )}
-          >
-            {checked ? "ON" : "OFF"}
-          </span>
-        )}
+        {state && <span className="sr-only">{checked ? "On" : "Off"}</span>}
         <span
           className={clsx(
-            "absolute flex items-center justify-center bg-surface-hi bg-surface-grad shadow-knob transition-transform duration-200 ease-out",
-            md ? "left-[3px] h-[22px] w-[24px] rounded-[8px]" : "left-[2px] h-[18px] w-[20px] rounded-[7px]",
-            checked ? (md ? "translate-x-[28px]" : "translate-x-[22px]") : "translate-x-0",
-            checked ? "text-accent" : "text-ink-3",
+            "absolute left-[2px] flex items-center justify-center rounded-full bg-white shadow-xs transition-transform duration-200 ease-out",
+            md ? "h-5 w-5" : "h-4 w-4",
+            checked ? (md ? "translate-x-[20px]" : "translate-x-[16px]") : "translate-x-0",
+            checked ? "text-primary-fill" : "text-ink-3",
           )}
         >
           {knobIcon}

@@ -83,8 +83,52 @@ async def _demo_if_empty() -> None:
         await seed.run(demo=True, drain_now=not get_settings().is_serverless)
 
 
+# Bump when reference data (sources, returns catalogue) changes, to force a re-seed.
+REFERENCE_DATA_VERSION = "1"
+
+
+def _target_marker() -> str:
+    from alembic.script import ScriptDirectory
+
+    head = ScriptDirectory.from_config(_alembic_config()).get_current_head()
+    return f"{head}:{REFERENCE_DATA_VERSION}"
+
+
+async def _already_bootstrapped(marker: str) -> bool:
+    """One round trip: is this database already at the schema and seed this code expects?
+    Cold starts on serverless hosts take this path almost every time."""
+    try:
+        async with session_scope() as session:
+            row = (
+                await session.execute(
+                    text("SELECT value FROM instance_config WHERE key = 'bootstrap'")
+                )
+            ).first()
+    except Exception:  # fresh database: the table does not exist yet
+        return False
+    return bool(row) and row[0] == marker
+
+
+async def _record(marker: str) -> None:
+    async with session_scope() as session:
+        await session.execute(
+            insert(InstanceConfig)
+            .values(key="bootstrap", value=marker)
+            .on_conflict_do_update(index_elements=["key"], set_={"value": marker})
+        )
+
+
 async def run() -> None:
     settings = get_settings()
+    marker = _target_marker()
+    if await _already_bootstrapped(marker):
+        from obligraph.compliance import approvals
+
+        await approvals.init()
+        await _signing_secret()
+        if settings.seed_demo:
+            await _demo_if_empty()
+        return
     url, connect_args = async_url(settings.database_url_unpooled or settings.database_url)
     lock_engine = create_async_engine(url, connect_args=connect_args, pool_size=1)
     try:
@@ -100,6 +144,7 @@ async def run() -> None:
                 await _signing_secret()
                 if settings.seed_demo:
                     await _demo_if_empty()
+                await _record(marker)
             finally:
                 await conn.execute(text("SELECT pg_advisory_unlock(:id)"), {"id": LOCK_ID})
                 await conn.commit()

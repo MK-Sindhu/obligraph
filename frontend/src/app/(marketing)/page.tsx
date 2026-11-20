@@ -1,251 +1,146 @@
 import {
-  ArrowRight,
-  Building2,
   CalendarDays,
   FileCheck2,
   FileSearch,
-  Fingerprint,
   Gauge,
-  KeyRound,
-  Landmark,
   Layers,
   ListChecks,
   MessageSquareText,
   PieChart,
   Radar,
   ScrollText,
-  ServerCog,
   ShieldCheck,
   Stamp,
-  Users,
-  Wallet,
   Waypoints,
 } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { CtaBand, CtaLinks, Eyebrow, FeatureCard, Section, ThemeShot } from "@/components/marketing/blocks";
-import { glassClass } from "@/components/ui/glass";
-import { iconTileClass } from "@/components/ui/styles";
+import { CtaBand, CtaLinks, Eyebrow, FeatureTile, Section, ThemeShot } from "@/components/marketing/blocks";
+import { ProgressRing } from "@/components/ui/charts";
+import { cardClass, iconTileClass } from "@/components/ui/styles";
 
-const DESCRIPTION =
-  "Obligraph turns circulars from RBI, SEBI, IRDAI and other regulators into the obligations that apply to you, the gaps in your policies and dated, owned work.";
+const DESCRIPTION = "Obligraph reads RBI, SEBI and IRDAI circulars, checks your policies and turns gaps into dated work.";
 
 export const metadata: Metadata = {
-  title: { absolute: "Obligraph · Regulatory obligations for Indian financial institutions" },
+  title: { absolute: "Obligraph · Every circular, traced to its obligations" },
   description: DESCRIPTION,
   alternates: { canonical: "/" },
-  openGraph: {
-    title: "Obligraph · Every circular, traced to the obligation it creates",
-    description: DESCRIPTION,
-    url: "/",
-  },
+  openGraph: { title: "Obligraph · Every circular, traced to its obligations", description: DESCRIPTION, url: "/" },
 };
 
 const STEPS = [
-  {
-    icon: <Radar size={18} />,
-    title: "Monitor",
-    body: "Regulator feeds are polled on a schedule, and anything else (a PDF, a Word file or pasted text) can be added by upload. Each document joins one shared corpus.",
-  },
-  {
-    icon: <FileSearch size={18} />,
-    title: "Extract",
-    body: "Each instrument is read into individual requirements with their severity, frequency, due date and the entity types they bind, quoting the source text. Amendments and supersessions are linked into a lineage.",
-  },
-  {
-    icon: <Gauge size={18} />,
-    title: "Map and assess",
-    body: "Requirements that bind your entity types become your obligations. Each is checked against your uploaded policies and marked covered, partial or missing, with the matching passage quoted.",
-  },
-  {
-    icon: <ListChecks size={18} />,
-    title: "Act and prove",
-    body: "Gaps turn into suggested tasks with owners and due dates. Maker-checker approvals, hashed evidence, filings and a board pack show the work was done.",
-  },
+  { icon: <Radar size={22} />, title: "Monitor", line: "Polled regulator feeds, plus anything you upload." },
+  { icon: <FileSearch size={22} />, title: "Extract", line: "Each circular split into dated, quoted requirements." },
+  { icon: <Gauge size={22} />, title: "Map and assess", line: "Matched to you, checked against your policies." },
+  { icon: <ListChecks size={22} />, title: "Act and prove", line: "Tasks, approvals, evidence and filings, all recorded." },
 ];
 
 const FEATURES = [
-  {
-    icon: <Waypoints size={18} />,
-    title: "Knowledge graph and lineage",
-    body: "Regulations, regulators, entity types, topics and acts in one graph. Follow amends and supersedes links, and check what was in force on any date.",
-  },
-  {
-    icon: <ScrollText size={18} />,
-    title: "Obligation extraction",
-    body: "Circulars become numbered requirements with severity, frequency, due dates and the entity types they bind, each with its source text.",
-  },
-  {
-    icon: <FileSearch size={18} />,
-    title: "Gap analysis with verbatim evidence",
-    body: "Every obligation is assessed against your policies: covered, partial or missing, with the exact passage quoted and a suggested fix.",
-  },
-  {
-    icon: <CalendarDays size={18} />,
-    title: "Compliance calendar and filings",
-    body: "Deadlines, recurring obligations, task due dates and statutory returns on one calendar. Record each filing with its acknowledgement.",
-  },
-  {
-    icon: <Stamp size={18} />,
-    title: "Maker-checker approvals with escalation",
-    body: "Remediation can need a second person's sign-off. Requests not decided within your SLA escalate to the next level of approver.",
-  },
-  {
-    icon: <FileCheck2 size={18} />,
-    title: "Evidence and audit pack",
-    body: "Attach files to tasks, obligations and filings. Each is fingerprinted with SHA-256; export everything, with a hash manifest, as one audit pack.",
-  },
-  {
-    icon: <ShieldCheck size={18} />,
-    title: "DPDP, CERT-In and KYC readiness packs",
-    body: "See how ready you are for each regime as one figure, with the gaps that matter most and a drill-down to every obligation.",
-  },
-  {
-    icon: <Layers size={18} />,
-    title: "NBFC SBR layer view",
-    body: "Which requirements differ between the Base, Middle, Upper and Top layers, and what moving up a layer would add.",
-  },
-  {
-    icon: <PieChart size={18} />,
-    title: "Board pack",
-    body: "A compliance summary for any period: coverage by regulator and topic, gap ageing, missed filings and approvals. Print it or save it as a PDF.",
-  },
-  {
-    icon: <MessageSquareText size={18} />,
-    title: "Copilot with citations",
-    body: "Ask about your regulations, obligations and deadlines; every answer lists its sources. Offline it returns retrieval summaries; with Claude configured it writes the answer.",
-  },
+  { icon: <Waypoints size={22} />, title: "Graph and lineage", line: "Follow amendments and supersessions; see what was in force.", href: "/docs/concepts/knowledge-graph-and-lineage" },
+  { icon: <ScrollText size={22} />, title: "Obligation extraction", line: "Circulars become requirements with severity and due dates.", href: "/docs/concepts/obligations-and-coverage" },
+  { icon: <FileSearch size={22} />, title: "Gap analysis", line: "Covered, partial or missing, with the policy passage quoted.", href: "/docs/using/policies-and-gap-analysis" },
+  { icon: <CalendarDays size={22} />, title: "Calendar and filings", line: "Deadlines, recurring duties and returns, with acknowledgements.", href: "/docs/using/calendar-and-filings" },
+  { icon: <Stamp size={22} />, title: "Maker-checker", line: "A second sign-off, escalated when the SLA passes.", href: "/docs/using/tasks-and-approvals" },
+  { icon: <FileCheck2 size={22} />, title: "Evidence and audit pack", line: "SHA-256 fingerprinted files, exported with a hash manifest.", href: "/docs/using/evidence-and-audit-pack" },
+  { icon: <ShieldCheck size={22} />, title: "Readiness packs", line: "DPDP, CERT-In and KYC/AML readiness at a glance.", href: "/docs/using/readiness-packs" },
+  { icon: <Layers size={22} />, title: "NBFC SBR layers", line: "What changes between the Base, Middle, Upper and Top layers.", href: "/docs/concepts/sbr-layers" },
+  { icon: <PieChart size={22} />, title: "Board pack", line: "A period summary for the board, printable as PDF.", href: "/docs/using/board-pack" },
+  { icon: <MessageSquareText size={22} />, title: "Copilot", line: "Answers from your records, with sources. Works offline.", href: "/docs/using/copilot" },
 ];
 
 const SEGMENTS = [
-  { icon: <Building2 size={18} />, title: "NBFCs", body: "SBR layers, periodic returns, the Fair Practices Code and KYC.", href: "/solutions#nbfcs" },
-  { icon: <Landmark size={18} />, title: "Banks", body: "A board pack, maker-checker approvals and an evidence trail.", href: "/solutions#banks" },
-  { icon: <Wallet size={18} />, title: "Payment aggregators and fintechs", body: "DPDP and CERT-In readiness and incident reporting windows.", href: "/solutions#fintechs" },
-  { icon: <Users size={18} />, title: "AIFs and SEBI intermediaries", body: "SEBI circulars added by upload, mapped to your registration.", href: "/solutions#sebi" },
+  { label: "NBFCs", href: "/solutions#nbfcs" },
+  { label: "Banks", href: "/solutions#banks" },
+  { label: "Payment aggregators and fintechs", href: "/solutions#fintechs" },
+  { label: "AIFs and SEBI intermediaries", href: "/solutions#sebi" },
 ];
 
-const SECURITY = [
-  { icon: <ServerCog size={16} />, label: "Self-hostable with Docker" },
-  { icon: <Building2 size={16} />, label: "Tenant isolation on every query" },
-  { icon: <Users size={16} />, label: "Owner, admin, member and viewer roles" },
-  { icon: <Fingerprint size={16} />, label: "SHA-256 evidence, checked on download" },
-  { icon: <KeyRound size={16} />, label: "OpenID Connect single sign-on" },
+// Readiness figures as they appear in the sample workspace.
+const SAMPLE_PACKS = [
+  { name: "DPDP", value: 56 },
+  { name: "CERT-In", value: 50 },
+  { name: "KYC/AML", value: 41 },
 ];
 
 export default function HomePage() {
   return (
     <>
-      <section aria-labelledby="hero-title" className="mx-auto w-full max-w-[1200px] px-4 pb-10 pt-14 sm:px-8 sm:pt-20">
-        <div className="mx-auto max-w-[920px] text-center">
-          <Eyebrow>Regulatory obligations for Indian financial institutions</Eyebrow>
-          <h1 id="hero-title" className="display mt-6 text-[36px] leading-[1.08] text-ink sm:text-[56px]">
-            Every circular, traced to the obligation it creates and the policy clause that meets it.
+      <section aria-labelledby="hero-title" className="mx-auto grid w-full max-w-[1200px] items-center gap-10 px-4 pb-8 pt-12 sm:px-8 sm:pt-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]">
+        <div>
+          <Eyebrow>Regulatory obligations · India</Eyebrow>
+          <h1 id="hero-title" className="display mt-3 text-[42px] font-extrabold leading-[1.02] text-on-canvas sm:text-[60px]">
+            Every circular, traced to its obligations.
           </h1>
-          <p className="mx-auto mt-6 max-w-[720px] text-[16.5px] leading-relaxed text-ink-2 sm:text-[18px]">
-            Obligraph monitors RBI, SEBI, IRDAI and other regulators through their feeds and the documents you upload, and turns
-            each circular into the obligations that apply to you, the gaps in your policies and dated work with an owner.
-          </p>
-          <CtaLinks className="mt-9 justify-center" />
+          <p className="mt-5 max-w-[520px] text-[17px] text-on-canvas-2">{DESCRIPTION}</p>
+          <CtaLinks className="mt-8" />
         </div>
 
-        <div className="relative mx-auto mt-14 max-w-[1120px]">
-          <ThemeShot name="dashboard" priority sizes="(min-width: 1200px) 1120px, 100vw" caption="The dashboard: policy coverage, workload, filings and approvals." />
-          <div className="pointer-events-none absolute -bottom-10 -right-6 hidden w-[330px] xl:block">
-            <ThemeShot name="approval" maxHeight={300} sizes="330px" caption="An approval with its history." className="pointer-events-auto shadow-pop" />
+        <div className="relative sm:pb-16 lg:pb-20">
+          <ThemeShot name="dashboard" priority sizes="(min-width: 1024px) 640px, 100vw" />
+          <div className={cardClass("raised", "tile", "absolute -bottom-2 left-4 hidden px-5 pb-4 pt-4 sm:block lg:-left-10")} aria-label="Sample readiness figures">
+            <span aria-hidden="true" className="absolute -right-px -top-px rounded-bl-[10px] rounded-tr-[inherit] bg-primary-fill px-2.5 py-1 text-[10px] font-bold uppercase leading-none tracking-[0.07em] text-white">
+              Sample
+            </span>
+            <p className="text-[11px] font-extrabold uppercase tracking-[0.08em] text-accent">Readiness</p>
+            <ul className="mt-3 flex gap-5">
+              {SAMPLE_PACKS.map((p) => (
+                <li key={p.name} className="flex flex-col items-center gap-1.5">
+                  <ProgressRing value={p.value} size={58} stroke={5} tone="auto" warnBelow={45} label={`${p.name} readiness ${p.value}%`} />
+                  <span className="text-[11.5px] font-semibold text-ink-2">{p.name}</span>
+                </li>
+              ))}
+            </ul>
           </div>
-        </div>
-        <div className="mx-auto mt-8 max-w-[1120px] space-y-6 xl:mt-20">
-          <ThemeShot name="lineage" sizes="(min-width: 1200px) 1120px, 100vw" caption="Lineage: a circular superseded by its revision." />
-          <ThemeShot name="readiness" maxHeight={470} sizes="(min-width: 1200px) 1120px, 100vw" caption="Readiness gauges for DPDP, CERT-In and KYC/AML." />
         </div>
       </section>
 
-      <Section id="how-it-works" eyebrow="How it works" title="From a circular to closed, provable work" center>
-        <ol className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+      <Section id="how-it-works" eyebrow="How it works" title="From circular to closed work" center>
+        <ol className="relative grid grid-cols-2 gap-x-4 gap-y-8 lg:grid-cols-4">
+          <span aria-hidden="true" className="absolute left-[12%] right-[12%] top-[34px] hidden h-[2px] bg-white/70 lg:block" />
           {STEPS.map((s, i) => (
-            <li key={s.title} className={glassClass("default", "tile", "relative px-6 pb-6 pt-5")}>
-              <div className="flex items-center justify-between">
-                <span aria-hidden="true" className={iconTileClass("accent", "md")}>
-                  {s.icon}
-                </span>
-                <span className="figure text-[34px] leading-none text-ink-3/50" aria-hidden="true">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-              </div>
-              <h3 className="display mt-4 text-[17px] text-ink">
+            <li key={s.title} className="relative flex flex-col items-center text-center">
+              <span aria-hidden="true" className={iconTileClass(i === 0 ? "selected" : "soft", "xl", "h-[68px]! w-[68px]! rounded-[20px]! shadow-card [&_svg]:size-7")}>
+                {s.icon}
+              </span>
+              <span className="mt-4 text-[16px] font-extrabold text-on-canvas">
                 <span className="sr-only">Step {i + 1}: </span>
                 {s.title}
-              </h3>
-              <p className="mt-2 text-[13.5px] leading-relaxed text-ink-2">{s.body}</p>
+              </span>
+              <span className="mt-1 max-w-[220px] text-[13px] text-on-canvas-2 sm:text-[13.5px]">{s.line}</span>
             </li>
           ))}
         </ol>
       </Section>
 
-      <Section
-        id="features"
-        eyebrow="What's in it"
-        title="Everything between the circular and the board"
-        intro="Each of these works today on your own data. Analysis runs offline out of the box, and is better with Claude configured."
-      >
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+      <Section id="features" eyebrow="What's in it" title="Everything between circular and board">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           {FEATURES.map((f) => (
-            <FeatureCard key={f.title} icon={f.icon} title={f.title}>
-              {f.body}
-            </FeatureCard>
+            <FeatureTile key={f.title} icon={f.icon} title={f.title} line={f.line} href={f.href} />
           ))}
         </div>
-        <p className="mt-8 text-center">
-          <Link href="/product" className="inline-flex items-center gap-1.5 rounded-full text-[14px] font-medium text-accent hover:underline">
-            How each module works <ArrowRight size={15} aria-hidden="true" />
+        <p className="mt-6">
+          <Link href="/product" className="text-[14px] font-bold text-accent-deep hover:underline">
+            See each module →
           </Link>
         </p>
       </Section>
 
-      <Section id="built-for" eyebrow="Built for" title="Regulated entities across Indian financial services">
-        <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+      <Section id="built-for" eyebrow="Built for" title="Licensed by RBI, SEBI or IRDAI" center>
+        <ul className="flex flex-wrap justify-center gap-3">
           {SEGMENTS.map((s) => (
-            <Link key={s.title} href={s.href} className={glassClass("default", "tile", "group flex flex-col px-6 pb-6 pt-5 transition-transform hover:-translate-y-0.5")}>
-              <span aria-hidden="true" className={iconTileClass("soft", "md")}>
-                {s.icon}
-              </span>
-              <span className="display mt-4 text-[16.5px] text-ink group-hover:text-accent">{s.title}</span>
-              <span className="mt-2 text-[13.5px] leading-relaxed text-ink-2">{s.body}</span>
-              <span className="mt-auto inline-flex items-center gap-1 pt-4 text-[13px] font-medium text-accent">
-                Read more <ArrowRight size={14} aria-hidden="true" />
-              </span>
-            </Link>
+            <li key={s.label}>
+              <Link
+                href={s.href}
+                className="inline-flex h-11 items-center rounded-full border border-white/70 bg-surface px-5 text-[14px] font-bold text-ink shadow-xs transition-colors hover:border-primary hover:text-accent"
+              >
+                {s.label}
+              </Link>
+            </li>
           ))}
-        </div>
+        </ul>
       </Section>
 
-      <section aria-labelledby="security-strip-title" className="mx-auto w-full max-w-[1200px] px-4 pb-16 sm:px-8">
-        <div className={glassClass("default", "lg", "flex flex-col gap-6 px-6 py-7 sm:px-10 lg:flex-row lg:items-center")}>
-          <div className="lg:w-[260px] lg:shrink-0">
-            <h2 id="security-strip-title" className="display text-[20px] text-ink">
-              Security you can check
-            </h2>
-            <Link href="/security" className="mt-1.5 inline-flex items-center gap-1 rounded-full text-[13.5px] font-medium text-accent hover:underline">
-              How Obligraph handles your data <ArrowRight size={14} aria-hidden="true" />
-            </Link>
-          </div>
-          <ul className="grid flex-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
-            {SECURITY.map((s) => (
-              <li key={s.label} className="flex items-center gap-3 text-[13.5px] text-ink">
-                <span aria-hidden="true" className={iconTileClass("soft", "sm")}>
-                  {s.icon}
-                </span>
-                {s.label}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      <CtaBand
-        title="See your obligations, not just the circulars"
-        body="We'll walk you through Obligraph on sample data and show how it would map to your entity types and policies."
-      />
+      <CtaBand title="See it on your entity type" line="A walkthrough on sample data, shaped to your licence." />
     </>
   );
 }

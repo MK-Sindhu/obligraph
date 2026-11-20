@@ -17,7 +17,7 @@ import { useState } from "react";
 import { CoverageBadge, SEVERITIES, SeverityBadge, SeverityGlyph } from "@/components/domain/badges";
 import { Badge, Chip } from "@/components/ui/badge";
 import { Button, IconTile } from "@/components/ui/button";
-import { softCardClass, StatTile } from "@/components/ui/card";
+import { cardClass, StatTile } from "@/components/ui/card";
 import { AreaChart, DonutGauge } from "@/components/ui/charts";
 import { Input, Label } from "@/components/ui/field";
 import { PageHeader, Panel } from "@/components/ui/misc";
@@ -116,11 +116,11 @@ function BoardPackBody({ d }: { d: BoardPack }) {
   return (
     <div className="space-y-6">
       <div className="grid gap-6 lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)]">
-        <section className={softCardClass("raised", "md", "flex flex-col items-center px-6 py-6")} aria-label="Coverage">
+        <section className={cardClass("raised", "md", "flex flex-col items-center px-6 py-6")} aria-label="Coverage">
           <DonutGauge
             value={h.coverage_pct}
             size={184}
-            thickness={16}
+            thickness={10}
             label={`Policy coverage ${h.coverage_pct === null ? "not available" : `${Math.round(h.coverage_pct)}%`}`}
             centerCaption="coverage"
             segments={(["covered", "partial", "missing", "unassessed"] as const).map((k) => ({
@@ -135,7 +135,7 @@ function BoardPackBody({ d }: { d: BoardPack }) {
             {d.org.sbr_layer ? ` · ${humanize(d.org.sbr_layer)} layer` : ""}
           </p>
         </section>
-        <section className={softCardClass("raised", "md", "px-7 py-6")} aria-label="Summary">
+        <section className={cardClass("raised", "md", "px-7 py-6")} aria-label="Summary">
           <p className="text-[12px] font-medium text-accent">For the board · {d.period.label}</p>
           <h2 className="display mt-1.5 text-[20px] text-ink">Compliance summary</h2>
           <div className="mt-3 space-y-2.5 text-[14px] leading-relaxed text-ink-2">
@@ -160,7 +160,7 @@ function BoardPackBody({ d }: { d: BoardPack }) {
             danger: (h.filings.overdue ?? 0) > 0,
           },
         ].map((k) => (
-          <div key={k.label} className={softCardClass("raised-sm", "tile", "px-5 py-4")}>
+          <div key={k.label} className={cardClass("raised-sm", "tile", "px-5 py-4")}>
             <StatTile
               label={k.label}
               value={k.value}
@@ -187,7 +187,7 @@ function BoardPackBody({ d }: { d: BoardPack }) {
               formatValue={(v) => `${Math.round(v)}%`}
             />
           ) : (
-            <p className="rounded-[18px] bg-surface-2 px-4 py-3 text-[13px] text-ink-3 shadow-inset-sm">
+            <p className="rounded-[18px] bg-surface-2 px-4 py-3 text-[13px] text-ink-3">
               {trend.length === 1
                 ? `One snapshot so far (${fmtDate(trend[0].day)}: ${Math.round(trend[0].coverage_pct ?? 0)}%). The trend line appears once Obligraph has taken daily snapshots on more than one day in the period.`
                 : "No coverage snapshots in this period yet."}
@@ -234,7 +234,7 @@ function BoardPackBody({ d }: { d: BoardPack }) {
                       return (
                         <td key={s} className="p-0">
                           <span
-                            className={clsx("num flex h-9 items-center justify-center rounded-[11px] text-[13px]", n ? "font-semibold shadow-raised-xs" : "shadow-inset-sm")}
+                            className={clsx("num flex h-9 items-center justify-center rounded-[11px] text-[13px]", n ? "font-semibold shadow-xs" : "")}
                             style={{ background: `var(--heat-${l})`, color: `var(--heat-fg-${l})` }}
                           >
                             {n || "·"}
@@ -305,7 +305,7 @@ function BoardPackBody({ d }: { d: BoardPack }) {
         <Panel title="Approvals in the period">
           <div className="grid grid-cols-3 gap-3 px-6 pb-6">
             {(["approved", "rejected", "pending"] as const).map((k) => (
-              <div key={k} className="rounded-[18px] bg-surface-2 px-3 py-3 text-center shadow-inset-sm">
+              <div key={k} className="rounded-[18px] bg-surface-2 px-3 py-3 text-center">
                 <p className="figure text-[24px] leading-none text-ink">{d.approvals[k]}</p>
                 <p className="mt-1.5 text-[11.5px] text-ink-3">{humanize(k)}</p>
               </div>
@@ -405,9 +405,9 @@ function Exports() {
                   type="button"
                   onClick={() => get(`/exports/${ds.key}.csv`, `${ds.key}.csv`, ds.key)}
                   disabled={busy !== null}
-                  className="flex w-full items-center gap-3 rounded-[20px] px-4 py-3 text-left soft-xs transition-[box-shadow,transform] hover:-translate-y-px hover:shadow-raised-sm disabled:opacity-60"
+                  className="flex w-full items-center gap-3 rounded-[20px] px-4 py-3 text-left card-xs transition-[box-shadow,transform] hover:-translate-y-px hover:shadow-card disabled:opacity-60"
                 >
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[12px] bg-surface-2 text-accent shadow-inset-sm">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[12px] bg-surface-2 text-accent">
                     {busy === ds.key ? <span className="h-3 w-3 animate-spin rounded-full border-2 border-accent border-t-transparent" /> : <Download size={15} aria-hidden="true" />}
                   </span>
                   <span className="min-w-0">
@@ -419,7 +419,7 @@ function Exports() {
             ))}
           </ul>
         )}
-        <div className="mt-5 flex flex-wrap items-center gap-3 rounded-[22px] bg-surface-2 px-5 py-4 shadow-inset-sm">
+        <div className="mt-5 flex flex-wrap items-center gap-3 rounded-[22px] bg-surface-2 px-5 py-4">
           <IconTile tone="accent" size="md">
             <FileArchive size={18} />
           </IconTile>
@@ -512,7 +512,7 @@ export function ReportsView() {
         }
       />
 
-      <section className={softCardClass("raised-sm", "tile", "mb-6 flex flex-wrap items-end gap-x-5 gap-y-4 px-5 py-4")} aria-label="Reporting period">
+      <section className={cardClass("raised-sm", "tile", "mb-6 flex flex-wrap items-end gap-x-5 gap-y-4 px-5 py-4")} aria-label="Reporting period">
         <div role="group" aria-label="Period presets" className="flex flex-wrap gap-2">
           {PRESETS.map((p) => (
             <Chip key={p.value} active={preset === p.value} onClick={() => set({ preset: p.value === "qtd" ? null : p.value, start: null, end: null })}>

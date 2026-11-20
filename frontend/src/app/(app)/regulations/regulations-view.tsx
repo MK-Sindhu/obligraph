@@ -46,7 +46,7 @@ function RegulationRow({ r }: { r: RegulationSummary }) {
     <li>
       <Link
         href={`/regulations/${r.id}`}
-        className="group grid gap-x-6 gap-y-2 rounded-[22px] px-4 py-4 transition-[background-color,box-shadow] hover:bg-surface-hi hover:shadow-raised-xs md:grid-cols-[minmax(0,1fr)_auto]"
+        className="group grid gap-x-6 gap-y-2 rounded-[22px] px-4 py-4 transition-[background-color,box-shadow] hover:bg-surface-hi hover:shadow-xs md:grid-cols-[minmax(0,1fr)_auto]"
       >
         <div className="min-w-0">
           <Docket regulator={r.regulator} refNo={r.ref_no} date={r.issued_on} docType={r.doc_type} />

@@ -54,7 +54,7 @@ function EvidenceQuote({ title, quote }: { title: string; quote: string }) {
   const [expanded, setExpanded] = useState(false);
   const long = quote.length > 320;
   return (
-    <figure className="rounded-[20px] border border-line bg-surface-2 shadow-inset-sm">
+    <figure className="rounded-[20px] border border-line bg-surface-2">
       <figcaption className="flex items-center gap-2 px-4 pb-1 pt-3 text-[12px] font-medium text-ink-2">
         <FileText size={13} className="shrink-0 text-accent" aria-hidden="true" />
         <span className="truncate">{title}</span>
@@ -107,7 +107,7 @@ function RelatedTasks({
           <li key={t.id}>
             <Link
               href={`/tasks?task=${t.id}`}
-              className="flex items-start gap-3 rounded-[18px] px-4 py-3 soft-xs transition-shadow hover:shadow-raised-sm"
+              className="flex items-start gap-3 rounded-[18px] px-4 py-3 card-xs transition-shadow hover:shadow-card"
             >
               <div className="min-w-0 flex-1">
                 <p className={clsx("line-clamp-2 text-[13px] leading-snug", t.status === "done" && "text-ink-3 line-through")}>{t.title}</p>
@@ -276,7 +276,7 @@ function ObligationDetail({
         </div>
         <p className="display text-[18px] leading-snug text-ink">{req.text}</p>
         {showQuote ? (
-          <blockquote className="mt-4 rounded-[18px] bg-surface-2 px-4 py-3 text-[13px] italic leading-relaxed text-ink-2 shadow-inset-sm">
+          <blockquote className="mt-4 rounded-[18px] bg-surface-2 px-4 py-3 text-[13px] italic leading-relaxed text-ink-2">
             <span className="mb-1 block text-[11.5px] font-medium not-italic text-ink-3">Source text</span>
             {req.source_quote}
           </blockquote>
@@ -401,7 +401,7 @@ function ObligationDetail({
           <>
             <h4 className="mb-2.5 mt-5 text-[12.5px] font-medium text-ink-3">Suggested remediation</h4>
             <p className="relative rounded-[18px] bg-accent-wash/60 py-3 pl-5 pr-4 text-[13.5px] leading-relaxed">
-              <span className="absolute inset-y-3 left-2 w-[3px] rounded-full bg-accent-grad-diag" aria-hidden="true" />
+              <span className="absolute inset-y-3 left-2 w-[3px] rounded-full bg-primary" aria-hidden="true" />
               {ob.remediation}
             </p>
           </>

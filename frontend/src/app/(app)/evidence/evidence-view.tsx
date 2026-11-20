@@ -191,7 +191,7 @@ export function EvidenceView() {
                         {fmtDate(e.created_at)}
                       </td>
                       <td className="px-3 py-3">
-                        <span className="rounded-full bg-surface-2 px-2.5 py-[3px] font-mono text-[11px] text-ink-2 shadow-inset-sm" title={e.sha256}>
+                        <span className="rounded-full bg-surface-2 px-2.5 py-[3px] font-mono text-[11px] text-ink-2" title={e.sha256}>
                           {shortHash(e.sha256, 12)}
                         </span>
                       </td>

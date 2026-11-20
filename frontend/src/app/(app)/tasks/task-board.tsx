@@ -86,10 +86,10 @@ function TaskCard({
       }}
       onDragEnd={() => onDragState(null)}
       className={clsx(
-        "group rounded-[20px] soft-sm p-4 transition-[opacity,box-shadow,transform]",
+        "group rounded-[20px] card p-4 transition-[opacity,box-shadow,transform]",
         movable && "cursor-grab active:cursor-grabbing",
         dragging && "opacity-45",
-        "hover:-translate-y-px hover:shadow-raised",
+        "hover:-translate-y-px hover:shadow-card",
       )}
     >
       <div className="mb-2.5 flex flex-wrap items-center gap-1.5">
@@ -175,7 +175,7 @@ function BoardSkeleton() {
   return (
     <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4" role="status" aria-label="Loading tasks">
       {TASK_COLUMNS.map((c) => (
-        <div key={c} className="rounded-card soft-inset p-3">
+        <div key={c} className="rounded-card tint p-3">
           <Skeleton className="mb-3 h-4 w-24" />
           <div className="space-y-3">
             <Skeleton className="h-28 w-full rounded-[20px]" />
@@ -314,20 +314,20 @@ export function TaskBoard() {
 
       {tasksQ.data && tasks.length > 0 && (
         <p className="-mt-1 mb-6 flex flex-wrap items-center gap-2.5 text-[12.5px] text-ink-2 [&>*]:inline-flex [&>*]:h-9 [&>*]:items-center [&>*]:gap-1.5 [&>*]:rounded-full [&>*]:px-4">
-          <span className="soft-xs">
+          <span className="card-xs">
             <span className="num figure text-[15px] text-ink">{stats.open}</span> open
           </span>
-          <span className={stats.overdue ? "soft-xs text-danger" : "soft-xs"}>
+          <span className={stats.overdue ? "card-xs text-danger" : "card-xs"}>
             <span className="num figure text-[15px]">{stats.overdue}</span> overdue
           </span>
-          <span className="soft-xs">
+          <span className="card-xs">
             <span className="num figure text-[15px] text-ink">{stats.week}</span> due in the next 7 days
           </span>
-          <span className="soft-xs">
+          <span className="card-xs">
             <span className="num figure text-[15px] text-ink">{stats.suggested}</span> suggested by Obligraph
           </span>
           {stats.awaiting > 0 && (
-            <Link href="/approvals" className="soft-xs hover:text-accent">
+            <Link href="/approvals" className="card-xs hover:text-accent">
               <span className="num figure text-[15px] text-accent">{stats.awaiting}</span> awaiting approval
             </Link>
           )}
@@ -381,7 +381,7 @@ export function TaskBoard() {
                 onDrop={(e) => onDrop(e, status)}
                 className={clsx(
                   "flex min-h-40 flex-col rounded-card p-3 transition-[background-color,box-shadow]",
-                  isTarget ? "bg-accent-wash shadow-inset ring-2 ring-accent/60" : "soft-inset",
+                  isTarget ? "bg-accent-wash ring-2 ring-accent/60" : "tint",
                 )}
               >
                 <header className="mb-3 flex items-center gap-2 px-2 pt-1.5">

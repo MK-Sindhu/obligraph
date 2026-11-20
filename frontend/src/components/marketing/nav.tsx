@@ -1,7 +1,7 @@
 "use client";
 
 import clsx from "clsx";
-import { ArrowRight, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -13,6 +13,7 @@ export const MARKETING_NAV = [
   { href: "/product", label: "Product" },
   { href: "/solutions", label: "Solutions" },
   { href: "/security", label: "Security" },
+  { href: "/docs", label: "Docs" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -44,7 +45,7 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
         if (e.target === e.currentTarget) onClose();
       }}
       aria-label="Site menu"
-      className="glass-strong fixed inset-x-3 top-3 m-0 w-auto max-w-none rounded-[28px] p-0 text-ink open:animate-[rise-in_160ms_ease-out] md:hidden"
+      className="overlay fixed inset-x-3 top-3 m-0 w-auto max-w-none rounded-[28px] p-0 text-ink open:animate-[rise-in_160ms_ease-out] md:hidden"
     >
       {open && (
         <div className="px-5 pb-6 pt-4">
@@ -54,7 +55,7 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
               type="button"
               onClick={onClose}
               aria-label="Close menu"
-              className="flex h-10 w-10 items-center justify-center rounded-[14px] border border-line-strong/70 bg-surface-grad text-ink-2 shadow-raised-xs"
+              className="flex h-10 w-10 items-center justify-center rounded-[14px] border border-line-strong/70 bg-surface text-ink-2 shadow-xs"
             >
               <X size={18} />
             </button>
@@ -66,10 +67,10 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
                   <Link
                     href={l.href}
                     onClick={onClose}
-                    aria-current={pathname === l.href ? "page" : undefined}
+                    aria-current={pathname === l.href || pathname.startsWith(`${l.href}/`) ? "page" : undefined}
                     className={clsx(
-                      "flex h-12 items-center rounded-[16px] px-4 text-[15px] font-medium",
-                      pathname === l.href ? "bg-accent-wash text-accent" : "text-ink hover:bg-surface-2",
+                      "flex h-12 items-center rounded-[14px] px-4 text-[15px] font-semibold",
+                      pathname === l.href || pathname.startsWith(`${l.href}/`) ? "bg-accent-wash text-accent" : "text-ink hover:bg-surface-2",
                     )}
                   >
                     {l.label}
@@ -90,28 +91,28 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
   );
 }
 
-/** Floating glass navigation bar for the public site. */
+/** Floating white navigation bar for the public site. */
 export function MarketingNav() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   return (
     <header className="sticky top-0 z-40 px-3 pt-3 sm:px-6">
-      <div className="glass mx-auto flex h-16 max-w-[1200px] items-center gap-3 rounded-full pl-5 pr-2.5">
+      <div className="card mx-auto flex h-16 max-w-[1240px] items-center gap-3 rounded-[20px] pl-5 pr-2.5">
         <Link href="/" aria-label="Obligraph home" className="shrink-0 rounded-[12px]">
           <Wordmark size={28} />
         </Link>
         <nav aria-label="Site" className="ml-6 hidden md:block">
           <ul className="flex items-center gap-1">
             {MARKETING_NAV.map((l) => {
-              const active = pathname === l.href;
+              const active = pathname === l.href || pathname.startsWith(`${l.href}/`);
               return (
                 <li key={l.href}>
                   <Link
                     href={l.href}
                     aria-current={active ? "page" : undefined}
                     className={clsx(
-                      "inline-flex h-9 items-center rounded-full px-3.5 text-[13.5px] font-medium transition-colors",
-                      active ? "bg-surface-hi/70 text-accent shadow-raised-xs" : "text-ink-2 hover:text-ink",
+                      "inline-flex h-9 items-center rounded-[10px] px-3 text-[13.5px] font-semibold transition-colors",
+                      active ? "bg-accent-wash text-accent" : "text-ink-2 hover:bg-surface-2 hover:text-ink",
                     )}
                   >
                     {l.label}
@@ -122,16 +123,16 @@ export function MarketingNav() {
           </ul>
         </nav>
         <span className="flex-1" />
-        <AuthLink className="hidden h-9 items-center rounded-full px-3.5 text-[13.5px] font-medium text-ink-2 hover:text-ink sm:inline-flex" />
-        <Link href="/contact" className={buttonClass("primary", "md", "hidden! sm:inline-flex!")}>
-          Request a demo <ArrowRight size={15} aria-hidden="true" />
+        <AuthLink className="hidden h-9 items-center rounded-[10px] px-3 text-[13.5px] font-semibold text-ink-2 hover:bg-surface-2 hover:text-ink sm:inline-flex" />
+        <Link href="/contact" className={buttonClass("primary", "md", "hidden! uppercase tracking-[0.05em] sm:inline-flex!")}>
+          Request a demo
         </Link>
         <button
           type="button"
           onClick={() => setOpen(true)}
           aria-label="Open menu"
           aria-expanded={open}
-          className="flex h-11 w-11 items-center justify-center rounded-full border border-line-strong/70 bg-surface-grad text-ink-2 shadow-raised-xs md:hidden"
+          className="flex h-11 w-11 items-center justify-center rounded-full border border-line bg-surface text-ink-2 md:hidden"
         >
           <Menu size={19} />
         </button>

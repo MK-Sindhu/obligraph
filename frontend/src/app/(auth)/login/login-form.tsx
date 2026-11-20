@@ -5,7 +5,8 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { UnderlineField } from "@/components/ui/field";
+import { InsetField, Label } from "@/components/ui/field";
+import { CornerTab } from "@/components/ui/card";
 import { InlineError } from "@/components/ui/states";
 import { api, type SsoConfig } from "@/lib/api";
 import { storeSession, useStoredSession } from "@/lib/auth";
@@ -52,71 +53,67 @@ export function LoginForm() {
 
   return (
     <div>
-      <form onSubmit={submit} className="relative pb-7">
-        <div className="rounded-card-lg soft px-7 pb-14 pt-9 sm:px-9">
-          <h1 className="display text-[26px] leading-tight text-ink">Sign in</h1>
-          <p className="mt-1.5 text-[13.5px] text-ink-2">Use the email and password for your Obligraph account.</p>
-          <div className="mt-8 space-y-6">
-            <UnderlineField
+      <form onSubmit={submit} className="relative rounded-card-lg card px-7 pb-8 pt-10 sm:px-10">
+        <CornerTab />
+        <h1 className="label-caps text-center text-[24px] leading-tight">Sign in</h1>
+        <p className="mt-2 text-center text-[13px] text-ink-3">With your Obligraph work account.</p>
+        <div className="mt-8 space-y-5">
+          <div>
+            <Label htmlFor="email">Work email</Label>
+            <InsetField
               id="email"
-              label="Work email"
               type="email"
               autoComplete="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@company.in"
-              icon={<Mail size={17} />}
+              trailing={<Mail size={16} className="mr-2.5 text-ink-3" aria-hidden="true" />}
             />
-            <UnderlineField
+          </div>
+          <div>
+            <Label htmlFor="password">Password</Label>
+            <InsetField
               id="password"
-              label="Password"
               type={showPassword ? "text" : "password"}
               autoComplete="current-password"
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Your password"
               trailing={
                 <button
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
                   aria-label={showPassword ? "Hide password" : "Show password"}
                   aria-pressed={showPassword}
-                  className="-mr-1.5 rounded-full p-1.5 text-ink-3 hover:bg-surface-2 hover:text-accent"
+                  className="flex h-8 w-8 items-center justify-center rounded-full text-ink-3 hover:bg-surface-2 hover:text-accent"
                 >
-                  {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               }
             />
           </div>
-          <div className="mt-4 flex justify-end">
-            <button
-              type="button"
-              onClick={() => setForgot((v) => !v)}
-              aria-expanded={forgot}
-              aria-controls="forgot-hint"
-              className="rounded-full px-1 text-[12.5px] font-medium text-accent hover:underline"
-            >
-              Forgot password?
-            </button>
-          </div>
-          {forgot && (
-            <p id="forgot-hint" className="mt-2 rounded-[16px] bg-accent-wash px-4 py-3 text-[12.5px] leading-relaxed text-ink-2">
-              Passwords are managed by your organisation. Ask an admin or owner to set a new one for you from Settings → Team.
-            </p>
-          )}
-          <div className="mt-4">
-            <InlineError error={error} />
-          </div>
         </div>
-        <Button
-          type="submit"
-          variant="primary"
-          size="lg"
-          loading={busy}
-          className="absolute bottom-0 left-1/2 w-[min(260px,78%)] -translate-x-1/2"
-        >
+        <div className="mt-3 flex justify-end">
+          <button
+            type="button"
+            onClick={() => setForgot((v) => !v)}
+            aria-expanded={forgot}
+            aria-controls="forgot-hint"
+            className="rounded-[6px] px-1 text-[12.5px] font-semibold text-accent hover:underline"
+          >
+            Forgot password?
+          </button>
+        </div>
+        {forgot && (
+          <p id="forgot-hint" className="mt-2 rounded-[14px] bg-accent-wash px-4 py-3 text-[12.5px] leading-relaxed text-ink-2">
+            Passwords are managed by your organisation. Ask an admin or owner to set a new one for you from Settings → Team.
+          </p>
+        )}
+        <div className="mt-4">
+          <InlineError error={error} />
+        </div>
+        <Button type="submit" variant="primary" size="lg" loading={busy} className="mt-6 w-full uppercase tracking-[0.08em]">
           Sign in
         </Button>
       </form>
@@ -130,7 +127,7 @@ export function LoginForm() {
           <button
             type="button"
             onClick={() => window.location.assign(new URL("/api/auth/sso/start", window.location.origin).href)}
-            className="flex h-12 w-full items-center justify-center gap-2.5 rounded-full border border-line-strong/80 bg-surface-grad text-[14px] font-medium text-ink shadow-raised-sm transition-[box-shadow,color] hover:text-accent hover:shadow-raised"
+            className="flex h-12 w-full items-center justify-center gap-2.5 rounded-full border border-line-strong/80 bg-surface text-[14px] font-medium text-ink shadow-card transition-[box-shadow,color] hover:text-accent hover:shadow-card"
           >
             <KeyRound size={17} className="text-accent" aria-hidden="true" />
             Continue with {sso.data.name}

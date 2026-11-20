@@ -44,7 +44,7 @@ function LinkedObligation({ obligationId, onLoaded }: { obligationId: string; on
     return ob;
   });
   return (
-    <div className="rounded-[20px] bg-surface-2 px-4 py-3 shadow-inset-sm">
+    <div className="rounded-[20px] bg-surface-2 px-4 py-3">
       <p className="mb-1.5 flex items-center gap-1.5 text-[11.5px] font-medium text-ink-3">
         <Link2 size={11} aria-hidden="true" /> Linked obligation
       </p>

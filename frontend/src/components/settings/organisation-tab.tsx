@@ -162,7 +162,7 @@ function ControlsPanel({ org, onSaved }: { org: OrgOut; onSaved: (o: OrgOut) => 
             />
             <p className="mt-1.5 text-[11.5px] text-ink-3">People signing in with SSO from this domain join this organisation.</p>
           </div>
-          <div className="rounded-[18px] bg-surface-2 px-4 py-3.5 shadow-inset-sm">
+          <div className="rounded-[18px] bg-surface-2 px-4 py-3.5">
             <Toggle
               checked={f.maker_checker}
               disabled={!isAdmin || busy}
@@ -170,7 +170,7 @@ function ControlsPanel({ org, onSaved }: { org: OrgOut; onSaved: (o: OrgOut) => 
               label={<span className="font-medium text-ink">Maker-checker approvals</span>}
             />
             <p className="mt-2 text-[11.5px] leading-relaxed text-ink-3">
-              Remediation tasks need a second person&rsquo;s sign-off before they move to review or done.
+              Tasks linked to high or critical obligations need a second person&rsquo;s sign-off before they move to review or done.
             </p>
           </div>
         </div>
@@ -345,7 +345,7 @@ export function OrganisationTab() {
       />
       </div>
 
-      <aside className="rounded-card soft px-6 py-6 text-[13px] leading-relaxed text-ink-2">
+      <aside className="rounded-card card px-6 py-6 text-[13px] leading-relaxed text-ink-2">
         <IconTile tone="accent" size="md" className="mb-4">
           <Info size={18} />
         </IconTile>

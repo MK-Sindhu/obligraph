@@ -136,8 +136,8 @@ export function StatusStamp({ status, size = "sm", className }: { status: string
       className={clsx(
         "inline-flex items-center gap-2 whitespace-nowrap rounded-full font-medium leading-none",
         lg ? "h-10 px-5 text-[13.5px]" : "h-7 px-3 text-[12px]",
-        inForce && "bg-accent-grad-text text-white shadow-glow-sm",
-        superseded && "bg-[var(--sev-high-bg)] text-[color:var(--sev-high)] shadow-raised-xs",
+        inForce && "bg-primary-fill text-white",
+        superseded && "bg-[var(--sev-high-bg)] text-[color:var(--sev-high)] shadow-xs",
         !inForce && !superseded && "border border-dashed border-line-strong text-ink-3",
         className,
       )}

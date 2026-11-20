@@ -6,7 +6,7 @@ import type { ReactNode } from "react";
 import { initials } from "@/lib/format";
 
 // Primitives live in their own modules; re-exported here so existing imports keep working.
-export { Panel, SoftCard, StatTile, softCardClass } from "./card";
+export { Card, Panel, StatTile, cardClass } from "./card";
 export { FilterSelect, InsetField, Input, Label, SearchField, Select, Textarea, UnderlineField } from "./field";
 export { SegmentedControl as Segmented, SegmentedControl, Tabs } from "./tabs";
 export { Toggle } from "./toggle";
@@ -27,22 +27,22 @@ export function PageHeader({
   return (
     <div className={clsx("mb-7 flex flex-wrap items-end justify-between gap-x-6 gap-y-4", className)}>
       <div className="min-w-0">
-        {eyebrow && <div className="mb-1.5 text-[12.5px] text-ink-3">{eyebrow}</div>}
-        <h1 className="display text-[28px] leading-[1.15] text-ink sm:text-[32px]">{title}</h1>
-        {description && <p className="mt-2 max-w-2xl text-[13.5px] leading-relaxed text-ink-2">{description}</p>}
+        {eyebrow && <div className="mb-1.5 text-[11.5px] font-extrabold uppercase tracking-[0.08em] text-accent-deep">{eyebrow}</div>}
+        <h1 className="display text-[28px] font-extrabold leading-[1.12] text-on-canvas sm:text-[32px]">{title}</h1>
+        {description && <p className="mt-2 max-w-2xl text-[13.5px] leading-relaxed text-on-canvas-2">{description}</p>}
       </div>
       {actions && <div className="flex flex-wrap items-center gap-2.5">{actions}</div>}
     </div>
   );
 }
 
-/** Initials in a soft raised disc. */
+/** Initials in a white disc. */
 export function Avatar({ name, size = 24, className }: { name: string; size?: number; className?: string }) {
   return (
     <span
       title={name}
       className={clsx(
-        "inline-flex shrink-0 items-center justify-center rounded-full border border-[var(--card-edge)] bg-surface-grad font-medium text-accent shadow-raised-xs",
+        "inline-flex shrink-0 items-center justify-center rounded-full border border-line bg-surface font-bold text-accent",
         className,
       )}
       style={{ width: size, height: size, fontSize: Math.max(9, size * 0.38) }}
@@ -52,7 +52,7 @@ export function Avatar({ name, size = 24, className }: { name: string; size?: nu
   );
 }
 
-/** Soft chip for topics, entity types and other labels. */
+/** Small chip for topics, entity types and other labels. */
 export function Tag({ children, className, title }: { children: ReactNode; className?: string; title?: string }) {
   return (
     <span
@@ -68,7 +68,7 @@ export function Tag({ children, className, title }: { children: ReactNode; class
 }
 
 const pageBtn =
-  "inline-flex h-8 items-center gap-1 rounded-full border border-line-strong/80 bg-surface-grad px-3 text-[12.5px] font-medium text-ink-2 shadow-raised-xs transition-colors hover:text-accent disabled:pointer-events-none disabled:opacity-40 disabled:shadow-none";
+  "inline-flex h-8 items-center gap-1 rounded-[9px] border border-line-strong bg-surface px-3 text-[12.5px] font-semibold text-ink-2 transition-colors hover:border-primary hover:text-accent disabled:pointer-events-none disabled:opacity-40";
 
 export function Pagination({
   total,

@@ -52,7 +52,7 @@ function EventChip({ e, today }: { e: CalendarEvent; today: string }) {
   const done = EVENT_DONE_STATUSES.has(e.status);
   const cls = clsx(
     "flex w-full items-center gap-1 truncate rounded-[8px] py-[3px] pl-1.5 pr-1.5 text-left text-[11px] leading-tight",
-    e.kind === "deadline" && "border-l-[3px] bg-surface-hi text-ink shadow-raised-xs",
+    e.kind === "deadline" && "border-l-[3px] bg-surface-hi text-ink shadow-xs",
     e.kind === "recurring" && "border border-dashed border-line-strong text-ink-2",
     e.kind === "task" && "bg-accent-wash text-ink",
     e.kind === "filing" && "border border-accent/35 bg-surface-hi text-ink",
@@ -86,10 +86,10 @@ function AgendaItem({ e, today }: { e: CalendarEvent; today: string }) {
       <span
         className={clsx(
           "mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-[11px]",
-          e.kind === "deadline" && "bg-surface-2 text-ink-2 shadow-inset-sm",
+          e.kind === "deadline" && "bg-surface-2 text-ink-2",
           e.kind === "recurring" && "border border-dashed border-line-strong text-ink-3",
-          e.kind === "task" && "bg-accent-grad-diag text-white shadow-glow-sm",
-          e.kind === "filing" && "border border-accent/35 bg-surface-hi text-accent shadow-raised-xs",
+          e.kind === "task" && "bg-primary text-white",
+          e.kind === "filing" && "border border-accent/35 bg-surface-hi text-accent shadow-xs",
         )}
       >
         <EventKindIcon kind={e.kind} size={13} />
@@ -193,12 +193,12 @@ export function CalendarView() {
       </div>
 
       <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
-        <section className="rounded-card soft p-3 sm:p-5" aria-label={`${monthFmt.format(month)} calendar`}>
+        <section className="rounded-card card p-3 sm:p-5" aria-label={`${monthFmt.format(month)} calendar`}>
           {q.error && !q.data ? (
             <ErrorState error={q.error} onRetry={q.reload} />
           ) : (
             <div className={clsx(q.loading && "opacity-60 transition-opacity")}>
-              <div className="mb-2 grid grid-cols-7 gap-1 rounded-full bg-surface-2 py-2 shadow-inset-sm sm:gap-2">
+              <div className="mb-2 grid grid-cols-7 gap-1 rounded-full bg-surface-2 py-2 sm:gap-2">
                 {WEEKDAYS.map((d) => (
                   <div key={d} className="text-center text-[11.5px] font-medium text-ink-3">
                     {d}
@@ -218,8 +218,8 @@ export function CalendarView() {
                       key={iso}
                       className={clsx(
                         "relative min-h-[64px] rounded-[12px] p-1 sm:min-h-[112px] sm:rounded-[18px] sm:p-1.5",
-                        inMonth ? "border border-[var(--card-edge)] bg-surface-grad shadow-raised-xs" : "border border-dashed border-line",
-                        selected && "bg-accent-wash! bg-none! shadow-inset-sm! ring-2 ring-accent",
+                        inMonth ? "border border-[var(--card-edge)] bg-surface shadow-xs" : "border border-dashed border-line",
+                        selected && "bg-accent-wash! bg-none! ring-2 ring-accent",
                       )}
                     >
                       <button
@@ -230,7 +230,7 @@ export function CalendarView() {
                         className={clsx(
                           "num mb-1 inline-flex h-7 min-w-7 items-center justify-center rounded-full px-1 text-[12px]",
                           isToday
-                            ? "bg-accent-grad-diag font-semibold text-white shadow-glow-sm"
+                            ? "bg-primary font-semibold text-white"
                             : inMonth
                               ? "font-medium text-ink hover:bg-surface-2"
                               : "text-ink-3 hover:bg-surface-2",
@@ -301,7 +301,7 @@ export function CalendarView() {
                   <div key={date}>
                     <p
                       className={clsx(
-                        "sticky top-0 z-[1] mt-2 rounded-full bg-surface-2 px-4 py-1.5 text-[11.5px] font-medium shadow-inset-sm first:mt-0",
+                        "sticky top-0 z-[1] mt-2 rounded-full bg-surface-2 px-4 py-1.5 text-[11.5px] font-medium first:mt-0",
                         date === today ? "text-accent" : "text-ink-3",
                       )}
                     >

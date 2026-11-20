@@ -4,7 +4,6 @@ import { Building2, LogOut, RotateCw } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { LogoMark, Splash } from "@/components/brand";
-import { BackdropBlobs } from "@/components/ui/glass";
 import { Button } from "@/components/ui/button";
 import { errorMessage } from "@/lib/api";
 import { AuthProvider, useAuth } from "@/lib/auth";
@@ -27,7 +26,7 @@ function MobileNav({ open, onClose }: { open: boolean; onClose: () => void }) {
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
-      className="glass-strong fixed inset-y-0 left-0 m-0 h-dvh max-h-none w-[272px] max-w-[85vw] rounded-r-[30px] p-0 open:animate-[rise-in_160ms_ease-out] lg:hidden"
+      className="topbar fixed inset-y-0 left-0 m-0 h-dvh max-h-none w-[272px] max-w-[85vw] rounded-r-[28px] border-0! p-0 shadow-pop open:animate-[rise-in_160ms_ease-out] lg:hidden"
     >
       {open && <Sidebar onNavigate={onClose} />}
     </dialog>
@@ -42,7 +41,6 @@ function Shell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex min-h-dvh">
-      <BackdropBlobs intensity="app" />
       <JobRunner />
       <aside className="sticky top-0 hidden h-dvh w-[248px] shrink-0 lg:block">
         <Sidebar />
@@ -73,7 +71,7 @@ function Gate({ children }: { children: React.ReactNode }) {
     case "error":
       return (
         <div className="flex min-h-dvh items-center justify-center px-4">
-          <div className="flex w-full max-w-[480px] flex-col items-center gap-3 rounded-card-lg soft px-8 py-10 text-center">
+          <div className="flex w-full max-w-[480px] flex-col items-center gap-3 rounded-card-lg card px-8 py-10 text-center">
           <LogoMark size={40} />
           <p className="display mt-2 text-[20px]">Obligraph can&rsquo;t reach its API</p>
           <p className="max-w-md text-[13.5px] text-ink-2">{errorMessage(auth.error)}</p>
@@ -91,8 +89,8 @@ function Gate({ children }: { children: React.ReactNode }) {
     case "no-org":
       return (
         <div className="flex min-h-dvh items-center justify-center px-4">
-          <div className="flex w-full max-w-[480px] flex-col items-center gap-3 rounded-card-lg soft px-8 py-10 text-center">
-          <span className="flex h-14 w-14 items-center justify-center rounded-[18px] soft-sm text-accent">
+          <div className="flex w-full max-w-[480px] flex-col items-center gap-3 rounded-card-lg card px-8 py-10 text-center">
+          <span className="flex h-14 w-14 items-center justify-center rounded-[18px] card text-accent">
             <Building2 size={24} />
           </span>
           <p className="display mt-2 text-[20px]">You&rsquo;re not in an organisation yet</p>

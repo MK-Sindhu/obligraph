@@ -68,7 +68,7 @@ export function ConversationList({
                     aria-current={active ? "true" : undefined}
                     className={clsx(
                       "block w-full rounded-[18px] py-2.5 pl-3.5 pr-10 text-left transition-[background-color,box-shadow] disabled:opacity-50",
-                      active ? "soft-xs" : "hover:bg-surface-2",
+                      active ? "card-xs" : "hover:bg-surface-2",
                     )}
                   >
                     <span className={clsx("line-clamp-2 text-[13px] leading-snug", active ? "font-medium text-accent" : "text-ink-2")}>

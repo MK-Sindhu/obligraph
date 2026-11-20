@@ -185,7 +185,7 @@ function FileForm({ onResult }: { onResult: (r: IngestResult) => void }) {
     <form onSubmit={submit} className="space-y-4">
       <div>
         <Label htmlFor="ing-file">Document</Label>
-        <label className="flex cursor-pointer items-center gap-3.5 rounded-[22px] border-2 border-dashed border-line-strong bg-surface-2 px-4 py-3.5 shadow-inset-sm hover:border-accent/50 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-accent">
+        <label className="flex cursor-pointer items-center gap-3.5 rounded-[22px] border-2 border-dashed border-line-strong bg-surface-2 px-4 py-3.5 hover:border-accent/50 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-accent">
           <IconTile tone="accent" size="md">
             <FileUp size={18} />
           </IconTile>

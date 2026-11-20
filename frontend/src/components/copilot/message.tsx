@@ -50,7 +50,7 @@ function toolSummary(input: Record<string, unknown>): string | null {
 function ToolActivity({ tools, live }: { tools: ToolStep[]; live: boolean }) {
   if (!tools.length) return null;
   return (
-    <ol className="mb-3 space-y-1.5 rounded-[18px] bg-surface-2 px-4 py-3 shadow-inset-sm" aria-label="Copilot activity">
+    <ol className="mb-3 space-y-1.5 rounded-[18px] bg-surface-2 px-4 py-3" aria-label="Copilot activity">
       {tools.map((t, i) => {
         const latest = live && i === tools.length - 1;
         const summary = toolSummary(t.input);
@@ -98,7 +98,7 @@ function CitationChips({ citations }: { citations: Citation[] }) {
                 <Link
                   href={`/regulations/${c.regulation_id}`}
                   title={c.title}
-                  className="flex max-w-full items-center gap-1.5 rounded-full soft-xs py-1.5 pl-1.5 pr-3 text-[12px] transition-[box-shadow,color] hover:text-accent hover:shadow-raised-sm"
+                  className="flex max-w-full items-center gap-1.5 rounded-full card-xs py-1.5 pl-1.5 pr-3 text-[12px] transition-[box-shadow,color] hover:text-accent hover:shadow-card"
                 >
                   {c.regulator && <RegulatorTag regulator={c.regulator} />}
                   {c.ref_no && <span className="hidden shrink-0 font-mono text-[10.5px] text-ink-2 sm:inline">{c.ref_no}</span>}
@@ -128,7 +128,7 @@ export function MessageView({ item }: { item: ChatItem }) {
   if (item.role === "user") {
     return (
       <div className="flex justify-end">
-        <div className="max-w-[85%] whitespace-pre-wrap rounded-[22px] rounded-br-[8px] bg-accent-grad-text px-4 py-3 text-[14px] leading-relaxed text-white shadow-glow-sm">
+        <div className="max-w-[85%] whitespace-pre-wrap rounded-[22px] rounded-br-[8px] bg-primary-fill px-4 py-3 text-[14px] leading-relaxed text-white">
           {item.text}
         </div>
       </div>

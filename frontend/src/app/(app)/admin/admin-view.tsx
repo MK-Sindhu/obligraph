@@ -52,7 +52,7 @@ export function AdminView() {
   const { isSuperuser } = useAuth();
   if (!isSuperuser) {
     return (
-      <div className="mt-6 rounded-card soft">
+      <div className="mt-6 rounded-card card">
         <EmptyState
           icon={<ShieldCheck size={26} />}
           title="Platform admins only"

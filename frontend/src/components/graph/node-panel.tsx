@@ -138,7 +138,7 @@ export function NodePanel({
           ) : reg.data ? (
             <Link
               href={`/regulations/${reg.data.id}`}
-              className="inline-flex h-10 items-center gap-1.5 rounded-full bg-accent-grad-text px-5 text-[13px] font-medium text-white shadow-glow hover:brightness-105"
+              className="inline-flex h-10 items-center gap-1.5 rounded-full bg-primary-fill px-5 text-[13px] font-medium text-white hover:brightness-105"
             >
               Open regulation <ArrowUpRight size={14} aria-hidden="true" />
             </Link>
@@ -151,7 +151,7 @@ export function NodePanel({
       )}
 
       {props.length > 0 && (
-        <dl className="mt-5 grid grid-cols-2 gap-x-4 gap-y-3 rounded-[20px] bg-surface-2 px-4 py-3.5 shadow-inset-sm">
+        <dl className="mt-5 grid grid-cols-2 gap-x-4 gap-y-3 rounded-[20px] bg-surface-2 px-4 py-3.5">
           {props.map(([k, v]) => (
             <div key={k} className={k === "ref_no" ? "col-span-2 min-w-0" : "min-w-0"}>
               <dt className="mb-0.5 text-[11.5px] text-ink-3">{PROP_LABEL[k] ?? humanize(k)}</dt>

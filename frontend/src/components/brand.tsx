@@ -40,7 +40,7 @@ export function Wordmark({ className, size = 30 }: { className?: string; size?: 
 export function Splash({ label = "Opening your workspace…" }: { label?: string }) {
   return (
     <div className="flex min-h-dvh flex-col items-center justify-center gap-5 bg-canvas" role="status">
-      <span className="flex h-20 w-20 items-center justify-center rounded-[26px] soft">
+      <span className="flex h-20 w-20 items-center justify-center rounded-[26px] card">
         <LogoMark size={38} className="animate-pulse" />
       </span>
       <p className="text-[13px] text-ink-3">{label}</p>

@@ -26,7 +26,7 @@ export function CoverageRing({
     <DonutGauge
       value={pct}
       size={size}
-      thickness={18}
+      thickness={9}
       label={`Weighted policy coverage ${pct === null ? "not available" : `${Math.round(pct)}%`}`}
       centerCaption="covered"
       segments={ORDER.map((k) => ({ key: k, value: counts[k] ?? 0, color: `var(--cov-${k})`, label: COVERAGE_LABEL[k] }))}

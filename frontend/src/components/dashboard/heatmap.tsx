@@ -55,7 +55,7 @@ export function RiskHeatmap({ byTopic, byRegulator }: { byTopic: HeatmapRow[]; b
         <div className="flex items-center gap-1.5 text-[11.5px] text-ink-3" aria-hidden="true">
           <span>Fewer</span>
           {[1, 2, 3, 4, 5].map((l) => (
-            <span key={l} className="h-3.5 w-5 rounded-[5px] shadow-raised-xs" style={{ background: `var(--heat-${l})` }} />
+            <span key={l} className="h-3.5 w-5 rounded-[5px] shadow-xs" style={{ background: `var(--heat-${l})` }} />
           ))}
           <span>More open gaps</span>
         </div>
@@ -65,16 +65,16 @@ export function RiskHeatmap({ byTopic, byRegulator }: { byTopic: HeatmapRow[]; b
           Every assessed obligation is covered by your policies.
         </EmptyState>
       ) : (
-        <div className="overflow-x-auto px-5 pb-5 pt-3">
-          <table className="w-full min-w-[540px] table-fixed border-separate border-spacing-[6px]">
+        <div className="overflow-x-auto px-3 pb-5 pt-3 sm:px-5">
+          <table className="w-full min-w-[330px] table-fixed border-separate border-spacing-[4px] sm:min-w-[540px] sm:border-spacing-[6px]">
             <caption className="sr-only">Open gaps (missing or partial coverage) by {axis} and severity</caption>
             <colgroup>
-              <col className="w-[34%]" />
+              <col className="w-[30%] sm:w-[34%]" />
               <col />
               <col />
               <col />
               <col />
-              <col className="w-14" />
+              <col className="w-9 sm:w-14" />
             </colgroup>
             <thead>
               <tr>
@@ -85,7 +85,8 @@ export function RiskHeatmap({ byTopic, byRegulator }: { byTopic: HeatmapRow[]; b
                   <th key={s} scope="col" className="pb-1 text-center text-[11.5px] font-medium text-ink-2">
                     <span className="inline-flex items-center gap-1.5">
                       <SeverityGlyph severity={s} />
-                      {humanize(s)}
+                      {/* Glyph only on phones so the grid fits without scrolling. */}
+                      <span className="sr-only sm:not-sr-only">{humanize(s)}</span>
                     </span>
                   </th>
                 ))}
@@ -97,7 +98,7 @@ export function RiskHeatmap({ byTopic, byRegulator }: { byTopic: HeatmapRow[]; b
             <tbody>
               {rows.map((r) => (
                 <tr key={r.key}>
-                  <th scope="row" className="max-w-[220px] truncate pr-2 text-left text-[13px] font-normal text-ink" title={rowLabel(r.key)}>
+                  <th scope="row" className="max-w-[220px] truncate pr-1 text-left text-[12.5px] font-normal text-ink sm:pr-2 sm:text-[13px]" title={rowLabel(r.key)}>
                     {rowLabel(r.key)}
                   </th>
                   {SEVERITIES.map((s) => {
@@ -114,8 +115,8 @@ export function RiskHeatmap({ byTopic, byRegulator }: { byTopic: HeatmapRow[]; b
                             aria-label={`${desc}. Open in Obligations`}
                             style={style}
                             className={clsx(
-                              "num flex h-10 items-center justify-center rounded-[13px] text-[13.5px] font-semibold shadow-raised-xs transition-[filter,box-shadow,transform]",
-                              "hover:-translate-y-px hover:shadow-[0_0_0_2px_var(--accent),var(--shadow-raised-xs)] hover:brightness-105",
+                              "num flex h-10 items-center justify-center rounded-[13px] text-[13.5px] font-semibold shadow-xs transition-[filter,box-shadow,transform]",
+                              "hover:-translate-y-px hover:shadow-[0_0_0_2px_var(--accent),var(--shadow-xs)] hover:brightness-105",
                             )}
                           >
                             {n}
@@ -124,7 +125,7 @@ export function RiskHeatmap({ byTopic, byRegulator }: { byTopic: HeatmapRow[]; b
                           <span
                             title={desc}
                             style={style}
-                            className="num flex h-10 items-center justify-center rounded-[13px] text-[12px] shadow-inset-sm"
+                            className="num flex h-10 items-center justify-center rounded-[13px] text-[12px]"
                           >
                             ·
                           </span>
@@ -132,7 +133,7 @@ export function RiskHeatmap({ byTopic, byRegulator }: { byTopic: HeatmapRow[]; b
                       </td>
                     );
                   })}
-                  <td className="num pl-2 text-right text-[13px] font-medium text-ink-2">{r.total}</td>
+                  <td className="num pl-1 text-right text-[13px] font-medium text-ink-2 sm:pl-2">{r.total}</td>
                 </tr>
               ))}
             </tbody>

@@ -6,7 +6,7 @@ import { useState } from "react";
 import { RegulatorTag } from "@/components/domain/badges";
 import { Badge, Chip } from "@/components/ui/badge";
 import { Button, IconTile } from "@/components/ui/button";
-import { softCardClass } from "@/components/ui/card";
+import { cardClass } from "@/components/ui/card";
 import { PageHeader, Panel, SegmentedControl } from "@/components/ui/misc";
 import { EmptyState, ErrorState, LoadingRows } from "@/components/ui/states";
 import { Tabs } from "@/components/ui/tabs";
@@ -136,7 +136,7 @@ function ReturnsCatalogue({ onEdit }: { onEdit: (r: ReturnTypeOut | null) => voi
   return (
     <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
       {items.map((r) => (
-        <article key={r.id} className={softCardClass("raised", "tile", clsx("flex flex-col px-5 py-5", !r.active && "opacity-70"))}>
+        <article key={r.id} className={cardClass("raised", "tile", clsx("flex flex-col px-5 py-5", !r.active && "opacity-70"))}>
           <div className="flex items-start justify-between gap-3">
             <div className="flex flex-wrap items-center gap-1.5">
               <RegulatorTag regulator={r.regulator} />
@@ -153,7 +153,7 @@ function ReturnsCatalogue({ onEdit }: { onEdit: (r: ReturnTypeOut | null) => voi
             {FREQ_LABEL[r.frequency]} · due {r.due_days} day{r.due_days === 1 ? "" : "s"} after period end
           </p>
           {r.description && (
-            <p className={clsx("mt-3 rounded-[14px] px-3.5 py-2.5 text-[12px] leading-relaxed", r.sample ? "bg-[var(--sev-medium-bg)] text-warn" : "bg-surface-2 text-ink-2 shadow-inset-sm")}>
+            <p className={clsx("mt-3 rounded-[14px] px-3.5 py-2.5 text-[12px] leading-relaxed", r.sample ? "bg-[var(--sev-medium-bg)] text-warn" : "bg-surface-2 text-ink-2")}>
               {r.description}
             </p>
           )}
@@ -283,16 +283,16 @@ export function FilingsView() {
           <>
             {q.data && (
               <p className="mb-5 flex flex-wrap items-center gap-2.5 text-[12.5px] text-ink-2 [&>span]:inline-flex [&>span]:h-9 [&>span]:items-center [&>span]:gap-1.5 [&>span]:rounded-full [&>span]:px-4">
-                <span className={stats.overdue ? "soft-xs text-danger" : "soft-xs"}>
+                <span className={stats.overdue ? "card-xs text-danger" : "card-xs"}>
                   <span className="num figure text-[15px]">{stats.overdue}</span> overdue
                 </span>
-                <span className="soft-xs">
+                <span className="card-xs">
                   <span className="num figure text-[15px] text-ink">{stats.due30}</span> due in 30 days
                 </span>
-                <span className="soft-xs">
+                <span className="card-xs">
                   <span className="num figure text-[15px] text-ink">{stats.filed}</span> filed on time
                 </span>
-                <span className="soft-xs">
+                <span className="card-xs">
                   <span className="num figure text-[15px] text-ink">{stats.late}</span> filed late
                 </span>
               </p>

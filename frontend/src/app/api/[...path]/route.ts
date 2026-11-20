@@ -53,7 +53,7 @@ async function proxy(req: NextRequest, ctx: RouteContext<"/api/[...path]">): Pro
     // The request body (JSON or multipart, bytes untouched) is buffered rather than streamed:
     // undici turns any 401 answer to a streamed-body request into a network error
     // ("expected non-null body source"), which would hide e.g. "invalid email or password".
-    // Uploads are capped at 20 MB by the API, so buffering is cheap. Responses still stream.
+    // The API caps uploads (25 MB by default, see /meta/runtime), so buffering is cheap. Responses still stream.
     const buf = await req.arrayBuffer();
     if (buf.byteLength) init.body = buf;
   }

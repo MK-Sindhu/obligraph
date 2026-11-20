@@ -62,7 +62,8 @@ async def migrated():
 TABLES = (
     "chat_messages, conversations, tasks, alerts, obligations, requirements, regulations, "
     "chunks, documents, graph_edges, graph_nodes, memberships, orgs, users, audit_events, "
-    "llm_calls, jobs, sources, demo_requests"
+    "llm_calls, jobs, sources, demo_requests, approval_requests, evidence, evidence_blobs, "
+    "filings, coverage_snapshots, instance_config"
 )
 
 

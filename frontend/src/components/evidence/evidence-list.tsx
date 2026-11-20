@@ -11,9 +11,9 @@ import { api, ApiError, errorMessage, type EvidenceLink, type EvidenceOut } from
 import { useAuth } from "@/lib/auth";
 import { downloadFile } from "@/lib/download";
 import { fmtBytes, fmtDateTime, relativeTime } from "@/lib/format";
+import { useUploadLimitMb } from "@/lib/runtime";
 import { useQuery } from "@/lib/use-query";
 
-export const EVIDENCE_MAX_BYTES = 25 * 1024 * 1024;
 
 export function shortHash(sha: string, n = 10) {
   return sha.slice(0, n);
@@ -64,7 +64,7 @@ export function EvidenceRow({
     <li
       className={clsx(
         "flex items-center gap-3 rounded-[18px] px-3.5 py-2.5 transition-[background-color,box-shadow]",
-        selected ? "bg-accent-wash ring-1 ring-accent/30" : "soft-xs",
+        selected ? "bg-accent-wash ring-1 ring-accent/30" : "card-xs",
       )}
     >
       {selectable ? (
@@ -123,12 +123,13 @@ export function EvidenceUploadButton({
 }) {
   const toast = useToast();
   const ref = useRef<HTMLInputElement>(null);
+  const limitMb = useUploadLimitMb();
   const [busy, setBusy] = useState(false);
 
   async function upload(file: File | undefined) {
     if (!file) return;
-    if (file.size > EVIDENCE_MAX_BYTES) {
-      toast.error("File too large", `${file.name} is ${fmtBytes(file.size)}. The limit is 25 MB.`);
+    if (file.size > limitMb * 1024 * 1024) {
+      toast.error("File too large", `${file.name} is ${fmtBytes(file.size)}. The limit is ${limitMb} MB.`);
       return;
     }
     if (file.size === 0) {
@@ -151,7 +152,7 @@ export function EvidenceUploadButton({
   return (
     <label
       className={clsx(
-        "inline-flex h-8 cursor-pointer items-center gap-1.5 whitespace-nowrap rounded-full border border-line-strong/80 bg-surface-grad px-3.5 text-[12.5px] font-medium text-ink shadow-raised-xs transition-colors hover:text-accent",
+        "inline-flex h-8 cursor-pointer items-center gap-1.5 whitespace-nowrap rounded-full border border-line-strong/80 bg-surface px-3.5 text-[12.5px] font-medium text-ink shadow-xs transition-colors hover:text-accent",
         "has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-accent",
         busy && "pointer-events-none opacity-60",
       )}
@@ -180,6 +181,7 @@ export function EvidenceSection({
 }) {
   const { can } = useAuth();
   const toast = useToast();
+  const limitMb = useUploadLimitMb();
   const key = `evidence:${link.task_id ?? ""}:${link.obligation_id ?? ""}:${link.filing_id ?? ""}`;
   const q = useQuery<EvidenceOut[]>(key, (signal) => api.evidence.list(link, { signal }));
   const { download, busy } = useEvidenceDownload();
@@ -245,7 +247,7 @@ export function EvidenceSection({
               if (selection) selection.onChange([...selection.selected, ev.id]);
             }}
           />
-          <span className="text-[11.5px] text-ink-3">Any file up to 25 MB. Each file is hashed (SHA-256) on upload.</span>
+          <span className="text-[11.5px] text-ink-3">Any file up to {limitMb} MB. Each file is hashed (SHA-256) on upload.</span>
         </div>
       )}
       <ConfirmDialog

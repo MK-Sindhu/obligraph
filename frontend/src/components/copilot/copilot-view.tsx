@@ -246,21 +246,21 @@ export function CopilotView() {
     <div className="relative flex h-[calc(100dvh-76px)] min-h-[480px] gap-6 px-4 pb-6 sm:px-8">
       <title>Copilot · Obligraph</title>
 
-      <aside className="hidden w-[290px] shrink-0 overflow-hidden rounded-card soft lg:block">{list}</aside>
+      <aside className="hidden w-[290px] shrink-0 overflow-hidden rounded-card card lg:block">{list}</aside>
       {listOpen && (
         <div className="absolute inset-0 z-20 flex lg:hidden">
-          <div className="glass-strong w-[300px] max-w-[85%] overflow-hidden rounded-r-[30px]">{list}</div>
+          <div className="overlay w-[300px] max-w-[85%] overflow-hidden rounded-r-[30px]">{list}</div>
           <button type="button" aria-label="Close conversations" className="flex-1 bg-[rgb(30_38_56/0.3)]" onClick={() => setListOpen(false)} />
         </div>
       )}
 
-      <section className="flex min-w-0 flex-1 flex-col overflow-hidden rounded-card soft">
+      <section className="flex min-w-0 flex-1 flex-col overflow-hidden rounded-card card">
         <header className="flex items-center gap-3 border-b border-line px-4 py-4 sm:px-7">
           <IconButton label="Show conversations" size="sm" tone="soft" className="lg:hidden" onClick={() => setListOpen(true)}>
             <PanelLeft size={16} />
           </IconButton>
           <div className="min-w-0 flex-1">
-            <p className="text-[12px] text-ink-3">Copilot</p>
+            <p className="text-[11px] font-extrabold uppercase tracking-[0.08em] text-accent">Copilot</p>
             <h1 className="display truncate text-[18px] leading-snug">{activeTitle}</h1>
           </div>
           {streaming && (
@@ -271,7 +271,7 @@ export function CopilotView() {
         </header>
 
         {aiMode === "offline" && (
-          <div className="mx-4 mt-4 flex items-start gap-2.5 rounded-[18px] bg-surface-2 px-4 py-3 text-[12.5px] text-ink-2 shadow-inset-sm sm:mx-7">
+          <div className="mx-4 mt-4 flex items-start gap-2.5 rounded-[18px] bg-surface-2 px-4 py-3 text-[12.5px] text-ink-2 sm:mx-7">
             <Info size={14} className="mt-0.5 shrink-0 text-ink-3" aria-hidden="true" />
             <p>
               <span className="font-medium text-ink">Offline mode.</span> Claude isn&rsquo;t configured, so answers are
@@ -320,7 +320,7 @@ export function CopilotView() {
                       <button
                         type="button"
                         onClick={() => void send(q)}
-                        className="h-full w-full rounded-[20px] soft-xs px-4 py-3.5 text-left text-[13px] text-ink transition-[box-shadow,color,transform] hover:-translate-y-px hover:text-accent hover:shadow-raised-sm"
+                        className="h-full w-full rounded-[20px] card-xs px-4 py-3.5 text-left text-[13px] text-ink transition-[box-shadow,color,transform] hover:-translate-y-px hover:text-accent hover:shadow-card"
                       >
                         {q}
                       </button>
@@ -346,7 +346,7 @@ export function CopilotView() {
             void send(draft);
           }}
         >
-          <div className="mx-auto flex w-full max-w-[780px] items-end gap-2 rounded-[24px] border border-[var(--field-border)] bg-field py-2 pl-5 pr-2 shadow-inset-sm transition-[border-color,box-shadow] focus-within:border-accent focus-within:shadow-[var(--shadow-inset-sm),var(--focus-ring)]">
+          <div className="mx-auto flex w-full max-w-[780px] items-end gap-2 rounded-[24px] border border-[var(--field-border)] bg-field py-2 pl-5 pr-2 transition-[border-color,box-shadow] focus-within:border-accent focus-within:shadow-[var(--),var(--focus-ring)]">
             <label htmlFor="copilot-input" className="sr-only">
               Ask Copilot
             </label>
@@ -372,7 +372,7 @@ export function CopilotView() {
                 disabled={!draft.trim()}
                 className={clsx(
                   "inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-[14px] transition-[box-shadow,background-color]",
-                  draft.trim() ? "bg-accent-grad-diag text-white shadow-glow-sm hover:shadow-glow" : "bg-surface-3 text-ink-3",
+                  draft.trim() ? "bg-primary text-white" : "bg-surface-3 text-ink-3",
                 )}
               >
                 <ArrowUp size={16} />

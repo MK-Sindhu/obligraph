@@ -97,7 +97,7 @@ export function readPalette(theme: "light" | "dark"): Palette {
     surface: cssVar("--surface-hi") || "#fff",
     accent: cssVar("--accent") || "#2348f5",
     shadow: theme === "dark" ? "rgba(0, 0, 0, 0.55)" : "rgba(80, 98, 130, 0.35)",
-    sans: cssVar("--font-poppins") || "system-ui, sans-serif",
+    sans: cssVar("--font-jakarta") || "system-ui, sans-serif",
     mono: cssVar("--font-plex-mono") || "ui-monospace, monospace",
   };
 }

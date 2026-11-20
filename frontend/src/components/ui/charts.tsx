@@ -3,10 +3,6 @@
 import clsx from "clsx";
 import { useId, type ReactNode } from "react";
 
-// The accent gradient is the same in both themes.
-const GRAD_A = "#2348f5";
-const GRAD_B = "#3f8cff";
-
 export interface GaugeSegment {
   key: string;
   value: number;
@@ -16,14 +12,71 @@ export interface GaugeSegment {
 }
 
 /**
- * Donut gauge: a blue-gradient arc for the headline value, a thinner secondary ring (either a
- * plain grey track or a composition split into coloured segments) and an embossed centre disc
- * holding the large figure.
+ * Thin progress ring with the number inside. Azure by default; pass `tone="negative"` for a red
+ * ring (or `tone="auto"` with `warnBelow` to turn red when the value is low).
+ */
+export function ProgressRing({
+  value,
+  size = 64,
+  stroke = 5,
+  label,
+  tone = "primary",
+  warnBelow = 40,
+  caption,
+  className,
+}: {
+  /** 0–100, or null when unavailable. */
+  value: number | null;
+  size?: number;
+  stroke?: number;
+  /** Accessible description, e.g. "DPDP readiness 56%". */
+  label: string;
+  tone?: "primary" | "negative" | "auto";
+  warnBelow?: number;
+  caption?: ReactNode;
+  className?: string;
+}) {
+  const c = size / 2;
+  const r = c - stroke / 2 - 1;
+  const circ = 2 * Math.PI * r;
+  const v = value === null ? 0 : Math.max(0, Math.min(100, value));
+  const red = tone === "negative" || (tone === "auto" && value !== null && v < warnBelow);
+  return (
+    <div className={clsx("relative inline-flex shrink-0 items-center justify-center", className)} style={{ width: size, height: size }}>
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} role="img" aria-label={label} className="absolute inset-0">
+        <circle cx={c} cy={c} r={r} fill="none" stroke="var(--surface-3)" strokeWidth={stroke} />
+        {value !== null && v > 0 && (
+          <circle
+            cx={c}
+            cy={c}
+            r={r}
+            fill="none"
+            stroke={red ? "var(--negative)" : "var(--primary)"}
+            strokeWidth={stroke}
+            strokeLinecap="round"
+            strokeDasharray={`${(v / 100) * circ} ${circ}`}
+            transform={`rotate(-90 ${c} ${c})`}
+          />
+        )}
+      </svg>
+      <span className="relative flex flex-col items-center leading-none" aria-hidden="true">
+        <span className="figure text-ink" style={{ fontSize: Math.max(12, Math.round(size * 0.26)) }}>
+          {value === null ? "—" : Math.round(v)}
+        </span>
+        {caption && <span className="mt-1 text-[10.5px] font-medium text-ink-3">{caption}</span>}
+      </span>
+    </div>
+  );
+}
+
+/**
+ * Coverage gauge: a thin azure ring for the headline value with the figure inside, and an
+ * optional thinner inner ring that splits the whole into coloured segments (e.g. coverage states).
  */
 export function DonutGauge({
   value,
   size = 200,
-  thickness = 16,
+  thickness = 12,
   label,
   centerLabel,
   centerCaption,
@@ -39,17 +92,15 @@ export function DonutGauge({
   /** Overrides the centre figure (defaults to "75%"). */
   centerLabel?: ReactNode;
   centerCaption?: ReactNode;
-  /** Composition for the thin secondary ring. */
+  /** Composition for the thin inner ring. */
   segments?: GaugeSegment[];
   className?: string;
 }) {
-  const id = useId().replace(/:/g, "");
   const c = size / 2;
-  const r1 = c - thickness / 2 - 2;
-  const thin = Math.max(4, Math.round(thickness * 0.34));
-  const gap = Math.max(5, thickness * 0.45);
+  const r1 = c - thickness / 2 - 1;
+  const thin = Math.max(3, Math.round(thickness * 0.42));
+  const gap = Math.max(6, thickness * 0.75);
   const r2 = r1 - thickness / 2 - gap - thin / 2;
-  const disc = 2 * (r2 - thin / 2 - gap * 0.9);
   const circ1 = 2 * Math.PI * r1;
   const circ2 = 2 * Math.PI * r2;
   const v = value === null ? 0 : Math.max(0, Math.min(100, value));
@@ -67,32 +118,22 @@ export function DonutGauge({
 
   return (
     <div className={clsx("relative shrink-0", className)} style={{ width: size, height: size }}>
-      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} role="img" aria-label={label} className="overflow-visible">
-        <defs>
-          <linearGradient id={`g-${id}`} x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor={GRAD_B} />
-            <stop offset="100%" stopColor={GRAD_A} />
-          </linearGradient>
-        </defs>
-        {/* main track */}
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} role="img" aria-label={label}>
         <circle cx={c} cy={c} r={r1} fill="none" stroke="var(--surface-3)" strokeWidth={thickness} />
-        <circle cx={c} cy={c} r={r1} fill="none" stroke="var(--line)" strokeWidth={1} opacity={0.7} transform={`translate(0.6 0.6)`} />
         {value !== null && v > 0 && (
           <circle
             cx={c}
             cy={c}
             r={r1}
             fill="none"
-            stroke={`url(#g-${id})`}
+            stroke="var(--primary)"
             strokeWidth={thickness}
             strokeLinecap="round"
             strokeDasharray={`${dash} ${circ1}`}
             transform={`rotate(-90 ${c} ${c})`}
-            style={{ filter: "drop-shadow(0 4px 6px rgb(43 91 255 / 0.35))" }}
           />
         )}
-        {/* secondary ring */}
-        <circle cx={c} cy={c} r={r2} fill="none" stroke="var(--surface-3)" strokeWidth={thin} />
+        {segments && <circle cx={c} cy={c} r={r2} fill="none" stroke="var(--surface-3)" strokeWidth={thin} />}
         {arcs.length > 0 && (
           <g transform={`rotate(-90 ${c} ${c})`}>
             {arcs.map((a) => (
@@ -114,22 +155,19 @@ export function DonutGauge({
           </g>
         )}
       </svg>
-      <div
-        className="pointer-events-none absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-full soft-sm"
-        style={{ width: disc, height: disc }}
-      >
-        <span className="figure leading-none text-ink" style={{ fontSize: Math.round(disc * 0.3) }}>
+      <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
+        <span className="figure leading-none text-accent" style={{ fontSize: Math.round(size * 0.2) }}>
           {centerLabel ??
             (value === null ? (
               "—"
             ) : (
               <>
                 {Math.round(v)}
-                <span className="text-[0.5em] text-ink-3">%</span>
+                <span className="text-[0.5em]">%</span>
               </>
             ))}
         </span>
-        {centerCaption && <span className="mt-1 text-[11px] text-ink-3">{centerCaption}</span>}
+        {centerCaption && <span className="mt-1.5 text-[11.5px] font-medium text-ink-3">{centerCaption}</span>}
       </div>
     </div>
   );
@@ -181,10 +219,14 @@ function monotonePath(pts: [number, number][]): string {
   return d;
 }
 
+const TONE_COLOR = { blue: "var(--primary)", green: "var(--positive-area)", red: "var(--negative)" } as const;
+type Tone = keyof typeof TONE_COLOR;
+
 /**
- * Thin blue line chart with optional layered gradient areas and a highlighted knob.
- * Responsive: paths stretch with the container while strokes and the knob stay crisp.
- * The first series is drawn in front; later series sit behind it, lighter.
+ * Area chart on a light grid with a dot on every point, after the reference kit: green when the
+ * first series rises, red when it falls (`tone="auto"`), or a fixed tone. A highlighted point
+ * carries its value. Responsive: paths stretch with the container while strokes and dots stay
+ * crisp. The first series is drawn in front; later series sit behind it, lighter.
  */
 export function AreaChart({
   series,
@@ -196,6 +238,8 @@ export function AreaChart({
   ariaLabel,
   className,
   showGrid = true,
+  tone = "blue",
+  higherIsBetter = true,
 }: {
   series: ChartSeries[];
   /** X-axis labels (one per value). */
@@ -208,6 +252,10 @@ export function AreaChart({
   ariaLabel: string;
   className?: string;
   showGrid?: boolean;
+  /** auto: green when the first series ends higher than it starts, red when lower. */
+  tone?: Tone | "auto";
+  /** With tone="auto": whether a rise is good (green) or bad (red). */
+  higherIsBetter?: boolean;
 }) {
   const id = useId().replace(/:/g, "");
   const W = 300;
@@ -219,6 +267,10 @@ export function AreaChart({
   const y = (v: number) => H - pad - (v / (max * 1.12)) * (H - pad * 2);
   const first = series[0]?.values ?? [];
   const hi = highlight ?? (first.length ? first.indexOf(Math.max(...first)) : -1);
+  const rising = first.length > 1 && first[first.length - 1] >= first[0];
+  const resolved: Tone = tone === "auto" ? (first.length < 2 ? "blue" : rising === higherIsBetter ? "green" : "red") : tone;
+  const color = TONE_COLOR[resolved];
+  const cols = Math.max(2, len);
 
   return (
     <figure className={clsx("relative min-w-0", className)}>
@@ -231,28 +283,21 @@ export function AreaChart({
           aria-label={ariaLabel}
         >
           <defs>
-            <linearGradient id={`line-${id}`} x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stopColor={GRAD_A} />
-              <stop offset="100%" stopColor={GRAD_B} />
-            </linearGradient>
             <linearGradient id={`fill-${id}`} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor={GRAD_B} stopOpacity="0.38" />
-              <stop offset="100%" stopColor={GRAD_B} stopOpacity="0" />
+              <stop offset="0%" stopColor={color} stopOpacity="0.32" />
+              <stop offset="100%" stopColor={color} stopOpacity="0.02" />
             </linearGradient>
           </defs>
-          {showGrid &&
-            [0.25, 0.5, 0.75].map((f) => (
-              <line
-                key={f}
-                x1={0}
-                x2={W}
-                y1={pad + f * (H - pad * 2)}
-                y2={pad + f * (H - pad * 2)}
-                stroke="var(--line)"
-                strokeDasharray="3 4"
-                vectorEffect="non-scaling-stroke"
-              />
-            ))}
+          {showGrid && (
+            <g stroke="var(--line)" vectorEffect="non-scaling-stroke">
+              {[0, 0.25, 0.5, 0.75, 1].map((f) => (
+                <line key={`h${f}`} x1={0} x2={W} y1={f * H} y2={f * H} vectorEffect="non-scaling-stroke" />
+              ))}
+              {Array.from({ length: cols }, (_, i) => (
+                <line key={`v${i}`} x1={(i / (cols - 1)) * W} x2={(i / (cols - 1)) * W} y1={0} y2={H} vectorEffect="non-scaling-stroke" />
+              ))}
+            </g>
+          )}
           {[...series].reverse().map((s, ri) => {
             const layer = series.length - 1 - ri;
             const pts = s.values.map((v, i) => [x(i), y(v)] as [number, number]);
@@ -265,8 +310,8 @@ export function AreaChart({
                 <path
                   d={line}
                   fill="none"
-                  stroke={`url(#line-${id})`}
-                  strokeWidth={layer === 0 ? 2.5 : 1.6}
+                  stroke={color}
+                  strokeWidth={layer === 0 ? 2.25 : 1.5}
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   vectorEffect="non-scaling-stroke"
@@ -275,25 +320,34 @@ export function AreaChart({
             );
           })}
         </svg>
+        {/* Dots as HTML so they stay round while the SVG stretches. */}
+        {first.map((v, i) =>
+          i === hi ? null : (
+            <span
+              key={i}
+              aria-hidden="true"
+              className="pointer-events-none absolute h-[7px] w-[7px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-ink-2"
+              style={{ left: `${(x(i) / W) * 100}%`, top: `${(y(v) / H) * 100}%` }}
+            />
+          ),
+        )}
         {hi >= 0 && first[hi] !== undefined && (
           <div
             className="pointer-events-none absolute -translate-x-1/2 -translate-y-1/2"
             style={{ left: `${(x(hi) / W) * 100}%`, top: `${(y(first[hi]) / H) * 100}%` }}
             aria-hidden="true"
           >
-            <span className="absolute bottom-[calc(100%+6px)] left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-accent-grad-text px-2 py-[3px] text-[11px] font-medium leading-none text-white shadow-glow-sm">
+            <span className="absolute bottom-[calc(100%+6px)] left-1/2 -translate-x-1/2 whitespace-nowrap rounded-[6px] bg-ink px-1.5 py-[3px] text-[11px] font-semibold leading-none text-surface">
               {formatValue(first[hi])}
             </span>
-            <span className="flex h-[18px] w-[18px] items-center justify-center rounded-full bg-surface-hi shadow-knob">
-              <span className="h-2 w-2 rounded-full bg-accent-grad-diag" />
-            </span>
+            <span className="block h-3 w-3 rounded-full border-2 bg-surface" style={{ borderColor: color }} />
           </div>
         )}
       </div>
       {labels && (
         <div className="mt-2 flex justify-between gap-1 text-[11px] text-ink-3" aria-hidden="true">
           {labels.map((l, i) => (
-            <span key={i} className={clsx("min-w-0 truncate", i === hi && "font-medium text-accent")}>
+            <span key={i} className={clsx("min-w-0 truncate", i === hi && "font-semibold text-ink")}>
               {l}
             </span>
           ))}

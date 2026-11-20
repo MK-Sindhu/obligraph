@@ -48,14 +48,14 @@ function Legend({ data }: { data: Subgraph }) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="pointer-events-auto h-8 rounded-full border border-line-strong/70 bg-surface-grad px-3.5 text-[12px] font-medium text-ink-2 shadow-raised-xs hover:text-accent"
+        className="pointer-events-auto h-8 rounded-full border border-line-strong/70 bg-surface px-3.5 text-[12px] font-medium text-ink-2 shadow-xs hover:text-accent"
       >
         Show legend
       </button>
     );
   }
   return (
-    <div className="pointer-events-auto rounded-[22px] soft-sm px-4 py-3.5">
+    <div className="pointer-events-auto rounded-[22px] card px-4 py-3.5">
       <div className="mb-2 flex items-center justify-between gap-3">
         <p className="text-[11.5px] font-medium text-ink-3">Nodes</p>
         <button type="button" onClick={() => setOpen(false)} className="rounded-full px-1.5 text-[11.5px] font-medium text-accent hover:underline">
@@ -123,8 +123,8 @@ export function GraphExplorer() {
       <title>Knowledge graph · Obligraph</title>
       <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3 pb-5 pt-2">
         <div className="min-w-0">
-          <p className="mb-1 text-[12.5px] text-ink-3">Regulatory corpus</p>
-          <h1 className="display text-[28px] leading-tight sm:text-[32px]">Knowledge graph</h1>
+          <p className="mb-1.5 text-[11.5px] font-extrabold uppercase tracking-[0.08em] text-accent-deep">Regulatory corpus</p>
+          <h1 className="display text-[28px] font-extrabold leading-[1.12] text-on-canvas sm:text-[32px]">Knowledge graph</h1>
         </div>
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
           <Toggle checked={mine} onChange={(v) => set({ mine: v ? 1 : null })} label="Only what applies to us" />
@@ -149,8 +149,8 @@ export function GraphExplorer() {
       </div>
 
       <div className="relative flex min-h-0 flex-1 gap-6">
-        <div className="relative min-w-0 flex-1 rounded-card soft p-2.5">
-          <div className="relative h-full overflow-hidden rounded-[22px] bg-[var(--graph-bg)] shadow-inset">
+        <div className="relative min-w-0 flex-1 rounded-card card p-2.5">
+          <div className="relative h-full overflow-hidden rounded-[22px] bg-[var(--graph-bg)]">
           {graph.error != null && !data && (
             <div className="flex h-full items-center justify-center">
               <ErrorState error={graph.error} onRetry={graph.reload} title="Couldn't load the graph" />
@@ -178,7 +178,7 @@ export function GraphExplorer() {
             <>
               <GraphCanvas data={data} selectedId={nodeId} onSelect={select} />
               <div className="pointer-events-none absolute left-3 top-3 flex items-center gap-2">
-                <span className="num rounded-full soft-xs px-3 py-1.5 text-[11.5px] font-medium text-ink-2">
+                <span className="num rounded-full card-xs px-3 py-1.5 text-[11.5px] font-medium text-ink-2">
                   {data.nodes.length} nodes · {data.edges.length} links
                 </span>
                 {graph.loading && <span className="text-[11.5px] text-ink-3">Updating…</span>}
@@ -194,7 +194,7 @@ export function GraphExplorer() {
         <aside
           aria-label="Graph details"
           className={clsx(
-            "flex-col overflow-hidden rounded-card soft",
+            "flex-col overflow-hidden rounded-card card",
             "lg:static lg:flex lg:w-[350px] lg:max-h-none lg:shrink-0",
             panelOpen ? "absolute inset-x-0 bottom-0 z-10 flex max-h-[68%] shadow-pop!" : "hidden",
           )}

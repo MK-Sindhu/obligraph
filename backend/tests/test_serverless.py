@@ -31,6 +31,17 @@ def test_platform_urls_are_normalised():
     )
     supa = "postgresql://a:b@db.x.supabase.co:6543/postgres?pgbouncer=true&sslmode=require"
     assert "pgbouncer" not in libpq_url(supa) and is_pooled(supa)
+    # The form Vercel's Supabase integration sets as POSTGRES_URL.
+    vercel_supa = (
+        "postgres://postgres.abc:pw@aws-0-ap-south-1.pooler.supabase.com:6543/postgres"
+        "?sslmode=require&supa=base-pooler.x"
+    )
+    url, args = async_url(vercel_supa)
+    assert url.endswith(":6543/postgres") and "?" not in url
+    assert args["ssl"] == "require" and args["statement_cache_size"] == 0
+    assert libpq_url(vercel_supa).endswith("/postgres?sslmode=require")
+    direct = "postgres://postgres.abc:pw@aws-0-ap-south-1.pooler.supabase.com:5432/postgres"
+    assert is_pooled(direct)  # session-mode pooler: caching off is still safe
 
 
 @pytest.fixture
@@ -50,13 +61,21 @@ async def test_bootstrap_is_idempotent_and_generates_a_secret(monkeypatch, serve
     await bootstrap.run()  # a second cold start reuses the stored secret
     assert serverless.jwt_secret == first
     async with session_scope() as session:
-        assert (
-            await session.execute(select(func.count()).select_from(InstanceConfig))
-        ).scalar_one() == 1
+        keys = set((await session.execute(select(InstanceConfig.key))).scalars())
+        assert keys == {"jwt_secret", "bootstrap"}
         assert (await session.execute(select(func.count()).select_from(Source))).scalar_one() == 3
         assert (
             await session.execute(select(func.count()).select_from(ReturnType))
         ).scalar_one() == 11
+    # Fast path: an already-bootstrapped database is not re-migrated or re-seeded.
+    calls: list[str] = []
+
+    async def no_migrate() -> None:
+        calls.append("migrate")
+
+    monkeypatch.setattr(bootstrap, "migrate", no_migrate)
+    await bootstrap.run()
+    assert calls == []
 
 
 async def test_requests_run_their_own_jobs_and_store_evidence_in_db(client, serverless):

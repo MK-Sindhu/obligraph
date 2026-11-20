@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  BookOpen,
   CalendarDays,
   FileCheck2,
   FileStack,
@@ -91,7 +92,7 @@ function Tile({ item, onNavigate, count }: { item: NavItem; onNavigate?: () => v
       onClick={onNavigate}
       active={active}
       title={item.title}
-      icon={<Icon size={20} strokeWidth={1.8} />}
+      icon={<Icon size={22} strokeWidth={1.6} />}
       badge={count ? <CountBadge count={count} /> : undefined}
       label={
         <>
@@ -110,19 +111,20 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   const footer: NavItem[] = [
     { href: "/settings", label: "Settings", icon: Settings },
     ...(isSuperuser ? [{ href: "/admin", label: "Admin", title: "Platform admin", icon: ShieldCheck }] : []),
+    { href: "/docs", label: "Docs", title: "Documentation", icon: BookOpen },
   ];
   return (
     <nav aria-label="Main" className="flex h-full flex-col">
-      <div className="flex h-[76px] shrink-0 items-center px-6">
+      <div className="flex h-[76px] shrink-0 items-center px-5">
         <Link href="/dashboard" onClick={onNavigate} aria-label="Obligraph dashboard" className="rounded-[12px]">
           <Wordmark />
         </Link>
       </div>
-      <div className="flex-1 space-y-5 overflow-y-auto px-5 pb-4 pt-1">
+      <div className="flex-1 space-y-4 overflow-y-auto px-3 pb-4 pt-1">
         {GROUPS.map((g) => (
           <div key={g.label}>
-            <p className="mb-2 px-1 text-[11.5px] font-medium text-ink-3">{g.label}</p>
-            <div className="grid grid-cols-2 gap-2.5">
+            <p className="mb-1.5 px-2 text-[10.5px] font-extrabold uppercase tracking-[0.09em] text-accent-deep">{g.label}</p>
+            <div className="grid grid-cols-3 gap-x-1 gap-y-2">
               {g.items.map((item) => (
                 <Tile key={item.href} item={item} onNavigate={onNavigate} count={item.badge === "approvals" ? pending : undefined} />
               ))}
@@ -130,7 +132,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
           </div>
         ))}
       </div>
-      <div className="grid shrink-0 grid-cols-2 gap-2.5 px-5 pb-5 pt-3">
+      <div className="grid shrink-0 grid-cols-3 gap-x-1 border-t border-white/40 px-3 pb-4 pt-3">
         {footer.map((item) => (
           <Tile key={item.href} item={item} onNavigate={onNavigate} />
         ))}

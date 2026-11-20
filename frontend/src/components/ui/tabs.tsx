@@ -3,13 +3,13 @@
 import clsx from "clsx";
 import type { ReactNode } from "react";
 
-const track = "inline-flex max-w-full items-center gap-1 overflow-x-auto rounded-full border border-line bg-surface-2 p-1 shadow-inset-sm";
+const track = "inline-flex max-w-full items-center gap-1 overflow-x-auto rounded-[12px] border border-line bg-surface p-1 shadow-xs";
 
 function segClass(active: boolean, size: "sm" | "md") {
   return clsx(
-    "inline-flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-full font-medium transition-[background-color,box-shadow,color] duration-150",
-    size === "sm" ? "h-7 px-3 text-[12px]" : "h-8 px-4 text-[13px]",
-    active ? "bg-surface-hi text-accent shadow-raised-xs" : "text-ink-3 hover:text-ink",
+    "inline-flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-[8px] font-semibold transition-[background-color,color] duration-150",
+    size === "sm" ? "h-7 px-3 text-[12px]" : "h-8 px-3.5 text-[13px]",
+    active ? "bg-primary-fill text-white" : "text-ink-2 hover:bg-surface-2 hover:text-ink",
   );
 }
 

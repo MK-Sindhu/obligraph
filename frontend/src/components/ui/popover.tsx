@@ -45,7 +45,7 @@ export function Popover({
       {open && (
         <div
           className={clsx(
-            "glass-strong absolute top-[calc(100%+10px)] z-50 min-w-56 animate-[rise-in_140ms_ease-out] rounded-[22px] p-1.5",
+            "overlay absolute top-[calc(100%+10px)] z-50 min-w-56 animate-[rise-in_140ms_ease-out] rounded-[22px] p-1.5",
             align === "end" ? "right-0" : "left-0",
             panelClassName,
           )}

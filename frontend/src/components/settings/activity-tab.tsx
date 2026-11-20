@@ -117,7 +117,7 @@ export function ActivityTab() {
                       {summary.map((s, i) => (
                         <span
                           key={i}
-                          className="rounded-full bg-surface-2 px-2.5 py-[3px] font-mono text-[11px] text-ink-2 shadow-inset-sm"
+                          className="rounded-full bg-surface-2 px-2.5 py-[3px] font-mono text-[11px] text-ink-2"
                         >
                           {s}
                         </span>
