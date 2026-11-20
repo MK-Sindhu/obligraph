@@ -3,11 +3,11 @@ from __future__ import annotations
 import re
 import uuid
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from obligraph import vocab
+from obligraph import ratelimit, vocab
 from obligraph.api.deps import SessionDep, current_user
 from obligraph.api.schemas import (
     LoginIn,
@@ -52,18 +52,25 @@ async def unique_slug(session: AsyncSession, name: str) -> str:
 
 
 @router.post("/register", response_model=SessionOut, status_code=201)
-async def register(body: RegisterIn, session: AsyncSession = SessionDep) -> SessionOut:
+async def register(
+    body: RegisterIn, request: Request, session: AsyncSession = SessionDep
+) -> SessionOut:
+    ratelimit.enforce(ratelimit.LOGIN_PER_IP, ratelimit.client_ip(request))
     email = body.email.lower()
     if (await session.execute(select(User.id).where(User.email == email))).first():
         raise HTTPException(status.HTTP_409_CONFLICT, "email already registered")
     classes = vocab.canonical_entity_classes(body.entity_classes)
-    first_user = (await session.execute(select(func.count(User.id)))).scalar_one() == 0
+    admin_email = get_settings().admin_email.strip().lower()
+    if admin_email:
+        platform_admin = email == admin_email
+    else:  # no ADMIN_EMAIL configured: the very first account administers the platform
+        platform_admin = (await session.execute(select(func.count(User.id)))).scalar_one() == 0
     user = User(
         id=uuid.uuid4(),
         email=email,
         name=body.name,
         password_hash=hash_password(body.password),
-        is_superuser=first_user,
+        is_superuser=platform_admin,
     )
     org = Org(
         id=uuid.uuid4(),
@@ -95,7 +102,8 @@ async def register(body: RegisterIn, session: AsyncSession = SessionDep) -> Sess
 
 
 @router.post("/login", response_model=SessionOut)
-async def login(body: LoginIn, session: AsyncSession = SessionDep) -> SessionOut:
+async def login(body: LoginIn, request: Request, session: AsyncSession = SessionDep) -> SessionOut:
+    ratelimit.enforce(ratelimit.LOGIN_PER_IP, ratelimit.client_ip(request))
     user = (
         await session.execute(select(User).where(User.email == body.email.lower()))
     ).scalar_one_or_none()

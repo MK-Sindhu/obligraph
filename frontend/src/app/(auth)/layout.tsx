@@ -1,6 +1,7 @@
 import { FileCheck2, ListChecks, TriangleAlert } from "lucide-react";
 import { Wordmark } from "@/components/brand";
 import { IconTile } from "@/components/ui/button";
+import { BackdropBlobs } from "@/components/ui/glass";
 import { Timeline } from "@/components/ui/timeline";
 
 /** Sample lineage shown beside the sign-in form: the product's core idea in one glance. */
@@ -48,7 +49,8 @@ const POINTS = [
 
 export default function AuthLayout({ children }: LayoutProps<"/">) {
   return (
-    <div className="grid min-h-dvh bg-canvas lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
+    <div className="grid min-h-dvh lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
+      <BackdropBlobs intensity="auth" />
       <div className="flex flex-col px-5 py-6 sm:px-12 sm:py-8">
         <Wordmark />
         <div className="flex flex-1 items-center justify-center py-10">

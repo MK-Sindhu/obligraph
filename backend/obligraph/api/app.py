@@ -11,7 +11,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 
-from obligraph import jobs
+from obligraph import bootstrap, jobs
 from obligraph.api.routes import (
     admin,
     auth,
@@ -19,8 +19,10 @@ from obligraph.api.routes import (
     copilot,
     corpus,
     insights,
+    ops,
     org,
     oversight,
+    public,
     sso,
     work,
 )
@@ -36,8 +38,11 @@ async def lifespan(_app: FastAPI):
     settings = get_settings()
     stop = asyncio.Event()
     worker = None
-    await approvals.init()
-    if settings.run_worker_in_api:
+    if settings.should_auto_migrate:
+        await bootstrap.run()
+    else:
+        await approvals.init()
+    if settings.run_worker_in_api and not settings.is_serverless:
         worker = asyncio.create_task(jobs.run_worker(stop))
     try:
         yield
@@ -65,7 +70,20 @@ def create_app() -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
-    for module in (auth, sso, org, corpus, compliance, work, oversight, insights, copilot, admin):
+    for module in (
+        auth,
+        sso,
+        public,
+        ops,
+        org,
+        corpus,
+        compliance,
+        work,
+        oversight,
+        insights,
+        copilot,
+        admin,
+    ):
         app.include_router(module.router, prefix="/api")
 
     @app.get("/health", tags=["meta"])

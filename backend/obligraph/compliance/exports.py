@@ -217,7 +217,7 @@ async def audit_pack(session: AsyncSession, org: Org) -> tempfile.SpooledTempora
             await session.execute(select(Evidence).where(Evidence.org_id == org.id))
         ).scalars():
             try:
-                data = await evidence_store.read(ev)
+                data = await evidence_store.read(ev, session)
             except OSError as exc:
                 manifest["files"][f"evidence/{ev.id}"] = {"error": str(exc)}
                 continue

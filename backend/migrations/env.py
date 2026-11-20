@@ -6,6 +6,7 @@ from logging.config import fileConfig
 from alembic import context
 from sqlalchemy.ext.asyncio import create_async_engine
 
+from obligraph.dburl import async_url
 from obligraph.models import Base
 from obligraph.settings import get_settings
 
@@ -26,12 +27,13 @@ def include_object(obj, name, type_, reflected, compare_to) -> bool:
 
 
 def _url() -> str:
-    return config.attributes.get("database_url") or get_settings().database_url
+    s = get_settings()
+    return config.attributes.get("database_url") or s.database_url_unpooled or s.database_url
 
 
 def run_migrations_offline() -> None:
     context.configure(
-        url=_url(),
+        url=async_url(_url())[0],
         target_metadata=target_metadata,
         literal_binds=True,
         include_object=include_object,
@@ -49,7 +51,8 @@ def _do_run(connection) -> None:
 
 
 async def run_migrations_online() -> None:
-    engine = create_async_engine(_url())
+    url, connect_args = async_url(_url())
+    engine = create_async_engine(url, connect_args=connect_args)
     async with engine.connect() as connection:
         await connection.run_sync(_do_run)
     await engine.dispose()

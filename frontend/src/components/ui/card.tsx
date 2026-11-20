@@ -2,29 +2,10 @@
 
 import clsx from "clsx";
 import type { ComponentProps, ReactNode } from "react";
+import { softCardClass, type CardRadius, type Elevation } from "./styles";
 
-export type Elevation = "raised" | "raised-sm" | "raised-xs" | "inset" | "flat";
-export type CardRadius = "lg" | "md" | "tile" | "sm";
-
-const elevationClass: Record<Elevation, string> = {
-  raised: "soft",
-  "raised-sm": "soft-sm",
-  "raised-xs": "soft-xs",
-  inset: "soft-inset",
-  flat: "bg-surface border border-line",
-};
-
-const radiusClass: Record<CardRadius, string> = {
-  lg: "rounded-card-lg",
-  md: "rounded-card",
-  tile: "rounded-tile",
-  sm: "rounded-[18px]",
-};
-
-/** Class for an extruded (or pressed-in) surface, for use on links and other elements. */
-export function softCardClass(elevation: Elevation = "raised", radius: CardRadius = "md", extra?: string) {
-  return clsx(elevationClass[elevation], radiusClass[radius], extra);
-}
+export { softCardClass };
+export type { CardRadius, Elevation };
 
 type SoftCardProps = {
   as?: "div" | "section" | "article" | "aside" | "header" | "figure";

@@ -4,11 +4,13 @@ import { Building2, LogOut, RotateCw } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { LogoMark, Splash } from "@/components/brand";
+import { BackdropBlobs } from "@/components/ui/glass";
 import { Button } from "@/components/ui/button";
 import { errorMessage } from "@/lib/api";
 import { AuthProvider, useAuth } from "@/lib/auth";
 import { Sidebar } from "./sidebar";
 import { Topbar } from "./topbar";
+import { JobRunner } from "./job-runner";
 
 function MobileNav({ open, onClose }: { open: boolean; onClose: () => void }) {
   const ref = useRef<HTMLDialogElement>(null);
@@ -25,7 +27,7 @@ function MobileNav({ open, onClose }: { open: boolean; onClose: () => void }) {
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
-      className="fixed inset-y-0 left-0 m-0 h-dvh max-h-none w-[272px] max-w-[85vw] rounded-r-[30px] border-r border-[var(--card-edge)] bg-canvas p-0 shadow-pop open:animate-[rise-in_160ms_ease-out] lg:hidden"
+      className="glass-strong fixed inset-y-0 left-0 m-0 h-dvh max-h-none w-[272px] max-w-[85vw] rounded-r-[30px] p-0 open:animate-[rise-in_160ms_ease-out] lg:hidden"
     >
       {open && <Sidebar onNavigate={onClose} />}
     </dialog>
@@ -40,7 +42,9 @@ function Shell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex min-h-dvh">
-      <aside className="sticky top-0 hidden h-dvh w-[248px] shrink-0 bg-canvas lg:block">
+      <BackdropBlobs intensity="app" />
+      <JobRunner />
+      <aside className="sticky top-0 hidden h-dvh w-[248px] shrink-0 lg:block">
         <Sidebar />
       </aside>
       <MobileNav open={navOpen} onClose={() => setNavOpen(false)} />

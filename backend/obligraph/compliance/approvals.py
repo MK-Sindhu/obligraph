@@ -26,12 +26,14 @@ from typing import Annotated, Literal, TypedDict
 from langgraph.checkpoint.postgres.aio import AsyncPostgresSaver
 from langgraph.graph import END, START, StateGraph
 from langgraph.types import Command, interrupt
+from psycopg import AsyncConnection
 from psycopg.rows import dict_row
 from psycopg_pool import AsyncConnectionPool
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from obligraph.audit import record
+from obligraph.dburl import libpq_url
 from obligraph.models import Alert, ApprovalRequest, Membership, Obligation, Org, Task, User
 from obligraph.security import role_at_least
 from obligraph.settings import get_settings
@@ -229,8 +231,10 @@ _pool: AsyncConnectionPool | None = None
 _compiled = None
 
 
-def _conninfo() -> str:
-    return get_settings().database_url.replace("postgresql+asyncpg://", "postgresql://", 1)
+def _conninfo(direct: bool = False) -> str:
+    s = get_settings()
+    raw = (s.database_url_unpooled or s.database_url) if direct else s.database_url
+    return libpq_url(raw)
 
 
 async def init() -> None:
@@ -252,8 +256,13 @@ async def graph():
             kwargs={"autocommit": True, "prepare_threshold": 0, "row_factory": dict_row},
         )
         await _pool.open()
+        # One-time DDL (incl. CREATE INDEX CONCURRENTLY) over a direct connection when one
+        # is configured; poolers in transaction mode are fine for the regular traffic.
+        async with await AsyncConnection.connect(
+            _conninfo(direct=True), autocommit=True, prepare_threshold=0, row_factory=dict_row
+        ) as conn:
+            await AsyncPostgresSaver(conn).setup()
         saver = AsyncPostgresSaver(_pool)
-        await saver.setup()
         _compiled = build_graph().compile(checkpointer=saver)
     return _compiled
 

@@ -10,7 +10,7 @@ from sqlalchemy import select
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from obligraph import vocab
+from obligraph import clock, vocab
 from obligraph.compliance.filings import ensure_filings, seed_catalogue
 from obligraph.compliance.obligations import sync_org
 from obligraph.db import session_scope
@@ -134,7 +134,7 @@ async def seed_demo_org(session: AsyncSession) -> Org:
 async def _demo_filing_history(session: AsyncSession, org: Org) -> None:
     """Make the demo's past filings look lived-in: most filed on time, one filed late,
     and the most recent past-due one left overdue."""
-    from datetime import date, timedelta
+    from datetime import timedelta
 
     past = (
         (
@@ -143,7 +143,7 @@ async def _demo_filing_history(session: AsyncSession, org: Org) -> None:
                 .where(
                     Filing.org_id == org.id,
                     Filing.status == "pending",
-                    Filing.due_on < date.today(),
+                    Filing.due_on < clock.today(),
                 )
                 .order_by(Filing.due_on)
             )
@@ -159,7 +159,9 @@ async def _demo_filing_history(session: AsyncSession, org: Org) -> None:
         f.note = "Sample history created by the demo seed."
 
 
-async def run(demo: bool) -> None:
+async def run(demo: bool, drain_now: bool = True) -> None:
+    """``drain_now=False`` only queues the processing (serverless: it runs on later
+    requests and the scheduled cron instead of during startup)."""
     async with session_scope() as session:
         await seed_sources(session)
         await seed_catalogue(session)
@@ -167,7 +169,9 @@ async def run(demo: bool) -> None:
             n = await seed_sample_corpus(session)
             log.info("queued %s sample regulations", n)
     if demo:
-        await drain()  # extract the corpus before the demo org maps against it
+        if drain_now:
+            await drain()  # extract the corpus before the demo org maps against it
         async with session_scope() as session:
             await seed_demo_org(session)
-        await drain()
+        if drain_now:
+            await drain()

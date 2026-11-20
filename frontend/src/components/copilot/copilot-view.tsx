@@ -249,7 +249,7 @@ export function CopilotView() {
       <aside className="hidden w-[290px] shrink-0 overflow-hidden rounded-card soft lg:block">{list}</aside>
       {listOpen && (
         <div className="absolute inset-0 z-20 flex lg:hidden">
-          <div className="w-[300px] max-w-[85%] overflow-hidden rounded-r-[30px] bg-canvas shadow-pop">{list}</div>
+          <div className="glass-strong w-[300px] max-w-[85%] overflow-hidden rounded-r-[30px]">{list}</div>
           <button type="button" aria-label="Close conversations" className="flex-1 bg-[rgb(30_38_56/0.3)]" onClick={() => setListOpen(false)} />
         </div>
       )}

@@ -16,6 +16,7 @@ from obligraph.compliance import approvals, exports
 from obligraph.compliance import evidence as store
 from obligraph.models import ApprovalRequest, Evidence, Filing, Obligation, Requirement, Task, User
 from obligraph.security import role_at_least
+from obligraph.settings import get_settings
 
 router = APIRouter(tags=["work"])
 
@@ -61,7 +62,7 @@ async def upload_evidence(
     await _check_owned(c, Task, task_id, "task")
     await _check_owned(c, Obligation, obligation_id, "obligation")
     await _check_owned(c, Filing, filing_id, "filing")
-    data = await file.read(store.MAX_EVIDENCE_BYTES + 1)
+    data = await file.read(get_settings().upload_limit_bytes + 1)
     try:
         ev = await store.save(
             c.session,
@@ -118,7 +119,7 @@ async def download_evidence(evidence_id: uuid.UUID, c: Caller = Depends(caller))
     if ev is None or ev.org_id != c.org.id:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "evidence not found")
     try:
-        data = await store.read(ev)
+        data = await store.read(ev, c.session)
     except OSError as exc:
         raise HTTPException(status.HTTP_410_GONE, str(exc)) from exc
     safe = ev.filename.replace('"', "")

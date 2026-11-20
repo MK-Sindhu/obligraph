@@ -218,6 +218,15 @@ export const api = {
       }),
     jobs: (status?: string, o: Sig = {}) =>
       request<T.JobOut[]>("/admin/jobs", { ...o, query: { status_filter: status } }),
+    demoRequests: (o: Sig = {}) => request<T.DemoRequestOut[]>("/admin/demo-requests", o),
+    updateDemoRequest: (id: string, status: T.DemoRequestStatus) =>
+      request<T.DemoRequestOut>(`/admin/demo-requests/${id}`, { method: "PATCH", json: { status } }),
+  },
+
+  /** Unauthenticated endpoints for the public website. */
+  public: {
+    demoRequest: (body: T.DemoRequestIn) =>
+      request<{ ok: boolean }>("/public/demo-requests", { method: "POST", json: body, noAuthRedirect: true }),
   },
 };
 

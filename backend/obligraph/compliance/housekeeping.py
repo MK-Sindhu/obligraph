@@ -2,11 +2,12 @@
 
 from __future__ import annotations
 
-from datetime import date
+from datetime import datetime, time
 
-from sqlalchemy import func, select
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from obligraph import clock
 from obligraph.compliance import approvals, filings, report
 from obligraph.jobs import handler
 from obligraph.models import Alert, Org, Task
@@ -14,7 +15,8 @@ from obligraph.models import Alert, Org, Task
 
 async def overdue_task_alerts(session: AsyncSession, org: Org) -> int:
     """One alert per overdue task per day."""
-    today = date.today()
+    today = clock.today()
+    day_start = datetime.combine(today, time.min, tzinfo=clock.tz())
     overdue = (
         (
             await session.execute(
@@ -34,7 +36,7 @@ async def overdue_task_alerts(session: AsyncSession, org: Org) -> int:
                     Alert.org_id == org.id,
                     Alert.kind == "task_overdue",
                     Alert.ref_id == t.id,
-                    func.date(Alert.created_at) == today,
+                    Alert.created_at >= day_start,
                 )
             )
         ).first()

@@ -8,6 +8,7 @@ from datetime import UTC, date, datetime, timedelta
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import select, update
 
+from obligraph import clock
 from obligraph.api.deps import Caller, caller
 from obligraph.api.schemas import AlertOut, CalendarEvent
 from obligraph.compliance import calendar, dashboard
@@ -27,7 +28,7 @@ async def get_calendar(
     start: date | None = None,
     end: date | None = None,
 ) -> list[CalendarEvent]:
-    start = start or date.today().replace(day=1)
+    start = start or clock.today().replace(day=1)
     end = end or start + timedelta(days=62)
     if end < start or (end - start).days > 400:
         raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "window must be 0-400 days")

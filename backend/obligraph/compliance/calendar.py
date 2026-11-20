@@ -13,6 +13,7 @@ from datetime import date
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from obligraph import clock
 from obligraph.models import Filing, Obligation, Regulation, Requirement, ReturnType, Task
 
 PERIOD_MONTHS = {"monthly": 1, "quarterly": 3, "half_yearly": 6, "annual": 12}
@@ -43,7 +44,7 @@ def occurrences(anchor: date, months: int, start: date, end: date, cap: int = 40
 
 
 async def events(session: AsyncSession, org_id: uuid.UUID, start: date, end: date) -> list[dict]:
-    today = date.today()
+    today = clock.today()
     rows = (
         await session.execute(
             select(Obligation, Requirement, Regulation)

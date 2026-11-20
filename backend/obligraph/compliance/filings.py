@@ -18,7 +18,7 @@ from sqlalchemy import or_, select
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from obligraph import vocab
+from obligraph import clock, vocab
 from obligraph.compliance.calendar import add_months
 from obligraph.compliance.obligations import org_layer, org_regulators
 from obligraph.models import Filing, Org, ReturnType
@@ -175,7 +175,7 @@ async def applicable_types(session: AsyncSession, org: Org) -> list[ReturnType]:
 
 async def ensure_filings(session: AsyncSession, org: Org, today: date | None = None) -> int:
     """Create the filing rows due in the rolling window (idempotent)."""
-    today = today or date.today()
+    today = today or clock.today()
     lo, hi = today - timedelta(days=WINDOW_BACK_DAYS), today + timedelta(days=WINDOW_AHEAD_DAYS)
     n = 0
     for rt in await applicable_types(session, org):
@@ -198,7 +198,7 @@ async def ensure_filings(session: AsyncSession, org: Org, today: date | None = N
 
 
 def display_status(f: Filing, today: date | None = None) -> str:
-    today = today or date.today()
+    today = today or clock.today()
     if f.status == "filed":
         return "late" if f.filed_on and f.filed_on > f.due_on else "filed"
     if f.status == "waived":

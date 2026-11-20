@@ -43,7 +43,7 @@ export function Dialog({ open, onClose, title, subtitle, children, footer, class
         if (e.target === e.currentTarget) onClose();
       }}
       className={clsx(
-        "m-auto w-[min(560px,calc(100vw-24px))] max-h-[calc(100dvh-48px)] overflow-hidden rounded-[32px] border border-[var(--card-edge)] bg-surface-grad p-0 text-ink shadow-pop",
+        "glass-strong m-auto w-[min(560px,calc(100vw-24px))] max-h-[calc(100dvh-48px)] overflow-hidden rounded-[32px] p-0 text-ink",
         "open:flex open:flex-col open:animate-[rise-in_160ms_ease-out]",
         className,
       )}
@@ -82,7 +82,7 @@ export function Drawer({ open, onClose, title, subtitle, children, footer, class
         if (e.target === e.currentTarget) onClose();
       }}
       className={clsx(
-        "fixed inset-y-0 right-0 left-auto m-0 h-dvh max-h-none w-[min(640px,100vw)] max-w-none overflow-hidden border-l border-[var(--card-edge)] bg-surface-grad p-0 text-ink shadow-pop sm:rounded-l-[34px]",
+        "glass-strong fixed inset-y-0 right-0 left-auto m-0 h-dvh max-h-none w-[min(640px,100vw)] max-w-none overflow-hidden p-0 text-ink sm:rounded-l-[34px]",
         "open:flex open:flex-col open:animate-[drawer-in_180ms_ease-out]",
         className,
       )}

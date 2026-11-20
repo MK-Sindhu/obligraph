@@ -14,6 +14,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from obligraph.db import sessionmaker
 from obligraph.models import Membership, Org, User
 from obligraph.security import read_token, role_at_least
+from obligraph.settings import get_settings
 
 bearer = HTTPBearer(auto_error=False)
 
@@ -26,6 +27,12 @@ async def get_session() -> AsyncIterator[AsyncSession]:
         except BaseException:
             await session.rollback()
             raise
+        enqueued = session.info.pop("enqueued", False)
+    settings = get_settings()
+    if enqueued and settings.is_serverless:
+        from obligraph import jobs
+
+        await jobs.drain(budget_seconds=settings.job_inline_budget_seconds)
 
 
 # scope="function": commit runs when the endpoint returns, before the response is sent,

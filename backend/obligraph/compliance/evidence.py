@@ -1,7 +1,8 @@
 """Evidence files: stored once, hashed, never modified.
 
-Files live on local disk under ``STORAGE_DIR/<org>/<evidence id>``. The original file
-name is kept only in the database, so nothing user-supplied ever reaches a path.
+Two backends: local disk under ``STORAGE_DIR/evidence/<org>/<evidence id>``, or the
+``evidence_blobs`` table (serverless hosts, whose disks do not persist). The original
+file name is kept only in the database, so nothing user-supplied ever reaches a path.
 """
 
 from __future__ import annotations
@@ -13,10 +14,8 @@ from pathlib import Path
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from obligraph.models import Evidence
+from obligraph.models import Evidence, EvidenceBlob
 from obligraph.settings import get_settings
-
-MAX_EVIDENCE_BYTES = 25 * 1024 * 1024
 
 
 def storage_root() -> Path:
@@ -53,11 +52,14 @@ async def save(
 ) -> Evidence:
     if not data:
         raise ValueError("empty file")
-    if len(data) > MAX_EVIDENCE_BYTES:
-        raise ValueError("evidence files are limited to 25 MB")
+    limit = get_settings().upload_limit_bytes
+    if len(data) > limit:
+        raise ValueError(f"evidence files are limited to {limit // (1024 * 1024)} MB")
     eid = uuid.uuid4()
-    key = f"{org_id}/{eid}"
-    await asyncio.to_thread(_write, path_for(key), data)
+    in_db = get_settings().evidence_backend == "database"
+    key = f"db:{eid}" if in_db else f"{org_id}/{eid}"
+    if not in_db:
+        await asyncio.to_thread(_write, path_for(key), data)
     ev = Evidence(
         id=eid,
         org_id=org_id,
@@ -74,15 +76,28 @@ async def save(
     )
     session.add(ev)
     await session.flush()
+    if in_db:
+        session.add(EvidenceBlob(evidence_id=eid, data=data))
+        await session.flush()
     return ev
 
 
-async def read(ev: Evidence) -> bytes:
-    data = await asyncio.to_thread(path_for(ev.storage_key).read_bytes)
+async def read(ev: Evidence, session: AsyncSession | None = None) -> bytes:
+    if ev.storage_key.startswith("db:"):
+        if session is None:
+            raise OSError("reading database-stored evidence needs a session")
+        blob = await session.get(EvidenceBlob, ev.id)
+        if blob is None:
+            raise OSError(f"evidence {ev.id} has no stored content")
+        data = blob.data
+    else:
+        data = await asyncio.to_thread(path_for(ev.storage_key).read_bytes)
     if hashlib.sha256(data).hexdigest() != ev.sha256:
         raise OSError(f"evidence {ev.id} failed its integrity check")
     return data
 
 
 async def remove_file(ev: Evidence) -> None:
+    if ev.storage_key.startswith("db:"):
+        return  # the blob row is removed with the evidence row (ON DELETE CASCADE)
     await asyncio.to_thread(path_for(ev.storage_key).unlink, True)

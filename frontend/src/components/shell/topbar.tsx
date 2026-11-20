@@ -305,7 +305,7 @@ function UserMenu() {
 
 export function Topbar({ onMenu }: { onMenu: () => void }) {
   return (
-    <header className="sticky top-0 z-30 flex h-[76px] items-center gap-3 bg-canvas/85 px-4 backdrop-blur-md sm:px-8">
+    <header className="glass-bar sticky top-0 z-30 flex h-[76px] items-center gap-3 px-4 sm:px-8">
       <IconButton label="Open navigation" tone="soft" className="lg:hidden" onClick={onMenu}>
         <Menu size={18} />
       </IconButton>

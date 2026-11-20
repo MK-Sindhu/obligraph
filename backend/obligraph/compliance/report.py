@@ -16,7 +16,7 @@ from sqlalchemy import func, select, text
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from obligraph import vocab
+from obligraph import clock, vocab
 from obligraph.compliance import packs
 from obligraph.compliance.dashboard import coverage_pct
 from obligraph.compliance.filings import display_status
@@ -42,7 +42,7 @@ AGE_BUCKETS = [
 
 
 async def snapshot(session: AsyncSession, org_id: uuid.UUID, day: date | None = None) -> None:
-    day = day or date.today()
+    day = day or clock.today()
     counts = dict(
         (
             await session.execute(
@@ -56,10 +56,10 @@ async def snapshot(session: AsyncSession, org_id: uuid.UUID, day: date | None = 
         await session.execute(
             text(
                 "SELECT count(*) FILTER (WHERE status <> 'done'), "
-                "count(*) FILTER (WHERE status <> 'done' AND due_on < current_date) "
+                "count(*) FILTER (WHERE status <> 'done' AND due_on < :today) "
                 "FROM tasks WHERE org_id = :org"
             ),
-            {"org": org_id},
+            {"org": org_id, "today": clock.today()},
         )
     ).one()
     values = {
@@ -79,7 +79,7 @@ async def snapshot(session: AsyncSession, org_id: uuid.UUID, day: date | None = 
 
 
 def default_period(today: date | None = None) -> tuple[date, date]:
-    today = today or date.today()
+    today = today or clock.today()
     start = date(today.year, ((today.month - 1) // 3) * 3 + 1, 1)
     return start, today
 
@@ -90,7 +90,7 @@ def _bucket(days: int) -> str:
 
 async def build(session: AsyncSession, org: Org, start: date, end: date) -> dict:
     await snapshot(session, org.id)
-    today = date.today()
+    today = clock.today()
     rows = (
         await session.execute(
             select(Obligation, Requirement, Regulation)

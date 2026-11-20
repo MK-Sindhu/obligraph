@@ -731,3 +731,30 @@ export interface SsoConfig {
   enabled: boolean;
   name: string;
 }
+
+// ---------------------------------------------------------------- public site
+
+export interface DemoRequestIn {
+  name: string;
+  email: string;
+  company: string;
+  role?: string;
+  entity_type?: string;
+  message?: string;
+  /** Honeypot: must stay empty. */
+  website: string;
+}
+
+export type DemoRequestStatus = "new" | "contacted" | "closed";
+
+export interface DemoRequestOut {
+  id: UUID;
+  name: string;
+  email: string;
+  company: string;
+  role: string | null;
+  entity_type: string | null;
+  message: string | null;
+  status: DemoRequestStatus;
+  created_at: ISODateTime;
+}

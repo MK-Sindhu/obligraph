@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { IBM_Plex_Mono, Poppins } from "next/font/google";
 import { Providers } from "@/components/providers";
+import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 // Friendly geometric sans for everything; mono only for reference numbers.
@@ -19,10 +20,17 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: { default: "Obligraph", template: "%s · Obligraph" },
   description:
     "Regulatory obligations for Indian financial institutions: circulars, lineage, policy coverage and remediation in one place.",
   applicationName: "Obligraph",
+  openGraph: {
+    type: "website",
+    siteName: "Obligraph",
+    locale: "en_IN",
+    images: [{ url: "/marketing/dashboard-light.jpg", alt: "The Obligraph dashboard on sample data" }],
+  },
 };
 
 export const viewport: Viewport = {

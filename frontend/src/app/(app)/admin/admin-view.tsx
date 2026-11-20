@@ -1,6 +1,7 @@
 "use client";
 
 import { RefreshCw, ShieldCheck } from "lucide-react";
+import { DemoRequestsPanel } from "@/components/admin/demo-requests";
 import { IngestPanel } from "@/components/admin/ingest";
 import { JobsPanel } from "@/components/admin/jobs";
 import { OverviewPanel, UsagePanel } from "@/components/admin/overview";
@@ -35,6 +36,7 @@ function AdminContent() {
       />
       <div className="space-y-6">
         <OverviewPanel {...shared} />
+        <DemoRequestsPanel />
         <div className="grid items-start gap-6 xl:grid-cols-2">
           <JobsPanel counts={overview.data?.jobs} onRefreshed={overview.reload} />
           <UsagePanel {...shared} />

@@ -28,6 +28,7 @@ from obligraph.compliance.obligations import org_regulators
 from obligraph.ingest.documents import UnsupportedDocument, bytes_to_text
 from obligraph.ingest.pipeline import ingest_regulation
 from obligraph.models import GraphNode, Obligation, Regulation, Requirement, User
+from obligraph.settings import get_settings
 
 router = APIRouter(tags=["corpus"])
 
@@ -185,7 +186,12 @@ async def ingest_file(
     reg = vocab.canonical_regulator(regulator)
     if reg is None:
         raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "unknown regulator")
-    data = await file.read()
+    limit = get_settings().upload_limit_bytes
+    data = await file.read(limit + 1)
+    if len(data) > limit:
+        raise HTTPException(
+            status.HTTP_413_CONTENT_TOO_LARGE, f"file larger than {limit // (1024 * 1024)} MB"
+        )
     try:
         text = bytes_to_text(file.filename or "upload", data, file.content_type)
     except UnsupportedDocument as exc:

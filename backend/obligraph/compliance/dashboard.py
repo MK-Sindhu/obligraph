@@ -3,11 +3,12 @@
 from __future__ import annotations
 
 import uuid
-from datetime import date, timedelta
+from datetime import timedelta
 
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from obligraph import clock
 from obligraph.compliance.calendar import events
 
 SEVERITIES = ["critical", "high", "medium", "low"]
@@ -21,7 +22,7 @@ def coverage_pct(counts: dict[str, int]) -> float | None:
 
 
 async def summary(session: AsyncSession, org_id: uuid.UUID) -> dict:
-    p = {"org": org_id}
+    p = {"org": org_id, "today": clock.today()}
     coverage = {
         k: n
         for k, n in await session.execute(
@@ -41,7 +42,7 @@ async def summary(session: AsyncSession, org_id: uuid.UUID) -> dict:
     tasks = (
         await session.execute(
             text("""SELECT count(*) FILTER (WHERE status <> 'done'),
-                           count(*) FILTER (WHERE status <> 'done' AND due_on < current_date),
+                           count(*) FILTER (WHERE status <> 'done' AND due_on < :today),
                            count(*) FILTER (WHERE status = 'done')
                     FROM tasks WHERE org_id = :org"""),
             p,
@@ -79,7 +80,7 @@ async def summary(session: AsyncSession, org_id: uuid.UUID) -> dict:
         rows = [{"key": k, **v, "total": sum(v.values())} for k, v in bucket.items()]
         return sorted(rows, key=lambda r: (-r.get("critical", 0), -r.get("high", 0), -r["total"]))
 
-    today = date.today()
+    today = clock.today()
     upcoming = [
         e
         for e in await events(session, org_id, today, today + timedelta(days=30))
@@ -103,9 +104,9 @@ async def summary(session: AsyncSession, org_id: uuid.UUID) -> dict:
     ]
     filing_counts = (
         await session.execute(
-            text("""SELECT count(*) FILTER (WHERE status = 'pending' AND due_on < current_date),
-                           count(*) FILTER (WHERE status = 'pending' AND due_on >= current_date
-                                            AND due_on <= current_date + 30)
+            text("""SELECT count(*) FILTER (WHERE status = 'pending' AND due_on < :today),
+                           count(*) FILTER (WHERE status = 'pending' AND due_on >= :today
+                                            AND due_on <= CAST(:today AS date) + 30)
                     FROM filings WHERE org_id = :org"""),
             p,
         )

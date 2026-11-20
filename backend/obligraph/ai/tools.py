@@ -5,14 +5,14 @@ from __future__ import annotations
 
 import json
 import uuid
-from datetime import date, timedelta
+from datetime import timedelta
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from obligraph import graph, search
+from obligraph import clock, graph, search
 from obligraph.compliance import calendar
 from obligraph.compliance.dashboard import coverage_pct
 from obligraph.compliance.obligations import org_regulators
@@ -330,7 +330,7 @@ class ToolContext:
         if a.status:
             stmt = stmt.where(Task.status == a.status)
         if a.overdue_only:
-            stmt = stmt.where(Task.due_on < date.today(), Task.status != "done")
+            stmt = stmt.where(Task.due_on < clock.today(), Task.status != "done")
         tasks = (
             (
                 await self.session.execute(
@@ -348,7 +348,7 @@ class ToolContext:
         }
 
     async def _upcoming_deadlines(self, a: UpcomingDeadlines) -> dict:
-        today = date.today()
+        today = clock.today()
         evs = await calendar.events(
             self.session, self.org.id, today, today + timedelta(days=min(a.days or 60, 366))
         )

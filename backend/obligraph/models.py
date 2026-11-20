@@ -24,6 +24,7 @@ from sqlalchemy import (
     ForeignKey,
     Index,
     Integer,
+    LargeBinary,
     String,
     Text,
     UniqueConstraint,
@@ -516,6 +517,46 @@ class CoverageSnapshot(Base):
     open_tasks: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     overdue_tasks: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     coverage_pct: Mapped[float | None] = mapped_column(Float)
+
+
+class DemoRequest(Base):
+    """A "Request a demo" submission from the public website. The IP is kept only as a
+    salted hash, for abuse control."""
+
+    __tablename__ = "demo_requests"
+    id: Mapped[uuid.UUID] = _uuid()
+    name: Mapped[str] = mapped_column(String(200), nullable=False)
+    email: Mapped[str] = mapped_column(String(320), nullable=False)
+    company: Mapped[str] = mapped_column(String(200), nullable=False)
+    role: Mapped[str] = mapped_column(String(200), nullable=False, default="")
+    entity_type: Mapped[str] = mapped_column(String(64), nullable=False, default="")
+    message: Mapped[str] = mapped_column(Text, nullable=False, default="")
+    status: Mapped[str] = mapped_column(String(16), nullable=False, default="new")
+    ip_hash: Mapped[str] = mapped_column(String(64), nullable=False, default="")
+    created_at: Mapped[datetime] = _created()
+    handled_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+    __table_args__ = (Index("ix_demo_requests_created", "created_at"),)
+
+
+class EvidenceBlob(Base):
+    """Evidence file bytes, when STORAGE_BACKEND=database (serverless hosts have no disk)."""
+
+    __tablename__ = "evidence_blobs"
+    evidence_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("evidence.id", ondelete="CASCADE"), primary_key=True
+    )
+    data: Mapped[bytes] = mapped_column(LargeBinary, nullable=False)
+
+
+class InstanceConfig(Base):
+    """Per-installation values generated on first start (e.g. the token-signing secret
+    when JWT_SECRET is not set), so a deployment needs no extra configuration."""
+
+    __tablename__ = "instance_config"
+    key: Mapped[str] = mapped_column(String(64), primary_key=True)
+    value: Mapped[str] = mapped_column(Text, nullable=False)
+    created_at: Mapped[datetime] = _created()
 
 
 # --------------------------------------------------------------------------- operations

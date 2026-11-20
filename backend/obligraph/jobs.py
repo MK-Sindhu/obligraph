@@ -73,6 +73,9 @@ async def enqueue(
         # The database clock, not ours: workers compare against now() in SQL.
         run_after=func.now() + timedelta(seconds=delay_seconds),
     )
+    # Serverless hosts have no background worker: the request that enqueued work runs it
+    # (time-boxed) after committing. See api.deps.get_session.
+    session.info["enqueued"] = True
     if dedupe_key:
         stmt = stmt.on_conflict_do_nothing(
             index_elements=["dedupe_key"],
@@ -149,14 +152,25 @@ async def run_one() -> bool:
     return True
 
 
-async def drain(max_jobs: int = 10_000) -> int:
-    """Run ready jobs until none are left (tests, CLI)."""
+async def drain(max_jobs: int = 10_000, budget_seconds: float | None = None) -> int:
+    """Run ready jobs until none are left, ``max_jobs`` ran, or ``budget_seconds`` passed."""
     load_handlers()
     await _init_runtime()
+    loop = asyncio.get_running_loop()
+    deadline = loop.time() + budget_seconds if budget_seconds else None
     n = 0
-    while n < max_jobs and await run_one():
+    while n < max_jobs and (deadline is None or loop.time() < deadline) and await run_one():
         n += 1
     return n
+
+
+async def pending_count() -> int:
+    async with session_scope() as session:
+        return (
+            await session.execute(
+                text("SELECT count(*) FROM jobs WHERE status IN ('queued', 'running')")
+            )
+        ).scalar_one()
 
 
 async def _reclaim_stale() -> None:

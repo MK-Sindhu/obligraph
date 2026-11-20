@@ -7,6 +7,7 @@ from contextlib import asynccontextmanager
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
+from obligraph.dburl import async_url
 from obligraph.settings import get_settings
 
 _engine = None
@@ -16,7 +17,16 @@ _sessionmaker: async_sessionmaker[AsyncSession] | None = None
 def engine():
     global _engine, _sessionmaker
     if _engine is None:
-        _engine = create_async_engine(get_settings().database_url, pool_pre_ping=True)
+        settings = get_settings()
+        url, connect_args = async_url(settings.database_url)
+        _engine = create_async_engine(
+            url,
+            pool_pre_ping=True,
+            connect_args=connect_args,
+            # Serverless instances are short-lived; keep their footprint on the pool small.
+            pool_size=3 if settings.is_serverless else 5,
+            max_overflow=5 if settings.is_serverless else 10,
+        )
         _sessionmaker = async_sessionmaker(_engine, expire_on_commit=False)
     return _engine
 

@@ -17,7 +17,7 @@ from conftest import register
 from cryptography.hazmat.primitives.asymmetric import rsa
 from sqlalchemy import select, update
 
-from obligraph import jobs, sso
+from obligraph import clock, jobs, sso
 from obligraph.compliance import approvals, housekeeping
 from obligraph.compliance import evidence as store
 from obligraph.compliance.filings import period_containing
@@ -339,7 +339,7 @@ async def test_filings_tracker(client):
         f"/api/filings/{overdue['id']}/file",
         headers=member,
         json={
-            "filed_on": date.today().isoformat(),
+            "filed_on": clock.today().isoformat(),
             "reference": "ACK-123",
             "evidence_id": ev["id"],
         },
@@ -349,7 +349,7 @@ async def test_filings_tracker(client):
         await client.post(
             f"/api/filings/{overdue['id']}/file",
             headers=member,
-            json={"filed_on": date.today().isoformat(), "reference": "X"},
+            json={"filed_on": clock.today().isoformat(), "reference": "X"},
         )
     ).status_code == 409
     pending = next(f for f in filings if f["status"] == "pending")
@@ -381,8 +381,8 @@ async def test_filings_tracker(client):
     assert custom.status_code == 201 and custom.json()["custom"] is True
     cal = (
         await client.get(
-            f"/api/calendar?start={date.today() - timedelta(days=60)}"
-            f"&end={date.today() + timedelta(days=100)}",
+            f"/api/calendar?start={clock.today() - timedelta(days=60)}"
+            f"&end={clock.today() + timedelta(days=100)}",
             headers=a["headers"],
         )
     ).json()
@@ -423,7 +423,7 @@ async def test_overdue_task_alerts_once_per_day(client):
             headers=a["headers"],
             json={
                 "title": "File board note",
-                "due_on": (date.today() - timedelta(days=3)).isoformat(),
+                "due_on": (clock.today() - timedelta(days=3)).isoformat(),
             },
         )
     ).json()

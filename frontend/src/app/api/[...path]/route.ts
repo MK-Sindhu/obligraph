@@ -4,6 +4,10 @@
 
 import type { NextRequest } from "next/server";
 
+// Long enough for streamed Copilot answers and time-boxed job runs on serverless hosts
+// (Vercel Hobby allows up to 300 s).
+export const maxDuration = 300;
+
 // Headers that describe a single hop and must not be forwarded.
 const HOP_BY_HOP = new Set([
   "connection",

@@ -28,6 +28,11 @@ A Copilot answers questions over all of it, with citations.
 | Multi-tenant | Organisations, members, roles (owner / admin / member / viewer), tenant-scoped queries throughout, and a platform-admin console. |
 | Operations | Durable Postgres job queue with retries; every model call is traced (tokens, cache hits, latency, stop reason). |
 
+## Deploy
+
+- **Vercel:** two projects from this repo (`frontend/` and `backend/`) plus a Neon Postgres. Only environment variables are needed: see **[DEPLOY.md](DEPLOY.md)**.
+- **Docker / any VM:** `docker compose up --build`, as below.
+
 ## Quick start (Docker)
 
 ```bash

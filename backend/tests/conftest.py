@@ -62,7 +62,7 @@ async def migrated():
 TABLES = (
     "chat_messages, conversations, tasks, alerts, obligations, requirements, regulations, "
     "chunks, documents, graph_edges, graph_nodes, memberships, orgs, users, audit_events, "
-    "llm_calls, jobs, sources"
+    "llm_calls, jobs, sources, demo_requests"
 )
 
 
@@ -70,6 +70,10 @@ TABLES = (
 async def clean(migrated):
     async with session_scope() as session:
         await session.execute(text(f"TRUNCATE {TABLES} CASCADE"))
+    from obligraph import ratelimit
+
+    for limiter in (ratelimit.DEMO_PER_IP, ratelimit.DEMO_GLOBAL, ratelimit.LOGIN_PER_IP):
+        limiter.reset()
     yield
 
 

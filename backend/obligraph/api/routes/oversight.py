@@ -9,7 +9,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from fastapi.responses import HTMLResponse
 from sqlalchemy import select
 
-from obligraph import vocab
+from obligraph import clock, vocab
 from obligraph.api.deps import Caller, caller, requires
 from obligraph.api.routes.work import evidence_out
 from obligraph.api.schemas import (
@@ -41,7 +41,7 @@ async def list_returns(c: Caller = Depends(caller)) -> list[ReturnTypeOut]:
                 .where(
                     Filing.org_id == c.org.id,
                     Filing.status == "pending",
-                    Filing.due_on >= date.today(),
+                    Filing.due_on >= clock.today(),
                 )
                 .order_by(Filing.due_on.desc())
             )
@@ -169,10 +169,10 @@ async def list_filings(
     status_: str | None = Query(None, alias="status"),
 ) -> list[FilingOut]:
     await filings.ensure_filings(c.session, c.org)
-    start = start or date.today() - timedelta(days=90)
-    end = end or date.today() + timedelta(days=90)
+    start = start or clock.today() - timedelta(days=90)
+    end = end or clock.today() + timedelta(days=90)
     stmt = _filing_query(c).where(Filing.due_on >= start, Filing.due_on <= end)
-    today = date.today()
+    today = clock.today()
     if status_ == "overdue":
         stmt = stmt.where(Filing.status == "pending", Filing.due_on < today)
     elif status_ == "pending":
@@ -198,7 +198,7 @@ async def mark_filed(
     f = await _own_filing(c, filing_id)
     if f.status != "pending":
         raise HTTPException(status.HTTP_409_CONFLICT, f"filing is already {f.status}")
-    if body.filed_on > date.today():
+    if body.filed_on > clock.today():
         raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "filed_on is in the future")
     if body.evidence_id:
         ev = await c.session.get(Evidence, body.evidence_id)

@@ -1,0 +1,9 @@
+.venv
+data
+tests
+docker
+.pytest_cache
+.ruff_cache
+__pycache__
+*.pyc
+openapi.json

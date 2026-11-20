@@ -25,10 +25,9 @@ from obligraph.ingest.documents import UnsupportedDocument, bytes_to_text, guess
 from obligraph.ingest.pipeline import store_document
 from obligraph.jobs import enqueue
 from obligraph.models import Chunk, Document, Membership, Obligation, Regulation, Requirement, Task
+from obligraph.settings import get_settings
 
 router = APIRouter(tags=["compliance"])
-
-MAX_UPLOAD_BYTES = 20 * 1024 * 1024
 
 
 # --------------------------------------------------------------------------- policies
@@ -59,9 +58,12 @@ async def upload_policy(
     title: str | None = Form(None),
     c: Caller = Depends(requires("admin")),
 ) -> PolicyOut:
-    data = await file.read()
-    if len(data) > MAX_UPLOAD_BYTES:
-        raise HTTPException(status.HTTP_413_REQUEST_ENTITY_TOO_LARGE, "file larger than 20 MB")
+    limit = get_settings().upload_limit_bytes
+    data = await file.read(limit + 1)
+    if len(data) > limit:
+        raise HTTPException(
+            status.HTTP_413_CONTENT_TOO_LARGE, f"file larger than {limit // (1024 * 1024)} MB"
+        )
     try:
         text = bytes_to_text(file.filename or "policy.txt", data, file.content_type)
     except UnsupportedDocument as exc:

@@ -9,13 +9,13 @@ downgraded, so an unsupported claim never reaches the register.
 from __future__ import annotations
 
 import uuid
-from datetime import UTC, date, datetime, timedelta
+from datetime import UTC, datetime, timedelta
 from xml.sax.saxutils import escape, quoteattr
 
 from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from obligraph import search
+from obligraph import clock, search
 from obligraph.ai import claude, offline
 from obligraph.ai.prompts import ASSESSMENT_SYSTEM
 from obligraph.ai.schemas import CoverageVerdict
@@ -125,7 +125,7 @@ async def assess_obligation(session: AsyncSession, obligation_id: uuid.UUID) -> 
     await session.execute(
         delete(Task).where(Task.obligation_id == ob.id, Task.source == "ai", Task.status == "todo")
     )
-    today = date.today()
+    today = clock.today()
     for t in verdict.tasks[:3]:
         session.add(
             Task(
