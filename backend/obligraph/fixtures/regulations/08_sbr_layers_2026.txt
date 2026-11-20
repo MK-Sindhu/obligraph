@@ -1,0 +1,35 @@
+---
+title: Sample Circular - Scale Based Regulation: Layer-wise Requirements for NBFCs
+regulator: RBI
+published_on: 2026-07-14
+---
+SAMPLE DOCUMENT FOR OBLIGRAPH DEVELOPMENT. Illustrative text, not an official RBI publication.
+
+OG/SAMPLE/RBI/2026-27/20
+July 14, 2026
+
+All Non-Banking Financial Companies (NBFCs)
+
+Sample Circular - Scale Based Regulation: Layer-wise Requirements
+
+Under the scale based regulatory framework, NBFCs are placed in four layers according to their size, activity and perceived riskiness. This circular consolidates requirements that differ by layer.
+
+All NBFCs shall put in place a Board-approved policy on the grant of loans to directors, senior officers and their relatives.
+
+NBFCs in the Base Layer shall certify their principal business criteria to the Reserve Bank on an annual basis.
+
+NBFCs in the Middle Layer and above shall appoint a Chief Compliance Officer with a minimum tenure of three years.
+
+NBFCs in the Middle Layer and above shall constitute a Risk Management Committee of the Board.
+
+NBFCs in the Middle Layer and above shall disclose their exposure to sensitive sectors in their annual financial statements.
+
+NBFCs in the Upper Layer shall maintain Common Equity Tier 1 capital of at least nine per cent of risk weighted assets at all times.
+
+NBFCs in the Upper Layer shall be listed on a recognised stock exchange within three years of being identified as an Upper Layer NBFC.
+
+NBFCs in the Upper Layer shall put in place a Board-approved internal capital adequacy assessment process, which shall be reviewed on an annual basis.
+
+NBFCs in the Top Layer shall submit a capital plan to the Reserve Bank on a quarterly basis.
+
+These directions shall come into force with effect from October 1, 2026.

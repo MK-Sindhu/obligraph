@@ -1,0 +1,22 @@
+---
+title: Sample SEBI Circular - Cyber Resilience Framework for Alternative Investment Funds
+regulator: SEBI
+published_on: 2026-06-18
+---
+SAMPLE DOCUMENT FOR OBLIGRAPH DEVELOPMENT. Illustrative text, not an official SEBI publication.
+
+OG/SAMPLE/SEBI/2026/41
+June 18, 2026
+
+All Alternative Investment Funds (AIFs)
+All Managers of Alternative Investment Funds
+
+Sample Circular - Cyber Resilience Framework for Alternative Investment Funds
+
+This circular is issued under the Securities and Exchange Board of India Act, 1992.
+
+AIFs shall designate a Chief Information Security Officer responsible for implementing the cyber resilience framework.
+
+AIFs shall report every cyber incident to SEBI within six hours of noticing it.
+
+AIFs shall conduct a cyber audit at least once a year and submit the audit report to SEBI within thirty days of its completion.

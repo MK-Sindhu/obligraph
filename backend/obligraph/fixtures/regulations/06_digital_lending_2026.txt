@@ -1,0 +1,26 @@
+---
+title: Sample Directions - Digital Lending
+regulator: RBI
+published_on: 2026-05-05
+---
+SAMPLE DOCUMENT FOR OBLIGRAPH DEVELOPMENT. Illustrative text, not an official RBI publication.
+
+OG/SAMPLE/RBI/2026-27/12
+May 5, 2026
+
+All Commercial Banks
+All Non-Banking Financial Companies (NBFCs)
+
+Sample Directions - Digital Lending
+
+These directions apply to loans sourced or serviced through digital channels, including through lending service providers.
+
+Regulated entities shall disburse every digital loan directly into the bank account of the borrower, and shall not route disbursements through the account of a lending service provider.
+
+Regulated entities shall provide the borrower a cooling-off period of at least three days during which the borrower may exit the loan by repaying the principal and the proportionate annual percentage rate without any penalty.
+
+Regulated entities shall publish on their website the list of all lending service providers and digital lending apps engaged by them.
+
+Regulated entities shall not access the contacts, media or call logs of the borrower's mobile phone.
+
+Regulated entities shall report every digital lending app deployed by them to the Reserve Bank by December 31, 2026.

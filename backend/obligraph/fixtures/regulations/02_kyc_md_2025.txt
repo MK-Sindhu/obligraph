@@ -1,0 +1,33 @@
+---
+title: Sample Master Direction - Know Your Customer (KYC) Directions, 2025
+regulator: RBI
+published_on: 2025-04-10
+---
+SAMPLE DOCUMENT FOR OBLIGRAPH DEVELOPMENT. Illustrative text, not an official RBI publication.
+
+OG/SAMPLE/RBI/2025-26/01
+April 10, 2025
+
+All Commercial Banks
+All Non-Banking Financial Companies (NBFCs)
+All Payment Aggregators
+
+Sample Master Direction - Know Your Customer (KYC) Directions, 2025
+
+These directions are issued under the Banking Regulation Act, 1949 and the Prevention of Money-laundering Act, 2002, and apply to all regulated entities listed above.
+
+Regulated entities shall have a Know Your Customer policy duly approved by the Board of Directors, which shall be reviewed at least once a year.
+
+Regulated entities shall undertake customer due diligence, including identification and verification of the customer and the beneficial owner, before opening an account or commencing an account-based relationship.
+
+Regulated entities shall carry out periodic updation of KYC at least once every two years for high-risk customers, once every eight years for medium-risk customers and once every ten years for low-risk customers.
+
+Regulated entities shall report every suspicious transaction to the Financial Intelligence Unit - India within seven working days of arriving at a conclusion that the transaction is suspicious.
+
+Regulated entities shall maintain all records of transactions and identification documents for a period of at least five years after the business relationship has ended.
+
+Regulated entities shall appoint a Principal Officer and a Designated Director responsible for ensuring compliance with the obligations under these directions, and shall communicate their details to the Financial Intelligence Unit - India.
+
+The status of periodic updation of KYC shall be placed before the Board of Directors on a quarterly basis.
+
+These directions shall come into force with effect from July 1, 2025.

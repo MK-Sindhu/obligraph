@@ -1,0 +1,23 @@
+---
+title: Sample Directions - Cyber Security Incident Reporting (Illustrative)
+regulator: CERT-In
+published_on: 2025-05-02
+---
+SAMPLE DOCUMENT FOR OBLIGRAPH DEVELOPMENT. Illustrative text, not an official CERT-In publication.
+
+OG/SAMPLE/CERTIN/2025/01
+May 2, 2025
+
+Sample Directions - Cyber Security Incident Reporting
+
+These sample directions are issued under the Information Technology Act, 2000 and apply to service providers, intermediaries, data centres and body corporates.
+
+Every body corporate shall report cyber incidents to CERT-In within six hours of noticing such incidents.
+
+Every body corporate shall connect to the Network Time Protocol servers of the National Informatics Centre or the National Physical Laboratory for the synchronisation of all its system clocks.
+
+Every body corporate shall maintain logs of all its information and communication systems within Indian jurisdiction for a rolling period of one hundred and eighty days.
+
+Every body corporate shall designate a Point of Contact to interface with CERT-In and shall communicate the details to CERT-In.
+
+Every body corporate shall furnish information or provide assistance to CERT-In within the time specified in its order.

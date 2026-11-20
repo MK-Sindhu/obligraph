@@ -1,0 +1,21 @@
+---
+title: Sample Circular - Fair Practices Code for NBFCs (2019)
+regulator: RBI
+published_on: 2019-08-12
+---
+SAMPLE DOCUMENT FOR OBLIGRAPH DEVELOPMENT. Illustrative text, not an official RBI publication.
+
+OG/SAMPLE/RBI/2019-20/07
+August 12, 2019
+
+All Non-Banking Financial Companies (NBFCs)
+
+Sample Circular - Fair Practices Code
+
+This circular sets out the fair practices that NBFCs are expected to follow in their dealings with borrowers, issued in exercise of the powers conferred under the Reserve Bank of India Act, 1934.
+
+NBFCs shall convey to the borrower the terms and conditions of the loan, including the annualised rate of interest, in writing in a language understood by the borrower.
+
+NBFCs shall not resort to undue harassment of borrowers while recovering loans, and recovery agents shall not call borrowers at odd hours.
+
+The Board of Directors of each NBFC shall lay down an appropriate grievance redressal mechanism within the organisation.

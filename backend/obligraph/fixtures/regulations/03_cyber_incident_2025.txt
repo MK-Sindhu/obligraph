@@ -1,0 +1,27 @@
+---
+title: Sample Circular - Reporting of Cyber Security Incidents
+regulator: RBI
+published_on: 2025-09-02
+---
+SAMPLE DOCUMENT FOR OBLIGRAPH DEVELOPMENT. Illustrative text, not an official RBI publication.
+
+OG/SAMPLE/RBI/2025-26/31
+September 2, 2025
+
+All Commercial Banks
+All Non-Banking Financial Companies (NBFCs)
+All Payment Aggregators
+
+Sample Circular - Reporting of Cyber Security Incidents
+
+Cyber incidents at regulated entities can disrupt customer services and erode trust. This circular sets out minimum expectations on incident reporting and cyber resilience.
+
+Regulated entities shall report every cyber security incident to the Reserve Bank and to CERT-In within six hours of noticing the incident.
+
+Regulated entities shall have a cyber crisis management plan approved by the Board of Directors, which shall be tested at least once a year.
+
+Regulated entities shall conduct vulnerability assessment and penetration testing of all critical systems on a quarterly basis and shall remediate critical findings within thirty days.
+
+Regulated entities shall conduct an annual information systems audit through an independent auditor and shall submit the audit report to the Board of Directors.
+
+Regulated entities shall maintain logs of all critical systems for a rolling period of one hundred and eighty days.

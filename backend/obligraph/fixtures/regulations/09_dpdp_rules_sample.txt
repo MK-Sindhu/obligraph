@@ -1,0 +1,29 @@
+---
+title: Sample Rules - Digital Personal Data Protection (Illustrative)
+regulator: MeitY
+published_on: 2025-11-14
+---
+SAMPLE DOCUMENT FOR OBLIGRAPH DEVELOPMENT. Illustrative text, not an official Government publication.
+
+OG/SAMPLE/MEITY/2025/03
+November 14, 2025
+
+Sample Rules - Digital Personal Data Protection
+
+These sample rules are framed under the Digital Personal Data Protection Act, 2023 and apply to every Data Fiduciary processing digital personal data in India.
+
+A Data Fiduciary shall give every Data Principal a notice in clear and plain language, before or at the time of seeking consent, itemising the personal data to be processed and the specified purpose.
+
+A Data Fiduciary shall enable a Data Principal to withdraw consent with the same ease with which the consent was given.
+
+A Data Fiduciary shall implement reasonable security safeguards, including encryption, access controls and logging, to prevent a personal data breach.
+
+On becoming aware of a personal data breach, a Data Fiduciary shall intimate the Board and each affected Data Principal without delay, and shall furnish a detailed report to the Board within seventy-two hours.
+
+A Data Fiduciary shall erase personal data when the specified purpose is no longer being served, unless retention is required by law.
+
+A Data Fiduciary shall publish the business contact information of a person who can answer questions about the processing of personal data.
+
+A Data Fiduciary shall respond to every grievance of a Data Principal within ninety days.
+
+A Significant Data Fiduciary shall appoint a Data Protection Officer based in India and shall undertake a data protection impact assessment and audit once every year.

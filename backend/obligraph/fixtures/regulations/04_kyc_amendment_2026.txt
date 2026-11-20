@@ -1,0 +1,25 @@
+---
+title: Sample Circular - Amendment to the KYC Directions: Periodic Updation
+regulator: RBI
+published_on: 2026-02-16
+---
+SAMPLE DOCUMENT FOR OBLIGRAPH DEVELOPMENT. Illustrative text, not an official RBI publication.
+
+OG/SAMPLE/RBI/2025-26/58
+February 16, 2026
+
+All Commercial Banks
+All Non-Banking Financial Companies (NBFCs)
+All Payment Aggregators
+
+Sample Circular - Amendment to the KYC Directions: Periodic Updation
+
+On a review, it has been decided to amend the Sample Master Direction - Know Your Customer (KYC) Directions, OG/SAMPLE/RBI/2025-26/01, as set out below.
+
+Regulated entities shall send at least three advance reminders to the customer, through the customer's registered channels, before the due date for periodic updation of KYC.
+
+Regulated entities shall not freeze or close the account of a customer solely on the ground that periodic updation is pending, without giving the customer at least one month's notice.
+
+Regulated entities shall complete periodic updation within thirty days of receiving the self-declaration from the customer where there is no change in KYC information.
+
+These amendments shall come into force with effect from April 1, 2026.
