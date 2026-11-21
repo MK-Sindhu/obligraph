@@ -6,18 +6,18 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SeverityGlyph } from "@/components/domain/badges";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { CountBadge } from "@/components/ui/badge";
 import { IconButton, iconTileClass } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/misc";
 import { SegmentedControl } from "@/components/ui/tabs";
-import { Toggle } from "@/components/ui/toggle";
 import { MenuItem, Popover } from "@/components/ui/popover";
 import { Spinner } from "@/components/ui/states";
 import { useToast } from "@/components/ui/toast";
 import { api, errorMessage, type AlertOut } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
 import { humanize, relativeTime } from "@/lib/format";
-import { setThemePref, useResolvedTheme, useThemePref, type ThemePref } from "@/lib/theme";
+import { setThemePref, useThemePref, type ThemePref } from "@/lib/theme";
 import { useQuery } from "@/lib/use-query";
 import { useVocab } from "@/lib/vocab";
 
@@ -214,22 +214,6 @@ function AlertsBell() {
   );
 }
 
-function ThemeToggle() {
-  const theme = useResolvedTheme();
-  const dark = theme === "dark";
-  return (
-    <span title={dark ? "Dark theme is on" : "Dark theme is off"} className="hidden sm:inline-flex">
-      <Toggle
-        checked={dark}
-        onChange={(v) => setThemePref(v ? "dark" : "light")}
-        label="Dark theme"
-        labelHidden
-        knobIcon={dark ? <Moon size={12} strokeWidth={2.2} /> : <Sun size={12} strokeWidth={2.2} />}
-      />
-    </span>
-  );
-}
-
 function UserMenu() {
   const { user, role, org, isSuperuser, logout } = useAuth();
   const pref = useThemePref();
@@ -313,7 +297,7 @@ export function Topbar({ onMenu }: { onMenu: () => void }) {
       <div className="flex-1" />
       <AiBadge />
       <AlertsBell />
-      <ThemeToggle />
+      <ThemeToggle className="hidden sm:inline-flex" />
       <UserMenu />
     </header>
   );

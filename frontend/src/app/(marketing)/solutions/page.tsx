@@ -1,7 +1,8 @@
 import { Info } from "lucide-react";
 import type { Metadata } from "next";
-import { CtaBand, DocsLink, Eyebrow, JumpChips, PageIntro, ThemeShot, Ticks } from "@/components/marketing/blocks";
-import type { ShotName } from "@/components/marketing/shots";
+import { CtaBand, DocsLink, Eyebrow, JumpChips, PageIntro, Ticks } from "@/components/marketing/blocks";
+import { Plate, type PlateTone } from "@/components/marketing/plate";
+import type { ArtName } from "@/components/marketing/plate-art";
 
 const DESCRIPTION = "How Obligraph fits NBFCs, banks, payment aggregators and fintechs, and AIFs and SEBI intermediaries.";
 
@@ -17,10 +18,13 @@ interface Segment {
   name: string;
   title: string;
   points: string[];
-  shot: ShotName;
+  art: ArtName;
+  /** Plate labels: regulators (top left), what it shows (top right), title. */
+  regulators: string;
+  tag: string;
+  plate: string;
   docs: string;
   note?: string;
-  maxHeight?: number;
 }
 
 const SEGMENTS: Segment[] = [
@@ -29,7 +33,10 @@ const SEGMENTS: Segment[] = [
     name: "NBFCs",
     title: "Your layer, your returns",
     points: ["SBR layer adds and retires obligations", "Returns tracked with acknowledgements", "Fair Practices and KYC checked against policies"],
-    shot: "sbr",
+    art: "sbr",
+    regulators: "RBI · NBFC",
+    tag: "Scale-based regulation",
+    plate: "SBR layers",
     docs: "/docs/concepts/sbr-layers",
   },
   {
@@ -37,7 +44,10 @@ const SEGMENTS: Segment[] = [
     name: "Banks",
     title: "Oversight the board can read",
     points: ["Board pack for any period", "Maker-checker with SLA escalation", "Hashed evidence and an audit pack"],
-    shot: "board-pack",
+    art: "board",
+    regulators: "RBI · Banks",
+    tag: "Reporting",
+    plate: "Board pack",
     docs: "/docs/using/board-pack",
   },
   {
@@ -45,7 +55,10 @@ const SEGMENTS: Segment[] = [
     name: "Payment aggregators and fintechs",
     title: "Data protection and cyber readiness",
     points: ["DPDP and CERT-In readiness packs", "Incident reporting windows tracked", "Digital lending duties with owners"],
-    shot: "readiness",
+    art: "readiness",
+    regulators: "MeitY · CERT-In",
+    tag: "Data and cyber",
+    plate: "Readiness",
     docs: "/docs/using/readiness-packs",
   },
   {
@@ -54,10 +67,16 @@ const SEGMENTS: Segment[] = [
     title: "SEBI circulars, mapped to you",
     points: ["Add circulars by upload or pasted text", "Same coverage, tasks and board pack"],
     note: "SEBI's RSS feed currently publishes nothing, so SEBI documents arrive by upload.",
-    shot: "requirements",
+    art: "requirements",
+    regulators: "SEBI",
+    tag: "Extraction",
+    plate: "Requirements",
     docs: "/docs/admin/regulator-feeds",
   },
 ];
+
+// Orange and graphite plates alternate down the page.
+const TONES: PlateTone[] = ["signal", "teal", "signal", "violet"];
 
 export default function SolutionsPage() {
   return (
@@ -83,7 +102,7 @@ export default function SolutionsPage() {
                 <DocsLink href={s.docs} />
               </div>
             </div>
-            <ThemeShot name={s.shot} maxHeight={s.maxHeight} sizes="(min-width: 1024px) 680px, 100vw" />
+            <Plate art={s.art} tone={TONES[i % TONES.length]} index={s.regulators} tag={s.tag} title={s.plate} />
           </section>
         ))}
       </div>

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Wordmark } from "@/components/brand";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { buttonClass } from "@/components/ui/styles";
 import { useStoredSession } from "@/lib/auth";
 
@@ -123,6 +124,7 @@ export function MarketingNav() {
           </ul>
         </nav>
         <span className="flex-1" />
+        <ThemeToggle className="mr-1 inline-flex" />
         <AuthLink className="hidden h-9 items-center rounded-[10px] px-3 text-[13.5px] font-semibold text-ink-2 hover:bg-surface-2 hover:text-ink sm:inline-flex" />
         <Link href="/contact" className={buttonClass("primary", "md", "hidden! uppercase tracking-[0.05em] sm:inline-flex!")}>
           Request a demo

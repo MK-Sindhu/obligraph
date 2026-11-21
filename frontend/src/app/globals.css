@@ -903,3 +903,115 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* ---------------------------------------------------------------------------------------
+   Illustration plates (marketing pages): flat signal-orange or graphite cards carrying a
+   monoline diagram, mono corner labels and a condensed title, with a fine print grain.
+   The same in both site themes: they are objects on the page, not themed surfaces.
+   --------------------------------------------------------------------------------------- */
+@layer components {
+  .plate {
+    --plate-bg: #ff7426;
+    --plate-ink: #17110b;
+    --plate-accent: #17110b;
+    --plate-hi: #fff3e6;
+    --plate-dot: #7a2508;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    container-type: inline-size;
+    aspect-ratio: 4 / 3;
+    margin: 0;
+    border-radius: 28px;
+    background: var(--plate-bg);
+    color: var(--plate-ink);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.22),
+      0 28px 56px -30px rgb(8 12 30 / 0.55);
+  }
+  .plate[data-tone="teal"],
+  .plate[data-tone="violet"] {
+    --plate-ink: #e8e3d8;
+    --plate-hi: #e2a33c;
+    --plate-dot: #e2a33c;
+    box-shadow:
+      inset 0 0 0 1px rgb(255 255 255 / 0.07),
+      0 28px 56px -30px rgb(8 12 30 / 0.6);
+  }
+  .plate[data-tone="teal"] {
+    --plate-bg: #17191c;
+    --plate-accent: #5cc8b4;
+  }
+  .plate[data-tone="violet"] {
+    --plate-bg: #1a1a26;
+    --plate-accent: #9188ea;
+  }
+  /* Print grain: dark specks on orange, light specks on graphite. */
+  .plate::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.15;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.55 0 0 0 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .plate[data-tone="teal"]::after,
+  .plate[data-tone="violet"]::after {
+    opacity: 0.09;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0.7 0 0 0 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .plate-meta {
+    font-family: var(--font-mono);
+    font-size: clamp(10px, 2.1cqw, 13px);
+    font-weight: 500;
+    line-height: 1.3;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .plate-title {
+    font-family: var(--font-anton), Impact, "Arial Narrow", sans-serif;
+    font-size: clamp(32px, 9.5cqw, 72px);
+    line-height: 0.9;
+    letter-spacing: 0.002em;
+    text-transform: uppercase;
+  }
+  .plate-art * {
+    vector-effect: non-scaling-stroke;
+  }
+  .plate-art .p-fill { fill: currentColor; stroke: none; }
+  .plate-art .p-bg { fill: var(--plate-bg); }
+  .plate-art .p-hi { fill: var(--plate-hi); stroke: none; }
+  .plate-art .p-hi-o { fill: var(--plate-hi); }
+  .plate-art .p-dot { fill: var(--plate-dot); stroke: none; }
+  .plate-art .p-acc { stroke: var(--plate-accent); }
+  .plate-art .p-dash { stroke-dasharray: 4 6; }
+  .plate-art .p-faint { opacity: 0.4; }
+  .plate-art .p-thick { stroke-width: 5; }
+  .plate-art .p-text {
+    fill: currentColor;
+    stroke: none;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+  }
+  .plate-art .p-text-lg { font-size: 15px; }
+  .plate-art .p-num {
+    fill: currentColor;
+    stroke: none;
+    font-family: var(--font-anton), Impact, sans-serif;
+    font-size: 26px;
+  }
+  .plate-art .p-quote {
+    fill: currentColor;
+    stroke: none;
+    font-family: var(--font-anton), Impact, sans-serif;
+    font-size: 40px;
+  }
+}
+
+@media (max-width: 639px) {
+  .plate {
+    border-radius: 22px;
+  }
+}

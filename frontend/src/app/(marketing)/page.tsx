@@ -15,9 +15,9 @@ import {
 } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { CtaBand, CtaLinks, Eyebrow, FeatureTile, Section, ThemeShot } from "@/components/marketing/blocks";
-import { ProgressRing } from "@/components/ui/charts";
-import { cardClass, iconTileClass } from "@/components/ui/styles";
+import { CtaBand, CtaLinks, Eyebrow, FeatureTile, Section } from "@/components/marketing/blocks";
+import { Plate } from "@/components/marketing/plate";
+import { iconTileClass } from "@/components/ui/styles";
 
 const DESCRIPTION = "Obligraph reads RBI, SEBI and IRDAI circulars, checks your policies and turns gaps into dated work.";
 
@@ -55,13 +55,6 @@ const SEGMENTS = [
   { label: "AIFs and SEBI intermediaries", href: "/solutions#sebi" },
 ];
 
-// Readiness figures as they appear in the sample workspace.
-const SAMPLE_PACKS = [
-  { name: "DPDP", value: 56 },
-  { name: "CERT-In", value: 50 },
-  { name: "KYC/AML", value: 41 },
-];
-
 export default function HomePage() {
   return (
     <>
@@ -75,23 +68,7 @@ export default function HomePage() {
           <CtaLinks className="mt-8" />
         </div>
 
-        <div className="relative sm:pb-16 lg:pb-20">
-          <ThemeShot name="dashboard" priority sizes="(min-width: 1024px) 640px, 100vw" />
-          <div className={cardClass("raised", "tile", "absolute -bottom-2 left-4 hidden px-5 pb-4 pt-4 sm:block lg:-left-10")} aria-label="Sample readiness figures">
-            <span aria-hidden="true" className="absolute -right-px -top-px rounded-bl-[10px] rounded-tr-[inherit] bg-primary-fill px-2.5 py-1 text-[10px] font-bold uppercase leading-none tracking-[0.07em] text-white">
-              Sample
-            </span>
-            <p className="text-[11px] font-extrabold uppercase tracking-[0.08em] text-accent">Readiness</p>
-            <ul className="mt-3 flex gap-5">
-              {SAMPLE_PACKS.map((p) => (
-                <li key={p.name} className="flex flex-col items-center gap-1.5">
-                  <ProgressRing value={p.value} size={58} stroke={5} tone="auto" warnBelow={45} label={`${p.name} readiness ${p.value}%`} />
-                  <span className="text-[11.5px] font-semibold text-ink-2">{p.name}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+        <Plate art="pipeline" tone="signal" index="RBI · SEBI · IRDAI" tag="Circular → calendar" title="Obligraph" />
       </section>
 
       <Section id="how-it-works" eyebrow="How it works" title="From circular to closed work" center>

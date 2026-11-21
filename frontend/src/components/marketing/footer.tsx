@@ -48,7 +48,7 @@ export function MarketingFooter() {
           ))}
         </div>
         <p className="mt-10 border-t border-line pt-5 text-[12px] leading-relaxed text-ink-3">
-          Screenshots on this site show sample data. Obligraph is not affiliated with RBI, SEBI, IRDAI or any other regulator;
+          Illustrations on this site are schematic. Obligraph is not affiliated with RBI, SEBI, IRDAI or any other regulator;
           always check obligations against the official text.
         </p>
       </div>

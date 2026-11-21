@@ -2,60 +2,13 @@
 
 import clsx from "clsx";
 import { ArrowRight, Check } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { buttonClass, cardClass, iconTileClass } from "@/components/ui/styles";
-import { SHOTS, type ShotName } from "./shots";
 
 /** Bold blue uppercase label above a heading. */
 export function Eyebrow({ children, className }: { children: ReactNode; className?: string }) {
   return <p className={clsx("text-[12px] font-extrabold uppercase tracking-[0.1em] text-accent-deep", className)}>{children}</p>;
-}
-
-/** The corner tab, carrying a label. Used to mark every product screenshot "Sample data". */
-function Tab({ children }: { children: ReactNode }) {
-  return (
-    <span className="absolute -right-px -top-px z-[1] rounded-bl-[10px] rounded-tr-[inherit] bg-primary-fill px-3 py-1 text-[10.5px] font-bold uppercase leading-none tracking-[0.07em] text-white">
-      {children}
-    </span>
-  );
-}
-
-/**
- * A product screenshot in a white card, in the visitor's theme (only the visible image is
- * fetched). The corner tab says "Sample data".
- */
-export function ThemeShot({
-  name,
-  caption,
-  sizes = "(min-width: 1024px) 560px, 100vw",
-  priority,
-  maxHeight,
-  className,
-}: {
-  name: ShotName;
-  caption?: ReactNode;
-  sizes?: string;
-  /** Above-the-fold hero image: fetch it early (lazy-safe, so only one theme loads). */
-  priority?: boolean;
-  /** Crop tall screenshots from the top. */
-  maxHeight?: number;
-  className?: string;
-}) {
-  const shot = SHOTS[name];
-  const img = "h-auto w-full";
-  return (
-    <figure className={cardClass("raised", "lg", clsx("relative p-2.5 sm:p-3", className))}>
-      <Tab>Sample data</Tab>
-      <div className="relative overflow-hidden rounded-[22px] border border-line" style={maxHeight ? { maxHeight } : undefined}>
-        <Image src={shot.light} alt={shot.alt} sizes={sizes} placeholder="blur" fetchPriority={priority ? "high" : undefined} className={clsx(img, "theme-light-only")} />
-        <Image src={shot.dark} alt={shot.alt} sizes={sizes} placeholder="blur" fetchPriority={priority ? "high" : undefined} className={clsx(img, "theme-dark-only")} />
-        {maxHeight && <span aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-[var(--surface)] to-transparent" />}
-      </div>
-      {caption && <figcaption className="px-2 pb-0.5 pt-2.5 text-[12.5px] font-medium text-ink-3">{caption}</figcaption>}
-    </figure>
-  );
 }
 
 /** Section with a short headline (8 words or fewer) and at most one line under it. */

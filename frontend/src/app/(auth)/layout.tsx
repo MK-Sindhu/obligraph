@@ -1,5 +1,6 @@
 import { FileCheck2, ListChecks, TriangleAlert } from "lucide-react";
 import { Wordmark } from "@/components/brand";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { IconTile } from "@/components/ui/button";
 import { Timeline } from "@/components/ui/timeline";
 
@@ -50,7 +51,10 @@ export default function AuthLayout({ children }: LayoutProps<"/">) {
   return (
     <div className="grid min-h-dvh lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
       <div className="flex flex-col px-5 py-6 sm:px-12 sm:py-8">
-        <Wordmark />
+        <div className="flex items-center justify-between gap-4">
+          <Wordmark />
+          <ThemeToggle />
+        </div>
         <div className="flex flex-1 items-center justify-center py-10">
           <div className="w-full max-w-[420px]">{children}</div>
         </div>

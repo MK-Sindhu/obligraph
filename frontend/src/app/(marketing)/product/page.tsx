@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { CtaBand, DocsLink, Eyebrow, JumpChips, PageIntro, ThemeShot, Ticks } from "@/components/marketing/blocks";
-import type { ShotName } from "@/components/marketing/shots";
+import { CtaBand, DocsLink, Eyebrow, JumpChips, PageIntro, Ticks } from "@/components/marketing/blocks";
+import { Plate, type PlateTone } from "@/components/marketing/plate";
+import type { ArtName } from "@/components/marketing/plate-art";
 
 const DESCRIPTION = "Each Obligraph module at a glance: corpus, extraction, lineage, gaps, approvals, evidence, filings, readiness, board pack and Copilot.";
 
@@ -16,9 +17,12 @@ interface Module {
   name: string;
   title: string;
   points: string[];
-  shot: ShotName;
+  art: ArtName;
+  /** Top-right label on the plate. */
+  tag: string;
+  /** Condensed title on the plate. */
+  plate: string;
   docs: string;
-  maxHeight?: number;
 }
 
 const MODULES: Module[] = [
@@ -27,7 +31,9 @@ const MODULES: Module[] = [
     name: "Regulatory corpus",
     title: "One library of circulars",
     points: ["Polled RBI and SEBI feeds", "PDF, Word, text or HTML by upload", "Filter by regulator, topic and status"],
-    shot: "regulations",
+    art: "corpus",
+    tag: "Monitoring",
+    plate: "Corpus",
     docs: "/docs/admin/regulator-feeds",
   },
   {
@@ -35,7 +41,9 @@ const MODULES: Module[] = [
     name: "Requirement extraction",
     title: "Circulars read into requirements",
     points: ["Kind, severity, frequency and due date", "The source sentence kept with each", "Offline extractor; Claude when configured"],
-    shot: "requirements",
+    art: "requirements",
+    tag: "Extraction",
+    plate: "Requirements",
     docs: "/docs/concepts/obligations-and-coverage",
   },
   {
@@ -43,7 +51,9 @@ const MODULES: Module[] = [
     name: "Graph and lineage",
     title: "Know which version is current",
     points: ["Amends and supersedes, as a timeline", "What was in force on any date", "Explore by topic, or only what applies"],
-    shot: "graph",
+    art: "lineage",
+    tag: "Knowledge graph",
+    plate: "Lineage",
     docs: "/docs/concepts/knowledge-graph-and-lineage",
   },
   {
@@ -51,25 +61,29 @@ const MODULES: Module[] = [
     name: "Gap analysis",
     title: "Policies checked against every obligation",
     points: ["Covered, partial or missing", "The matching passage quoted and verified", "A suggested fix for each gap"],
-    shot: "obligation",
+    art: "coverage",
+    tag: "Gap analysis",
+    plate: "Coverage",
     docs: "/docs/using/policies-and-gap-analysis",
-    maxHeight: 560,
   },
   {
     id: "approvals",
     name: "Tasks and approvals",
     title: "A second pair of eyes",
     points: ["Suggested tasks with owners and dates", "Maker can't approve their own work", "Escalation when the SLA passes"],
-    shot: "approval",
+    art: "approvals",
+    tag: "Approvals",
+    plate: "Maker-checker",
     docs: "/docs/using/tasks-and-approvals",
-    maxHeight: 560,
   },
   {
     id: "evidence",
     name: "Evidence",
     title: "Proof that holds up",
     points: ["Files on tasks, obligations and filings", "SHA-256 checked on every download", "Audit pack with a hash manifest"],
-    shot: "evidence",
+    art: "evidence",
+    tag: "Audit trail",
+    plate: "Evidence",
     docs: "/docs/using/evidence-and-audit-pack",
   },
   {
@@ -77,7 +91,9 @@ const MODULES: Module[] = [
     name: "Calendar and filings",
     title: "Every date in one place",
     points: ["Deadlines, recurring duties, task dates", "Returns tracked period by period", "Acknowledgement kept with each filing"],
-    shot: "calendar",
+    art: "calendar",
+    tag: "Deadlines · filings",
+    plate: "Calendar",
     docs: "/docs/using/calendar-and-filings",
   },
   {
@@ -85,7 +101,9 @@ const MODULES: Module[] = [
     name: "Readiness and SBR",
     title: "Ready, regime by regime",
     points: ["DPDP, CERT-In and KYC/AML packs", "Top gaps first", "What moving up an SBR layer adds"],
-    shot: "readiness",
+    art: "readiness",
+    tag: "DPDP · CERT-In · KYC",
+    plate: "Readiness",
     docs: "/docs/using/readiness-packs",
   },
   {
@@ -93,7 +111,9 @@ const MODULES: Module[] = [
     name: "Board pack",
     title: "A summary the board reads",
     points: ["Coverage by regulator and topic", "Gap ageing, filings and approvals", "Print or save as PDF; CSV exports"],
-    shot: "board-pack",
+    art: "board",
+    tag: "Reporting",
+    plate: "Board pack",
     docs: "/docs/using/board-pack",
   },
   {
@@ -101,10 +121,15 @@ const MODULES: Module[] = [
     name: "Copilot",
     title: "Answers from your own records",
     points: ["Every answer lists its sources", "Retrieval summaries offline", "Written answers with Claude configured"],
-    shot: "copilot",
+    art: "copilot",
+    tag: "Answers with sources",
+    plate: "Copilot",
     docs: "/docs/using/copilot",
   },
 ];
+
+// Orange and graphite plates alternate down the page.
+const TONES: PlateTone[] = ["signal", "teal", "signal", "violet"];
 
 export default function ProductPage() {
   return (
@@ -124,7 +149,7 @@ export default function ProductPage() {
                 <DocsLink href={m.docs} />
               </div>
             </div>
-            <ThemeShot name={m.shot} maxHeight={m.maxHeight} sizes="(min-width: 1024px) 680px, 100vw" />
+            <Plate art={m.art} tone={TONES[i % TONES.length]} index={`${String(i + 1).padStart(2, "0")} / ${MODULES.length}`} tag={m.tag} title={m.plate} />
           </section>
         ))}
       </div>
