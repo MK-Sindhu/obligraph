@@ -7,6 +7,7 @@ from sqlalchemy import func, select
 
 from obligraph.db import session_scope
 from obligraph.models import DemoRequest
+from obligraph.seed import DEMO_EMAIL, DEMO_PASSWORD, seed_demo_org
 
 FORM = {
     "name": "Asha Rao",
@@ -93,3 +94,15 @@ async def test_login_is_rate_limited(client):
         for _ in range(21)
     ]
     assert codes[:20] == [401] * 20 and codes[20] == 429
+
+
+async def test_runtime_reports_whether_the_demo_login_works(client):
+    # A deployment without SEED_DEMO has no demo account: the login page must not offer it.
+    assert (await client.get("/api/meta/runtime")).json()["demo"] is False
+    async with session_scope() as session:
+        await seed_demo_org(session)
+    assert (await client.get("/api/meta/runtime")).json()["demo"] is True
+    login = await client.post(
+        "/api/auth/login", json={"email": DEMO_EMAIL, "password": DEMO_PASSWORD}
+    )
+    assert login.status_code == 200

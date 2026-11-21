@@ -8,6 +8,8 @@ export interface Runtime {
   /** Largest upload the API accepts (policies, evidence, regulation files). */
   upload_limit_mb: number;
   ai_mode: "claude" | "offline";
+  /** The demo account exists (SEED_DEMO or `obligraph seed --demo`), so its login works. */
+  demo: boolean;
 }
 
 /** Deployment facts from GET /api/meta/runtime (cached per session). */

@@ -10,6 +10,7 @@ import { CornerTab } from "@/components/ui/card";
 import { InlineError } from "@/components/ui/states";
 import { api, type SsoConfig } from "@/lib/api";
 import { storeSession, useStoredSession } from "@/lib/auth";
+import { useRuntime } from "@/lib/runtime";
 import { useQuery } from "@/lib/use-query";
 
 const DEMO = { email: "demo@obligraph.dev", password: "obligraph-demo" };
@@ -31,6 +32,8 @@ export function LoginForm() {
   const [error, setError] = useState<unknown>(null);
   // SSO is optional; a failed lookup just hides the button.
   const sso = useQuery<SsoConfig>("auth:sso", (signal) => api.auth.sso({ signal }));
+  // Offer the demo credentials only where the demo account exists (SEED_DEMO is optional).
+  const runtime = useRuntime();
 
   // Already signed in: go straight to the app.
   useEffect(() => {
@@ -135,22 +138,24 @@ export function LoginForm() {
         </div>
       )}
 
-      <div className="mt-9 flex gap-3 rounded-[24px] border border-dashed border-line-strong px-5 py-4 text-[12.5px] text-ink-2">
-        <Sparkles size={16} className="mt-0.5 shrink-0 text-accent" aria-hidden="true" />
-        <p>
-          <span className="font-medium text-ink">Exploring?</span> The demo workspace is an NBFC with sample circulars and policies.{" "}
-          <button
-            type="button"
-            className="font-medium text-accent hover:underline"
-            onClick={() => {
-              setEmail(DEMO.email);
-              setPassword(DEMO.password);
-            }}
-          >
-            Fill in demo credentials
-          </button>
-        </p>
-      </div>
+      {runtime.data?.demo && (
+        <div className="mt-9 flex gap-3 rounded-[24px] border border-dashed border-line-strong px-5 py-4 text-[12.5px] text-ink-2">
+          <Sparkles size={16} className="mt-0.5 shrink-0 text-accent" aria-hidden="true" />
+          <p>
+            <span className="font-medium text-ink">Exploring?</span> The demo workspace is an NBFC with sample circulars and policies.{" "}
+            <button
+              type="button"
+              className="font-medium text-accent hover:underline"
+              onClick={() => {
+                setEmail(DEMO.email);
+                setPassword(DEMO.password);
+              }}
+            >
+              Fill in demo credentials
+            </button>
+          </p>
+        </div>
+      )}
       <p className="mt-6 text-center text-[13px] text-ink-2">
         New to Obligraph?{" "}
         <Link href="/register" className="font-medium text-accent hover:underline">

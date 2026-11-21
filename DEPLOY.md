@@ -42,7 +42,7 @@ Obligraph accepts the URLs exactly as Neon gives them (`postgres://…?sslmode=r
 | `JWT_SECRET` | optional | Set it to control the signing key yourself. Otherwise one is generated |
 | `PUBLIC_URL` | for SSO | Your web URL, e.g. `https://obligraph.example.com` |
 | `OIDC_ISSUER`, `OIDC_CLIENT_ID`, `OIDC_CLIENT_SECRET` | for SSO | Register the redirect URI `<PUBLIC_URL>/api/auth/sso/callback` with your provider |
-| `SEED_DEMO` | optional | `true` loads the sample corpus and a demo org on first start. The demo login is public, so don't use this on a site real users rely on |
+| `SEED_DEMO` | optional | `true` loads the sample corpus and a demo org on first start, into an empty database only: once any organisation exists it is skipped, so set it before anyone registers. The demo account is a public platform admin, so set `ADMIN_EMAIL` too, and don't use this on a site real users rely on |
 
 Note the deployment URL, e.g. `https://obligraph-api.vercel.app`, and check `<that URL>/ready`.
 

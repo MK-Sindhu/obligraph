@@ -1,6 +1,7 @@
 """Runtime information and job control, for serverless hosts without a background worker.
 
-- ``GET /api/meta/runtime``: upload limit and mode, so the UI can adapt.
+- ``GET /api/meta/runtime``: upload limit, mode and whether the demo login exists, so the UI
+  can adapt.
 - ``GET /api/jobs/status`` / ``POST /api/jobs/drain``: lets a signed-in browser advance
   queued work (assessments, extraction) in short, time-boxed steps.
 - ``GET /api/internal/cron``: the scheduled entry point (Vercel Cron sends
@@ -17,9 +18,10 @@ from fastapi import APIRouter, Depends, Header, HTTPException, status
 from sqlalchemy import select
 
 from obligraph import jobs, ratelimit
-from obligraph.api.deps import Caller, caller
+from obligraph.api.deps import Caller, SessionDep, caller
 from obligraph.db import session_scope
-from obligraph.models import Source
+from obligraph.models import Source, User
+from obligraph.seed import DEMO_EMAIL
 from obligraph.settings import get_settings
 
 log = logging.getLogger(__name__)
@@ -30,12 +32,15 @@ _drain_lock = asyncio.Lock()
 
 
 @router.get("/meta/runtime")
-async def runtime() -> dict:
+async def runtime(session=SessionDep) -> dict:
     s = get_settings()
+    # The login page offers the demo credentials only when they would work.
+    demo = (await session.execute(select(User.id).where(User.email == DEMO_EMAIL))).first()
     return {
         "serverless": s.is_serverless,
         "upload_limit_mb": s.upload_limit_bytes // (1024 * 1024),
         "ai_mode": "claude" if s.claude_enabled else "offline",
+        "demo": demo is not None,
     }
 
 

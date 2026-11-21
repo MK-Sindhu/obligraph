@@ -131,7 +131,7 @@ async def test_requests_run_their_own_jobs_and_store_evidence_in_db(client, serv
     )
     assert too_big.status_code == 422 and "4 MB" in too_big.text
     rt = (await client.get("/api/meta/runtime")).json()
-    assert rt == {"serverless": True, "upload_limit_mb": 4, "ai_mode": "offline"}
+    assert rt == {"serverless": True, "upload_limit_mb": 4, "ai_mode": "offline", "demo": False}
 
 
 async def test_drain_endpoint_and_cron(client, monkeypatch, serverless):
