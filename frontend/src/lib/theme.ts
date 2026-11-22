@@ -6,18 +6,19 @@ export type ThemePref = "system" | "light" | "dark";
 const KEY = "obligraph.theme";
 const listeners = new Set<() => void>();
 
+// Light is the default; "system" (follow the OS) and "dark" are saved choices.
 function readPref(): ThemePref {
   try {
     const v = window.localStorage.getItem(KEY);
-    return v === "light" || v === "dark" ? v : "system";
+    return v === "dark" || v === "system" ? v : "light";
   } catch {
-    return "system";
+    return "light";
   }
 }
 
 export function setThemePref(pref: ThemePref) {
   try {
-    if (pref === "system") window.localStorage.removeItem(KEY);
+    if (pref === "light") window.localStorage.removeItem(KEY);
     else window.localStorage.setItem(KEY, pref);
   } catch {
     /* storage unavailable */
@@ -45,7 +46,7 @@ function resolved(): "light" | "dark" {
 }
 
 export function useThemePref(): ThemePref {
-  return useSyncExternalStore(subscribe, readPref, () => "system");
+  return useSyncExternalStore(subscribe, readPref, () => "light");
 }
 
 /** The theme actually in effect (resolves "system"). */

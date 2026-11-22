@@ -34,20 +34,20 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#a9d1fa" },
-    { media: "(prefers-color-scheme: dark)", color: "#0f1b2d" },
-  ],
+  // Light is the default theme, whatever the OS uses.
+  themeColor: "#a9d1fa",
 };
 
-// Applies the saved theme before first paint ("light" | "dark"; absent = follow the OS).
-const themeScript = `(function(){try{var t=localStorage.getItem("obligraph.theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}})()`;
+// The page is served light (the default). Before first paint, switch to a saved "dark", or
+// drop the attribute for a saved "system" so the OS setting applies.
+const themeScript = `(function(){try{var t=localStorage.getItem("obligraph.theme"),r=document.documentElement;if(t==="dark")r.setAttribute("data-theme","dark");else if(t==="system")r.removeAttribute("data-theme")}catch(e){}})()`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en-IN"
       className={`${jakarta.variable} ${plexMono.variable} h-full antialiased`}
+      data-theme="light"
       suppressHydrationWarning
     >
       <head>
